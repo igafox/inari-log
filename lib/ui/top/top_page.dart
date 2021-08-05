@@ -188,25 +188,22 @@ class TopPage extends HookWidget {
                       physics: NeverScrollableScrollPhysics(),
                       childAspectRatio: Responsive.value(
                           context: context,
-                          desktop: 1 / 1.2,
-                          tablet: 1 / 1.2,
-                          mobile: 1 / 1.2),
+                          desktop: 1 / 1,
+                          tablet: 1 / 1,
+                          mobile: 1 / 1),
                       crossAxisCount: Responsive.value(
                               context: context,
-                              desktop: 4,
-                              tablet: 2,
+                              desktop: 3,
+                              tablet: 3,
                               mobile: 1)
                           .toInt(),
                       mainAxisSpacing: 15,
                       crossAxisSpacing: 15,
                       shrinkWrap: true,
                       children: [
-                        _createItem(context, "王子稲荷神社", "images/ouji.jpg"),
-                        _createItem(context, "装束稲荷神社", "images/syouzoku.jpg"),
-                        _createItem(
-                            context, "高屋敷稲荷神社", "images/takayasiki.jpg"),
-                        _createItem(
-                            context, "高屋敷稲荷神社", "images/takayasiki.jpg"),
+                        _createItem(context, "王子稲荷神社","東京都北区","images/ouji.jpg"),
+                        _createItem(context, "装束稲荷神社", "東京都北区","images/syouzoku.jpg"),
+                        _createItem(context, "高屋敷稲荷神社","福島県郡山市","images/takayasiki.jpg"),
                       ]),
                   SizedBox(
                     height: 10,
@@ -236,28 +233,25 @@ class TopPage extends HookWidget {
                       physics: NeverScrollableScrollPhysics(),
                       childAspectRatio: Responsive.value(
                           context: context,
-                          desktop: 1 / 1.2,
-                          tablet: 1 / 1.2,
-                          mobile: 1 / 1.2),
+                          desktop: 1 / 1,
+                          tablet: 1 / 1,
+                          mobile: 1 / 1),
                       crossAxisCount: Responsive.value(
-                              context: context,
-                              desktop: 4,
-                              tablet: 2,
-                              mobile: 1)
+                          context: context,
+                          desktop: 3,
+                          tablet: 3,
+                          mobile: 1)
                           .toInt(),
                       mainAxisSpacing: 15,
                       crossAxisSpacing: 15,
                       shrinkWrap: true,
                       children: [
-                        _createItem(context, "王子稲荷神社", "images/ouji.jpg"),
-                        _createItem(context, "装束稲荷神社", "images/syouzoku.jpg"),
-                        _createItem(
-                            context, "高屋敷稲荷神社", "images/takayasiki.jpg"),
-                        _createItem(
-                            context, "高屋敷稲荷神社", "images/takayasiki.jpg"),
+                        _createItem(context, "殺生石稲荷神社","福島県大沼郡会津美里町","images/sessyouseki.jpg"),
+                        _createItem(context, "道の駅天栄の近くにある稲荷神社", "福島県岩瀬郡天栄村","images/tenei.jpg"),
+                        _createItem(context, "萬蔵稲荷神社","宮城県白石市","images/manzou.jpg"),
                       ]),
                   SizedBox(
-                    height: 40,
+                    height: 50,
                   ),
                   Align(
                     child: Text(
@@ -268,38 +262,37 @@ class TopPage extends HookWidget {
                     alignment: Alignment.centerLeft,
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   GridView.count(
                       physics: NeverScrollableScrollPhysics(),
                       childAspectRatio: Responsive.value(
                           context: context,
                           desktop: 1 / 0.8,
-                          tablet: 1 / 1.5,
+                          tablet: 1 / 0.6,
                           mobile: 1 / 0.7),
                       crossAxisCount: Responsive.value(
                               context: context,
                               desktop: 3,
-                              tablet: 3,
+                              tablet: 1,
                               mobile: 1)
                           .toInt(),
                       mainAxisSpacing: 15,
                       shrinkWrap: true,
                       children: [
                         Container(
-                            child: _buildMore("好きな稲荷を見つけよう", "地域やキーワードから探せます。",
-                                "images/inari1.jpg")),
+                            child: _buildMore("気になる稲荷を見つけよう", "地域やキーワードから探せます。",
+                                "images/torii.jpg")),
                         Container(
                             child: _buildMore(
                                 "気になる稲荷がすぐわかる",
                                 "投稿された神社の画像や説明を見ることができます",
-                                "images/inari1.jpg")),
+                                "images/komagitune.jpg")),
                         Container(
-                            color: Colors.red,
                             child: _buildMore(
                                 "稲荷を登録しよう",
-                                "稲荷神社に訪れた時に、思い出として登録して、みんなと共有しましょう。マイページでは、投稿履歴をみることができます。",
-                                "images/inari1.jpg")),
+                                "稲荷神社に訪れたら、思い出として登録して、みんなと共有しましょう。マイページでは、投稿履歴を見ることができます。",
+                                "images/torii.jpg")),
                       ]),
                 ],
               ),
@@ -313,41 +306,31 @@ class TopPage extends HookWidget {
     );
   }
 
-  Widget _createItem(BuildContext context, String name, String imageName) {
+  Widget _createItem(BuildContext context, String name, String address,String imageName) {
     return Card(
       child: Column(
         children: [
-          AspectRatio(
-            aspectRatio: 1.3,
-            child: Image.asset(
-              imageName,
-              height: double.infinity,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Padding(
+          Expanded(child:  Image.asset(
+            imageName,
+            height: double.infinity,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          )),
+          Container(
             padding: EdgeInsets.all(10),
-            child: Column(children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(name,
+            child: Row(children: [
+              CircleImage(size: 45, assetImage: AssetImage("images/icon.png")),
+              SizedBox(width: 10,),
+              Column(children: [
+                Text("iga",style: TextStyle(
+                    fontSize: 13, fontFamily: FontFamily.NOTOSANS_BOLD)),
+                Text(name,
                     style: TextStyle(
-                        fontSize: 17, fontFamily: FontFamily.NOTOSANS_BOLD)),
-              ),
-              SizedBox(height: 10),
-              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                CircleImage(
-                    size: 32, assetImage: AssetImage("images/icon.png")),
-                Text("iga"),
-                Expanded(
-                    child: Container(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Text(
-                          "ほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげ",
-                          maxLines: 4,
-                        ))),
-              ]),
+                        fontSize: 15, fontFamily: FontFamily.NOTOSANS_REGULAR),overflow: TextOverflow.ellipsis,),
+                Text(address,
+                    style: TextStyle(
+                        fontSize: 12, fontFamily: FontFamily.NOTOSANS_REGULAR))
+              ],crossAxisAlignment: CrossAxisAlignment.start,),
             ]),
           ),
         ],
