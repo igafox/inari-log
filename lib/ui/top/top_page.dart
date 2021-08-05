@@ -201,9 +201,12 @@ class TopPage extends HookWidget {
                       crossAxisSpacing: 15,
                       shrinkWrap: true,
                       children: [
-                        _createItem(context, "王子稲荷神社","東京都北区","images/ouji.jpg"),
-                        _createItem(context, "装束稲荷神社", "東京都北区","images/syouzoku.jpg"),
-                        _createItem(context, "高屋敷稲荷神社","福島県郡山市","images/takayasiki.jpg"),
+                        _createItem(
+                            context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
+                        _createItem(
+                            context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
+                        _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
+                            "images/takayasiki.jpg"),
                       ]),
                   SizedBox(
                     height: 10,
@@ -237,18 +240,21 @@ class TopPage extends HookWidget {
                           tablet: 1 / 1,
                           mobile: 1 / 1),
                       crossAxisCount: Responsive.value(
-                          context: context,
-                          desktop: 3,
-                          tablet: 3,
-                          mobile: 1)
+                              context: context,
+                              desktop: 3,
+                              tablet: 3,
+                              mobile: 1)
                           .toInt(),
                       mainAxisSpacing: 15,
                       crossAxisSpacing: 15,
                       shrinkWrap: true,
                       children: [
-                        _createItem(context, "殺生石稲荷神社","福島県大沼郡会津美里町","images/sessyouseki.jpg"),
-                        _createItem(context, "道の駅天栄の近くにある稲荷神社", "福島県岩瀬郡天栄村","images/tenei.jpg"),
-                        _createItem(context, "萬蔵稲荷神社","宮城県白石市","images/manzou.jpg"),
+                        _createItem(context, "殺生石稲荷神社", "福島県大沼郡会津美里町",
+                            "images/sessyouseki.jpg"),
+                        _createItem(context, "道の駅天栄の近くにある稲荷神社", "福島県岩瀬郡天栄村",
+                            "images/tenei.jpg"),
+                        _createItem(
+                            context, "萬蔵稲荷神社", "宮城県白石市", "images/manzou.jpg"),
                       ]),
                   SizedBox(
                     height: 50,
@@ -306,34 +312,52 @@ class TopPage extends HookWidget {
     );
   }
 
-  Widget _createItem(BuildContext context, String name, String address,String imageName) {
+  Widget _createItem(
+      BuildContext context, String name, String address, String imageName) {
     return Card(
-      child: Column(
-        children: [
-          Expanded(child:  Image.asset(
-            imageName,
-            height: double.infinity,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          )),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Row(children: [
-              CircleImage(size: 45, assetImage: AssetImage("images/icon.png")),
-              SizedBox(width: 10,),
-              Column(children: [
-                Text("iga",style: TextStyle(
-                    fontSize: 13, fontFamily: FontFamily.NOTOSANS_BOLD)),
-                Text(name,
-                    style: TextStyle(
-                        fontSize: 15, fontFamily: FontFamily.NOTOSANS_REGULAR),overflow: TextOverflow.ellipsis,),
-                Text(address,
-                    style: TextStyle(
-                        fontSize: 12, fontFamily: FontFamily.NOTOSANS_REGULAR))
-              ],crossAxisAlignment: CrossAxisAlignment.start,),
-            ]),
-          ),
-        ],
+      child: InkWell(
+        onTap: () { Navigator.pushNamed(context,"/detail");},
+        child: Column(
+          children: [
+            Expanded(
+                child: Image.asset(
+              imageName,
+              height: double.infinity,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            )),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Row(children: [
+                CircleImage(
+                    size: 45, assetImage: AssetImage("images/icon.png")),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  children: [
+                    Text("iga",
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontFamily: FontFamily.NOTOSANS_BOLD)),
+                    Text(
+                      name,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: FontFamily.NOTOSANS_REGULAR),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(address,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: FontFamily.NOTOSANS_REGULAR))
+                  ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }

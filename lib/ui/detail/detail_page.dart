@@ -62,80 +62,109 @@ class DetailPage extends HookWidget {
       ),
       body: SingleChildScrollView(
           child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(15),
-              child: Row(children: [
-                CircleImage(
-                    size: 40, assetImage: AssetImage("images/icon.png")),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  children: [
-                    Text("iga",
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontFamily: FontFamily.NOTOSANS_BOLD)),
-                    Text(
-                      "装束稲荷神社",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: FontFamily.NOTOSANS_REGULAR),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text("東京都北区",
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: FontFamily.NOTOSANS_REGULAR))
-                  ],
+              alignment: Alignment.center,
+              child: Container(
+                constraints: BoxConstraints(minWidth: 100, maxWidth: 800),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                ),
-              ]),
-            ),
-            Container(
-                height: Responsive.value(
-                        context: context,
-                        desktop: 390,
-                        tablet: 390,
-                        mobile: 250)
-                    .toDouble(),
-              constraints: BoxConstraints(minWidth: 100, maxWidth: 1300),
-                child: Stack(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      "images/syouzoku.jpg",
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
+                    Container(
+                      padding: EdgeInsets.all(15),
+                      child: Row(children: [
+                        CircleImage(
+                            size: 40,
+                            assetImage: AssetImage("images/icon.png")),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          children: [
+                            Text("iga",
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: FontFamily.NOTOSANS_BOLD)),
+                            Text(
+                              "装束稲荷神社",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: FontFamily.NOTOSANS_REGULAR),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text("東京都北区",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: FontFamily.NOTOSANS_REGULAR))
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                        ),
+                      ]),
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 40),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
+                        height: Responsive.value(
+                                context: context,
+                                desktop: 390,
+                                tablet: 390,
+                                mobile: 250)
+                            .toDouble(),
+                        child: Stack(
+                          children: [
+                            Image.asset(
+                              "images/syouzoku.jpg",
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(left: 40),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                              ),
+                            )
+                          ],
+                        )),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "メモ",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: FontFamily.NOTOSANS_BOLD),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Card(
+                              child: Container(
+                            padding: EdgeInsets.all(12),
+                            height: 250,
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(child: Text("ああああああああああああああ")),
+                                Text("2021/08/05 14:67")
+                              ],
+                            ),
+                          )),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "マップ",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: FontFamily.NOTOSANS_BOLD),
+                          )
+                        ],
                       ),
                     )
                   ],
-                )),
-            Container(
-              constraints: BoxConstraints(minWidth: 100, maxWidth: 1300),
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Card(
-                      child: Container(
-                    width: double.infinity,
-                    height: 300,
-                  ))
-                ],
-              ),
-            )
-          ],
-        ),
-      )),
+                ),
+              ))),
     );
   }
 

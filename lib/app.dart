@@ -17,7 +17,7 @@ class MyApp extends HookWidget {
         fontFamily: FontFamily.NOTOSANS_REGULAR,
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: "/detail",
+      initialRoute: "/",
       routes: {
         '/':(_) => new TopPage(),
         '/detail':(_) => new DetailPage()
