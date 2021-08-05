@@ -103,7 +103,9 @@ class TopPage extends HookWidget {
             Icons.edit,
             color: Colors.white,
           ),
-          onPressed: () => {}),
+          onPressed: () {
+            Navigator.pushNamed(context, "/post/create");
+          }),
       body: SingleChildScrollView(
           child: Container(
         child: Column(
@@ -158,7 +160,9 @@ class TopPage extends HookWidget {
                                   primary: Colors.orange,
                                   onPrimary: Colors.white,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(context, "/post/create");
+                                },
                               ),
                             )
                           ],
@@ -316,7 +320,9 @@ class TopPage extends HookWidget {
       BuildContext context, String name, String address, String imageName) {
     return Card(
       child: InkWell(
-        onTap: () { Navigator.pushNamed(context,"/detail");},
+        onTap: () {
+          Navigator.pushNamed(context, "/post");
+        },
         child: Column(
           children: [
             Expanded(

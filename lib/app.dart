@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:inari_log/constant.dart';
 import 'package:inari_log/ui/detail/detail_page.dart';
+import 'package:inari_log/ui/post/post_page.dart';
 
 import 'ui/top/top_page.dart';
 
@@ -20,7 +21,8 @@ class MyApp extends HookWidget {
       initialRoute: "/",
       routes: {
         '/':(_) => new TopPage(),
-        '/detail':(_) => new DetailPage()
+        '/post':(_) => new DetailPage(),
+        '/post/create':(_) => new PostPage()
       },
     );
   }
