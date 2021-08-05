@@ -51,45 +51,13 @@ class TopPage extends HookWidget {
                 ];
                 return list;
               },
-              icon: CircleImage(
+              icon: const CircleImage(
                 assetImage: AssetImage("images/icon.png"),
                 size: 42,
               ),
               iconSize: 42,
             ),
           ],
-
-          // actions: [
-          //   // PopupMenuButton(itemBuilder: (context) {
-          //   //   var list = List<PopupMenuEntry<Object>>();
-          //   // })
-          // ],
-          // actions: [
-          //   TextButton(
-          //       onPressed: () {},
-          //       child: Text(
-          //         '新規登録',
-          //         style: TextStyle(fontSize: 15, color: Colors.white),
-          //       )),
-          //   SizedBox(
-          //     width: 10,
-          //   ),
-          //   TextButton(
-          //       onPressed: () {},
-          //       child: Text(
-          //         '投稿一覧',
-          //         style: TextStyle(fontSize: 15, color: Colors.white),
-          //       )),
-          //   SizedBox(
-          //     width: 10,
-          //   ),
-          //   TextButton(
-          //       onPressed: () {},
-          //       child: Text(
-          //         'iga',
-          //         style: TextStyle(fontSize: 15, color: Colors.white),
-          //       ))
-          // ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -107,7 +75,6 @@ class TopPage extends HookWidget {
             Navigator.pushNamed(context, "/post/create");
           }),
       body: SingleChildScrollView(
-          child: Container(
         child: Column(
           children: [
             Container(
@@ -125,48 +92,53 @@ class TopPage extends HookWidget {
                       width: double.infinity,
                       height: double.infinity,
                     ),
-                    Container(
-                      padding: EdgeInsets.only(left: 40),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "稲荷を見つけよう",
-                              style: TextStyle(
-                                fontSize: 25.0,
-                                letterSpacing: 1.0,
-                                fontFamily: FontFamily.NOTOSANS_BOLD,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1,
-                            ),
-                            Text(
-                              "あなたの好きな稲荷神社は？",
-                              style:
-                                  TextStyle(fontSize: 20.0, letterSpacing: 1.0),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            SizedBox(
-                              width: 130,
-                              height: 40,
-                              child: ElevatedButton(
-                                child: const Text("神社を投稿する"),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.orange,
-                                  onPrimary: Colors.white,
+                    Align(
+                      child: Container(
+                        constraints:
+                            BoxConstraints(minWidth: 100, maxWidth: 1300),
+                        padding: EdgeInsets.only(left: 40),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "稲荷を見つけよう",
+                                style: TextStyle(
+                                  fontSize: 25.0,
+                                  letterSpacing: 1.0,
+                                  fontFamily: FontFamily.NOTOSANS_BOLD,
                                 ),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, "/post/create");
-                                },
                               ),
-                            )
-                          ],
-                          mainAxisSize: MainAxisSize.min,
+                              SizedBox(
+                                height: 1,
+                              ),
+                              Text(
+                                "あなたの好きな稲荷神社は？",
+                                style: TextStyle(
+                                    fontSize: 20.0, letterSpacing: 1.0),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: 130,
+                                height: 40,
+                                child: ElevatedButton(
+                                  child: const Text("神社を投稿する"),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.orange,
+                                    onPrimary: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, "/post/create");
+                                  },
+                                ),
+                              )
+                            ],
+                            mainAxisSize: MainAxisSize.min,
+                          ),
                         ),
                       ),
                     )
@@ -188,30 +160,31 @@ class TopPage extends HookWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  GridView.count(
-                      physics: NeverScrollableScrollPhysics(),
-                      childAspectRatio: Responsive.value(
-                          context: context,
-                          desktop: 1 / 1,
-                          tablet: 1 / 1,
-                          mobile: 1 / 1),
-                      crossAxisCount: Responsive.value(
+                  Container(
+                      child: GridView.count(
+                          physics: NeverScrollableScrollPhysics(),
+                          childAspectRatio: Responsive.value(
                               context: context,
-                              desktop: 3,
-                              tablet: 3,
-                              mobile: 1)
-                          .toInt(),
-                      mainAxisSpacing: 15,
-                      crossAxisSpacing: 15,
-                      shrinkWrap: true,
-                      children: [
+                              desktop: 1 / 1,
+                              tablet: 1 / 1,
+                              mobile: 1 / 1),
+                          crossAxisCount: Responsive.value(
+                                  context: context,
+                                  desktop: 3,
+                                  tablet: 3,
+                                  mobile: 1)
+                              .toInt(),
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 15,
+                          shrinkWrap: true,
+                          children: [
                         _createItem(
                             context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
                         _createItem(
                             context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
                         _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
                             "images/takayasiki.jpg"),
-                      ]),
+                      ])),
                   SizedBox(
                     height: 10,
                   ),
@@ -227,44 +200,6 @@ class TopPage extends HookWidget {
                   ),
                   Align(
                     child: Text(
-                      "おすすめ",
-                      style: TextStyle(
-                          fontSize: 27, fontFamily: FontFamily.NOTOSANS_BOLD),
-                    ),
-                    alignment: Alignment.centerLeft,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GridView.count(
-                      physics: NeverScrollableScrollPhysics(),
-                      childAspectRatio: Responsive.value(
-                          context: context,
-                          desktop: 1 / 1,
-                          tablet: 1 / 1,
-                          mobile: 1 / 1),
-                      crossAxisCount: Responsive.value(
-                              context: context,
-                              desktop: 3,
-                              tablet: 3,
-                              mobile: 1)
-                          .toInt(),
-                      mainAxisSpacing: 15,
-                      crossAxisSpacing: 15,
-                      shrinkWrap: true,
-                      children: [
-                        _createItem(context, "殺生石稲荷神社", "福島県大沼郡会津美里町",
-                            "images/sessyouseki.jpg"),
-                        _createItem(context, "道の駅天栄の近くにある稲荷神社", "福島県岩瀬郡天栄村",
-                            "images/tenei.jpg"),
-                        _createItem(
-                            context, "萬蔵稲荷神社", "宮城県白石市", "images/manzou.jpg"),
-                      ]),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Align(
-                    child: Text(
                       "おいなりログとは",
                       style: TextStyle(
                           fontSize: 27, fontFamily: FontFamily.NOTOSANS_BOLD),
@@ -274,36 +209,38 @@ class TopPage extends HookWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  GridView.count(
-                      physics: NeverScrollableScrollPhysics(),
-                      childAspectRatio: Responsive.value(
-                          context: context,
-                          desktop: 1 / 0.8,
-                          tablet: 1 / 0.6,
-                          mobile: 1 / 0.7),
-                      crossAxisCount: Responsive.value(
-                              context: context,
-                              desktop: 3,
-                              tablet: 1,
-                              mobile: 1)
-                          .toInt(),
-                      mainAxisSpacing: 15,
-                      shrinkWrap: true,
-                      children: [
-                        Container(
-                            child: _buildMore("気になる稲荷を見つけよう", "地域やキーワードから探せます。",
-                                "images/torii.jpg")),
-                        Container(
-                            child: _buildMore(
-                                "気になる稲荷がすぐわかる",
-                                "投稿された神社の画像や説明を見ることができます",
-                                "images/komagitune.jpg")),
-                        Container(
-                            child: _buildMore(
-                                "稲荷を登録しよう",
-                                "稲荷神社に訪れたら、思い出として登録して、みんなと共有しましょう。マイページでは、投稿履歴を見ることができます。",
-                                "images/torii.jpg")),
-                      ]),
+                  Container(
+                    child: GridView.count(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        childAspectRatio: Responsive.value(
+                            context: context,
+                            desktop: 1 / 0.9,
+                            tablet: 1 / 0.6,
+                            mobile: 1 / 0.7),
+                        crossAxisCount: Responsive.value(
+                                context: context,
+                                desktop: 3,
+                                tablet: 1,
+                                mobile: 1)
+                            .toInt(),
+                        mainAxisSpacing: 15,
+                        children: [
+                          Container(
+                              child: _buildMore(
+                                  "稲荷神社に特化",
+                                  "稲荷神社に特化した神社投稿サービスです。",
+                                  "images/komagitune.jpg")),
+                          Container(
+                              child: _buildMore("あたらしい稲荷神社を探せる", "他の人が訪れた神社を知ることができます。",
+                                  "images/torii2.jpg")),
+                          Container(
+                              child: _buildMore(
+                                  "共有しましょう",
+                                  "神社に訪れたら、思い出として登録して、みんなと共有しましょう。",
+                                  "images/gosyuin.jpg")),
+                        ]),
+                  ),
                 ],
               ),
             ),
@@ -312,7 +249,7 @@ class TopPage extends HookWidget {
             ),
           ],
         ),
-      )),
+      ),
     );
   }
 
@@ -372,7 +309,7 @@ class TopPage extends HookWidget {
     return Column(
       children: [
         Expanded(
-            flex: 3,
+            flex: 2,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Image.asset(
@@ -383,9 +320,9 @@ class TopPage extends HookWidget {
               ),
             )),
         Expanded(
-          flex: 2,
+          flex: 1,
           child: Container(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Column(
               children: [
                 Text(
@@ -394,7 +331,7 @@ class TopPage extends HookWidget {
                       fontFamily: FontFamily.NOTOSANS_BOLD, fontSize: 18),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 Text(message),
               ],
