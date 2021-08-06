@@ -34,8 +34,8 @@ class AppRouter {
     router.notFoundHandler = homeHandler;
     router.define("/", handler: homeHandler);
     router.define("/post", handler: postListHandler);
-    router.define("/post/:id", handler: postDetailHandler);
     router.define("/post/create", handler: postCreateHandler);
+    router.define("/post/:id", handler: postDetailHandler);
   }
 
 }

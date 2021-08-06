@@ -1,6 +1,8 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:inari_log/app_router.dart';
 import 'package:inari_log/constant.dart';
 import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
@@ -72,7 +74,8 @@ class TopPage extends HookWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, "/post/create");
+            AppRouter.router.navigateTo(context, "/post/create",
+                transition: TransitionType.native);
           }),
       body: SingleChildScrollView(
         child: Column(
@@ -131,8 +134,9 @@ class TopPage extends HookWidget {
                                     onPrimary: Colors.white,
                                   ),
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, "/post/create");
+                                    AppRouter.router.navigateTo(
+                                        context, "/post/create",
+                                        transition: TransitionType.native);
                                   },
                                 ),
                               )
@@ -232,7 +236,9 @@ class TopPage extends HookWidget {
                                   "稲荷神社に特化した神社投稿サービスです。",
                                   "images/komagitune.jpg")),
                           Container(
-                              child: _buildMore("稲荷を探しましょう", "他の人が訪れた神社を新着順や地域毎に探すことができます。",
+                              child: _buildMore(
+                                  "稲荷を探しましょう",
+                                  "他の人が訪れた神社を新着順や地域毎に探すことができます。",
                                   "images/torii2.jpg")),
                           Container(
                               child: _buildMore(
@@ -258,7 +264,7 @@ class TopPage extends HookWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/post/1");
+          AppRouter.router.navigateTo(context, "/post/1",transition: TransitionType.native);
         },
         child: Column(
           children: [
