@@ -232,7 +232,7 @@ class TopPage extends HookWidget {
                                   "稲荷神社に特化した神社投稿サービスです。",
                                   "images/komagitune.jpg")),
                           Container(
-                              child: _buildMore("あたらしい稲荷神社を探せる", "他の人が訪れた神社を知ることができます。",
+                              child: _buildMore("稲荷を探しましょう", "他の人が訪れた神社を新着順や地域毎に探すことができます。",
                                   "images/torii2.jpg")),
                           Container(
                               child: _buildMore(
@@ -258,7 +258,7 @@ class TopPage extends HookWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/post");
+          Navigator.pushNamed(context, "/post/1");
         },
         child: Column(
           children: [

@@ -64,7 +64,7 @@ class PostViewModel extends ChangeNotifier {
   }
 
   void addUploadImage(List<Uint8List> imgs) {
-    _imagePaths = imgs;
+    _imagePaths = imgs.take(5).toList();
     notifyListeners();
   }
 

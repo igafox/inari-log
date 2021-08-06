@@ -21,7 +21,6 @@ enum Menu {
 class PostPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    print("build");
     final viewModel = useProvider(postViewModelProvider);
 
     //住所フォーム上書き
@@ -98,8 +97,17 @@ class PostPage extends HookWidget {
                           SizedBox(
                             height: 25,
                           ),
+                          SizedBox(
+                            height: 25,
+                          ),
                           Row(
-                            children: [Icon(Icons.bookmark), Text("名前")],
+                            children: [
+                              Icon(Icons.bookmark),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text("名前")
+                            ],
                           ),
                           TextField(
                             decoration: InputDecoration(
@@ -110,7 +118,13 @@ class PostPage extends HookWidget {
                             height: 25,
                           ),
                           Row(
-                            children: [Icon(Icons.place), Text("場所")],
+                            children: [
+                              Icon(Icons.place),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text("場所")
+                            ],
                           ),
                           Row(
                             children: [
@@ -153,42 +167,58 @@ class PostPage extends HookWidget {
                             height: 25,
                           ),
                           Row(
-                            children: [Icon(Icons.edit), Text("メモ")],
+                            children: [
+                              Icon(Icons.edit),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text("メモ")
+                            ],
                           ),
-                          TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(hintText: "メモを追加"),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(maxHeight: 200),
+                            child: TextField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              decoration: InputDecoration(hintText: "メモを追加"),
+                            ),
                           ),
                           SizedBox(
                             height: 25,
                           ),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Icon(Icons.photo_library),
-                              Text("写真(5枚までアップロード可能)"),
                               SizedBox(
-                                width: 15,
+                                width: 10,
                               ),
+                              // Text(
+                              //     "画像\n画像形式:JPEG/PNG\n推奨サイズ:4x3\nファイルサイズ5MB,5枚まで投稿可能"),
+                              Text("画像"),
+                              SizedBox(width: 10,),
+                              SizedBox(
+                                height: 28,
+                                width: 160,
+                                child: ElevatedButton.icon(
+                                  icon: Icon(Icons.upload_rounded),
+                                  label: Text("ファイルを選択"),
+                                  style: ElevatedButton.styleFrom(),
+                                  onPressed: () async {
+                                    final fromPicker =
+                                    await ImagePickerWeb.getMultiImages(
+                                        outputType: ImageType.bytes)
+                                    as List<Uint8List>;
+                                    print(fromPicker.length.toString());
+                                    viewModel.addUploadImage(fromPicker);
+                                  },
+                                ),
+                              )
                             ],
-                          ),ElevatedButton(
-                            child: const Text("フォルダから選択"),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.orange,
-                              onPrimary: Colors.white,
-                            ),
-                            onPressed: () async {
-                              final fromPicker =
-                              await ImagePickerWeb.getMultiImages(
-                                  outputType: ImageType.bytes)
-                              as List<Uint8List>;
-                              print(fromPicker.length.toString());
-                              viewModel.addUploadImage(fromPicker);
-                            },
                           ),
-                          SizedBox(
-                            height: 25,
-                          ),
+                          SizedBox(height: 10,),
+                          Text("画像形式:JPEG,PNG\n推奨サイズ:4x3\nファイルサイズ:5枚まで可能"),
+                          SizedBox(height: 20),
                           GridView.count(
                               physics: NeverScrollableScrollPhysics(),
                               childAspectRatio: Responsive.value(
@@ -206,11 +236,47 @@ class PostPage extends HookWidget {
                               crossAxisSpacing: 15,
                               shrinkWrap: true,
                               children:
-                                  _buildUploadImages(viewModel.imagePaths))
+                                  _buildUploadImages(viewModel.imagePaths)),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          SizedBox(
+                            width: 100,
+                            height: 35,
+                            child: ElevatedButton(
+                              child: const Text("投稿"),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.orange,
+                                onPrimary: Colors.white,
+                              ),
+                              onPressed: () async {
+                                final fromPicker =
+                                    await ImagePickerWeb.getMultiImages(
+                                            outputType: ImageType.bytes)
+                                        as List<Uint8List>;
+                                print(fromPicker.length.toString());
+                                viewModel.addUploadImage(fromPicker);
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
                         ])))));
   }
 
   List<Widget> _buildUploadImages(List<Uint8List> imagePaths) {
+    if (imagePaths.isEmpty) {
+      final empty = Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white24),
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: Icon(Icons.photo, size: 40),
+      );
+      return [empty];
+    }
+
     final images = imagePaths.map((image) => Image.memory(image)).toList();
     return images;
   }

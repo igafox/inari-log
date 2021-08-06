@@ -13,6 +13,10 @@ enum Menu {
 }
 
 class DetailPage extends HookWidget {
+  DetailPage({required this.postId});
+
+  final String postId;
+
   @override
   Widget build(BuildContext context) {
     final viewModel = useProvider(topViewModelProvider);
@@ -145,7 +149,7 @@ class DetailPage extends HookWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(child: Text("ああああああああああああああ")),
+                                Expanded(child: Text("毎年大晦日の夜に行われる「王子狐の行列」の出発地点となる稲荷神社")),
                                 Text("2021/08/05 14:67")
                               ],
                             ),
@@ -153,12 +157,6 @@ class DetailPage extends HookWidget {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            "マップ",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: FontFamily.NOTOSANS_BOLD),
-                          )
                         ],
                       ),
                     )
