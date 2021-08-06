@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/model/post.dart';
+import 'package:inari_log/model/user.dart' as Model;
 import 'package:inari_log/provider/firebase_provider.dart';
 import 'package:inari_log/repository/post_repository.dart';
 
@@ -12,8 +14,10 @@ class PostRepositoryImp implements PostRepository {
   final Reader _reader;
 
   late final FirebaseFirestore _firestore = _reader(firebaseFirestoreProvider);
+  late final FirebaseAuth _firebaseAuth = _reader(firebaseAuthProvider);
 
   late final postCollection = _firestore.collection("post");
+  late final userCollection = _firestore.collection("user");
 
   @override
   Future<List<Post>> findAll(int limit, String? startAfterId) async {
@@ -22,13 +26,13 @@ class PostRepositoryImp implements PostRepository {
       final doc = await postCollection.doc(startAfterId).get();
       result = await postCollection
           .limit(limit)
-          .orderBy("createdDate", descending: true)
+          .orderBy("createdDate", descending: false)
           .startAfterDocument(doc)
           .get();
     } else {
       result = await postCollection
           .limit(limit)
-          .orderBy("createdDate", descending: true)
+          .orderBy("createdDate", descending: false)
           .get();
     }
 
@@ -42,6 +46,40 @@ class PostRepositoryImp implements PostRepository {
     final post = Post.from(result.data()!);
     return post;
   }
+
+  @override
+  Future<bool> create(Post post) async {
+    // final uid = _firebaseAuth.currentUser?.uid ?? "iga_fox";
+    // if(uid == null) return false;
+
+    final uid = "iga_fox";
+
+    final userResult = await userCollection.doc(uid).get();
+    if(userResult.data() == null) return false;
+    final user = Model.User.from(userResult.data()!);
+
+    post.copyWith(userId: user.id ?? "", userName: user.name ?? "");
+
+    final userPostsCollection = userCollection.doc(uid).collection("posts");
+    final id = userPostsCollection.doc().id;
+
+    final map = {
+          "id": post.id,
+          "name": post.name,
+          "memo": post.memo,
+          "address": post.address,
+          "userId": post.userId,
+          "userName": post.userName,
+          "images": post.imageUrls,
+          "createdDate": post.createdDate
+        };
+
+    await postCollection.doc(id).set(map);
+    await userPostsCollection.doc(id).set(map);
+    return true;
+  }
+
+
 
 // @override
 // Future<List<Post>> findAll(int limit) async {

@@ -37,7 +37,7 @@ class PostListViewModel extends ChangeNotifier {
 
   void load() async {
     _loading = true;
-    _repository.findAll(3,null).then((value) {
+    _repository.findAll(15,null).then((value) {
       _post = value;
     }).catchError((dynamic error) {
       print(error);

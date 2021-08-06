@@ -16,10 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$UserTearOff {
   const _$UserTearOff();
 
-  _User call({String? id, String? title}) {
+  _User call({String? id, String? name, String? iconUrl}) {
     return _User(
       id: id,
-      title: title,
+      name: name,
+      iconUrl: iconUrl,
     );
   }
 }
@@ -30,7 +31,8 @@ const $User = _$UserTearOff();
 /// @nodoc
 mixin _$User {
   String? get id => throw _privateConstructorUsedError;
-  String? get title => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  String? get iconUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
@@ -40,7 +42,7 @@ mixin _$User {
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res>;
-  $Res call({String? id, String? title});
+  $Res call({String? id, String? name, String? iconUrl});
 }
 
 /// @nodoc
@@ -54,16 +56,21 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? title = freezed,
+    Object? name = freezed,
+    Object? iconUrl = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      title: title == freezed
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconUrl: iconUrl == freezed
+          ? _value.iconUrl
+          : iconUrl // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -74,7 +81,7 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) then) =
       __$UserCopyWithImpl<$Res>;
   @override
-  $Res call({String? id, String? title});
+  $Res call({String? id, String? name, String? iconUrl});
 }
 
 /// @nodoc
@@ -89,16 +96,21 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? title = freezed,
+    Object? name = freezed,
+    Object? iconUrl = freezed,
   }) {
     return _then(_User(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      title: title == freezed
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconUrl: iconUrl == freezed
+          ? _value.iconUrl
+          : iconUrl // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -107,16 +119,18 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_User implements _User {
-  _$_User({this.id, this.title});
+  _$_User({this.id, this.name, this.iconUrl});
 
   @override
   final String? id;
   @override
-  final String? title;
+  final String? name;
+  @override
+  final String? iconUrl;
 
   @override
   String toString() {
-    return 'User(id: $id, title: $title)';
+    return 'User(id: $id, name: $name, iconUrl: $iconUrl)';
   }
 
   @override
@@ -125,15 +139,18 @@ class _$_User implements _User {
         (other is _User &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.title, title) ||
-                const DeepCollectionEquality().equals(other.title, title)));
+            (identical(other.name, name) ||
+                const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.iconUrl, iconUrl) ||
+                const DeepCollectionEquality().equals(other.iconUrl, iconUrl)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(title);
+      const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(iconUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -142,12 +159,14 @@ class _$_User implements _User {
 }
 
 abstract class _User implements User {
-  factory _User({String? id, String? title}) = _$_User;
+  factory _User({String? id, String? name, String? iconUrl}) = _$_User;
 
   @override
   String? get id => throw _privateConstructorUsedError;
   @override
-  String? get title => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  @override
+  String? get iconUrl => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$UserCopyWith<_User> get copyWith => throw _privateConstructorUsedError;

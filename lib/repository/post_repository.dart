@@ -11,6 +11,7 @@ abstract class PostRepository {
 
   Future<Post> findById(String id);
 
+  Future<bool> create(Post post);
 
   // Future<void> create(Post Post);
   //

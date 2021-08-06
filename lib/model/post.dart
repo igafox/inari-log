@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'post.freezed.dart';
 
 @freezed
-abstract class Post with _$Post {
+abstract class Post implements _$Post {
   const factory Post({
     @Default("") String id,
     @Default("") String name,
@@ -29,13 +29,16 @@ abstract class Post with _$Post {
         createdDate: (map["createdDate"] as Timestamp).toDate());
   }
 
-// Map<String, dynamic> toMap() {
-//   return {
-//     "id": id,
-//     "title": this.title,
-//     "options": "options",
-//     "total": total,
-//     "open": open
-//   };
-// }
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     "id": this.id,
+  //     "name": this.name,
+  //     "memo": this.memo,
+  //     "address": this.address,
+  //     "userId": this.userId,
+  //     "userName": this.userName,
+  //     "images": this.imageUrls,
+  //     "createDate": this.createdDate
+  //   };
+  // }
 }

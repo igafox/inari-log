@@ -212,12 +212,7 @@ class PostPage extends HookWidget {
                                 onPrimary: Colors.white,
                               ),
                               onPressed: () async {
-                                final fromPicker =
-                                    await ImagePickerWeb.getMultiImages(
-                                            outputType: ImageType.bytes)
-                                        as List<Uint8List>;
-                                print(fromPicker.length.toString());
-                                viewModel.addUploadImage(fromPicker);
+                                viewModel.post();
                               },
                             ),
                           ),

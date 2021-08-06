@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -227,10 +228,8 @@ class TopPage extends HookWidget {
           child: Column(
             children: [
               Expanded(
-                  child: Image.network(
-                item.imageUrls.first,
-                height: double.infinity,
-                width: double.infinity,
+                  child: CachedNetworkImage(
+                imageUrl: item.imageUrls.first,
                 fit: BoxFit.cover,
               )),
               Container(
