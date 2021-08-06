@@ -4,7 +4,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/constant.dart';
+import 'package:inari_log/model/post.dart';
 import 'package:inari_log/responsive.dart';
+import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 
@@ -22,45 +24,7 @@ class TopPage extends HookWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
-        child: AppBar(
-          elevation: 0,
-          title: Text('おいなりログ'),
-          actions: [
-            TextButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                        EdgeInsets.only(left: 15, right: 15))),
-                child: Text(
-                  '神社一覧',
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                )),
-            PopupMenuButton<Menu>(
-              itemBuilder: (context) {
-                var list = <PopupMenuEntry<Menu>>[
-                  PopupMenuItem(
-                    child: Text("マイページ"),
-                    value: Menu.MY_PAGE,
-                  ),
-                  PopupMenuItem(
-                    child: Text("プロフィール編集"),
-                    value: Menu.EDIT_PROFILE,
-                  ),
-                  PopupMenuItem(
-                    child: Text("ログアウト"),
-                    value: Menu.LOGOUT,
-                  )
-                ];
-                return list;
-              },
-              icon: const CircleImage(
-                assetImage: AssetImage("images/icon.png"),
-                size: 42,
-              ),
-              iconSize: 42,
-            ),
-          ],
-        ),
+        child: GlobalMenu(),
       ),
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: Colors.orangeAccent,
@@ -181,14 +145,7 @@ class TopPage extends HookWidget {
                           mainAxisSpacing: 15,
                           crossAxisSpacing: 15,
                           shrinkWrap: true,
-                          children: [
-                        _createItem(
-                            context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                        _createItem(
-                            context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
-                        _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                            "images/takayasiki.jpg"),
-                      ])),
+                          children: _buildPostItems(context, viewModel.post))),
                   SizedBox(
                     height: 10,
                   ),
@@ -259,56 +216,58 @@ class TopPage extends HookWidget {
     );
   }
 
-  Widget _createItem(
-      BuildContext context, String name, String address, String imageName) {
-    return Card(
-      child: InkWell(
-        onTap: () {
-          AppRouter.router.navigateTo(context, "/post/1",transition: TransitionType.native);
-        },
-        child: Column(
-          children: [
-            Expanded(
-                child: Image.asset(
-              imageName,
-              height: double.infinity,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            )),
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Row(children: [
-                CircleImage(
-                    size: 45, assetImage: AssetImage("images/icon.png")),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  children: [
-                    Text("iga",
+  List<Widget> _buildPostItems(BuildContext context, List<Post> list) {
+    print("count:" + list.toString());
+    return list.map((item) {
+      return Card(
+        child: InkWell(
+          onTap: () {
+            AppRouter.router.navigateTo(context, "/post/" + item.id,
+                transition: TransitionType.native);
+          },
+          child: Column(
+            children: [
+              Expanded(
+                  child: Image.network(
+                item.imageUrls.first,
+                height: double.infinity,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              )),
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Row(children: [
+                  CircleImage(size: 45, image: AssetImage("images/icon.png")),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    children: [
+                      Text(item.userName,
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: FontFamily.NOTOSANS_BOLD)),
+                      Text(
+                        item.name,
                         style: TextStyle(
-                            fontSize: 13,
-                            fontFamily: FontFamily.NOTOSANS_BOLD)),
-                    Text(
-                      name,
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: FontFamily.NOTOSANS_REGULAR),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(address,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: FontFamily.NOTOSANS_REGULAR))
-                  ],
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                ),
-              ]),
-            ),
-          ],
+                            fontSize: 15,
+                            fontFamily: FontFamily.NOTOSANS_REGULAR),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(item.address,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: FontFamily.NOTOSANS_REGULAR))
+                    ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  ),
+                ]),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }).toList();
   }
 
   Widget _buildMore(String title, String message, String imageName) {

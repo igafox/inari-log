@@ -4,7 +4,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/constant.dart';
+import 'package:inari_log/model/post.dart';
 import 'package:inari_log/responsive.dart';
+import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/post_list/post_list_view_model.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
@@ -16,7 +18,6 @@ enum Menu {
 }
 
 class PostListPage extends HookWidget {
-
   @override
   Widget build(BuildContext context) {
     final viewModel = useProvider(postListViewModelProvider);
@@ -24,45 +25,7 @@ class PostListPage extends HookWidget {
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(60),
-          child: AppBar(
-            elevation: 0,
-            title: Text('おいなりログ'),
-            actions: [
-              TextButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                          EdgeInsets.only(left: 15, right: 15))),
-                  child: Text(
-                    '神社一覧',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  )),
-              PopupMenuButton<Menu>(
-                itemBuilder: (context) {
-                  var list = <PopupMenuEntry<Menu>>[
-                    PopupMenuItem(
-                      child: Text("マイページ"),
-                      value: Menu.MY_PAGE,
-                    ),
-                    PopupMenuItem(
-                      child: Text("プロフィール編集"),
-                      value: Menu.EDIT_PROFILE,
-                    ),
-                    PopupMenuItem(
-                      child: Text("ログアウト"),
-                      value: Menu.LOGOUT,
-                    )
-                  ];
-                  return list;
-                },
-                icon: const CircleImage(
-                  assetImage: AssetImage("images/icon.png"),
-                  size: 42,
-                ),
-                iconSize: 42,
-              ),
-            ],
-          ),
+          child: GlobalMenu(),
         ),
         floatingActionButton: FloatingActionButton.extended(
             backgroundColor: Colors.orangeAccent,
@@ -76,7 +39,8 @@ class PostListPage extends HookWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              AppRouter.router.navigateTo(context, "/post/create",transition: TransitionType.native);
+              AppRouter.router.navigateTo(context, "/post/create",
+                  transition: TransitionType.native);
             }),
         body: Container(
           alignment: Alignment.topCenter,
@@ -96,74 +60,42 @@ class PostListPage extends HookWidget {
                   height: 20,
                 ),
                 Expanded(
-                    child: GridView.count(
-                        childAspectRatio: Responsive.value(
-                            context: context,
-                            desktop: 1 / 1,
-                            tablet: 1 / 1,
-                            mobile: 1 / 1),
-                        crossAxisCount: Responsive.value(
-                                context: context,
-                                desktop: 3,
-                                tablet: 3,
-                                mobile: 1)
-                            .toInt(),
-                        mainAxisSpacing: 15,
-                        crossAxisSpacing: 15,
-                        children: [
-                          _createItem(
-                              context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                          _createItem(context, "装束稲荷神社", "東京都北区",
-                              "images/syouzoku.jpg"),
-                          _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                              "images/takayasiki.jpg"),
-                          _createItem(
-                              context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                          _createItem(context, "装束稲荷神社", "東京都北区",
-                              "images/syouzoku.jpg"),
-                          _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                              "images/takayasiki.jpg"),
-                          _createItem(
-                              context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                          _createItem(context, "装束稲荷神社", "東京都北区",
-                              "images/syouzoku.jpg"),
-                          _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                              "images/takayasiki.jpg"),
-                          _createItem(
-                              context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                          _createItem(context, "装束稲荷神社", "東京都北区",
-                              "images/syouzoku.jpg"),
-                          _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                              "images/takayasiki.jpg"),
-                          _createItem(
-                              context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                          _createItem(context, "装束稲荷神社", "東京都北区",
-                              "images/syouzoku.jpg"),
-                          _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                              "images/takayasiki.jpg"),
-                          _createItem(
-                              context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                          _createItem(context, "装束稲荷神社", "東京都北区",
-                              "images/syouzoku.jpg"),
-                          _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                              "images/takayasiki.jpg")
-                        ]))
+                    child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: Responsive.value(
+                              context: context,
+                              desktop: 1 / 1,
+                              tablet: 1 / 1,
+                              mobile: 1 / 1),
+                          crossAxisCount: Responsive.value(
+                                  context: context,
+                                  desktop: 3,
+                                  tablet: 3,
+                                  mobile: 1)
+                              .toInt(),
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 15,
+                        ),
+                        itemCount: viewModel.post.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _createItem(context, viewModel.post[index]);
+                        }))
               ])),
         ));
   }
 
-  Widget _createItem(
-      BuildContext context, String name, String address, String imageName) {
+  Widget _createItem(BuildContext context, Post post) {
     return Card(
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/post/1",transition: TransitionType.native);
+          AppRouter.router.navigateTo(context, "/post/1",
+              transition: TransitionType.native);
         },
         child: Column(
           children: [
             Expanded(
-                child: Image.asset(
-              imageName,
+                child: Image.network(
+              post.imageUrls.first,
               height: double.infinity,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -171,25 +103,24 @@ class PostListPage extends HookWidget {
             Container(
               padding: EdgeInsets.all(10),
               child: Row(children: [
-                CircleImage(
-                    size: 45, assetImage: AssetImage("images/icon.png")),
+                CircleImage(size: 45, image: AssetImage("images/icon.png")),
                 SizedBox(
                   width: 10,
                 ),
                 Column(
                   children: [
-                    Text("iga",
+                    Text(post.userName,
                         style: TextStyle(
                             fontSize: 13,
                             fontFamily: FontFamily.NOTOSANS_BOLD)),
                     Text(
-                      name,
+                      post.name,
                       style: TextStyle(
                           fontSize: 15,
                           fontFamily: FontFamily.NOTOSANS_REGULAR),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(address,
+                    Text(post.address,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: FontFamily.NOTOSANS_REGULAR))

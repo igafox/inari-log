@@ -32,6 +32,25 @@
        https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZPjVvPNOrROvG7psXCyYttuvRKv4qsVw"></script>
 
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDZPjVvPNOrROvG7psXCyYttuvRKv4qsVw",
+      authDomain: "oinari-log.firebaseapp.com",
+      projectId: "oinari-log",
+      storageBucket: "oinari-log.appspot.com",
+      messagingSenderId: "1072575606305",
+      appId: "1:1072575606305:web:ec0903bc3078c81603fd60"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;

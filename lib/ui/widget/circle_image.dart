@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class CircleImage extends StatelessWidget {
   final double size;
-  final AssetImage assetImage;
+  final ImageProvider image;
 
   const CircleImage({
     Key? key,
     required this.size,
-    required this.assetImage
+    required this.image
   }) : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class CircleImage extends StatelessWidget {
         shape: BoxShape.circle,
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: assetImage,
+          image: image,
         ),
       ),
     );

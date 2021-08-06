@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/constant.dart';
 import 'package:inari_log/responsive.dart';
+import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 
@@ -24,45 +25,7 @@ class DetailPage extends HookWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
-        child: AppBar(
-          elevation: 0,
-          title: Text('おいなりログ'),
-          actions: [
-            TextButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                        EdgeInsets.only(left: 15, right: 15))),
-                child: Text(
-                  '神社一覧',
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                )),
-            PopupMenuButton<Menu>(
-              itemBuilder: (context) {
-                var list = <PopupMenuEntry<Menu>>[
-                  PopupMenuItem(
-                    child: Text("マイページ"),
-                    value: Menu.MY_PAGE,
-                  ),
-                  PopupMenuItem(
-                    child: Text("プロフィール編集"),
-                    value: Menu.EDIT_PROFILE,
-                  ),
-                  PopupMenuItem(
-                    child: Text("ログアウト"),
-                    value: Menu.LOGOUT,
-                  )
-                ];
-                return list;
-              },
-              icon: CircleImage(
-                assetImage: AssetImage("images/icon.png"),
-                size: 42,
-              ),
-              iconSize: 42,
-            ),
-          ],
-        ),
+        child: GlobalMenu(),
       ),
       body: SingleChildScrollView(
           child: Container(
@@ -78,7 +41,7 @@ class DetailPage extends HookWidget {
                       child: Row(children: [
                         CircleImage(
                             size: 40,
-                            assetImage: AssetImage("images/icon.png")),
+                            image: AssetImage("images/icon.png")),
                         SizedBox(
                           width: 10,
                         ),
@@ -149,7 +112,9 @@ class DetailPage extends HookWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(child: Text("毎年大晦日の夜に行われる「王子狐の行列」の出発地点となる稲荷神社")),
+                                Expanded(
+                                    child: Text(
+                                        "毎年大晦日の夜に行われる「王子狐の行列」の出発地点となる稲荷神社")),
                                 Text("2021/08/05 14:67")
                               ],
                             ),
@@ -181,7 +146,7 @@ class DetailPage extends HookWidget {
           Container(
             padding: EdgeInsets.all(10),
             child: Row(children: [
-              CircleImage(size: 45, assetImage: AssetImage("images/icon.png")),
+              CircleImage(size: 45, image: AssetImage("images/icon.png")),
               SizedBox(
                 width: 10,
               ),

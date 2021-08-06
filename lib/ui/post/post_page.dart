@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:inari_log/constant.dart';
 import 'package:inari_log/responsive.dart';
+import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/post/post_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,47 +32,8 @@ class PostPage extends HookWidget {
 
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: AppBar(
-            elevation: 0,
-            title: Text('おいなりログ'),
-            actions: [
-              TextButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                          EdgeInsets.only(left: 15, right: 15))),
-                  child: Text(
-                    '神社一覧',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  )),
-              PopupMenuButton<Menu>(
-                itemBuilder: (context) {
-                  var list = <PopupMenuEntry<Menu>>[
-                    PopupMenuItem(
-                      child: Text("マイページ"),
-                      value: Menu.MY_PAGE,
-                    ),
-                    PopupMenuItem(
-                      child: Text("プロフィール編集"),
-                      value: Menu.EDIT_PROFILE,
-                    ),
-                    PopupMenuItem(
-                      child: Text("ログアウト"),
-                      value: Menu.LOGOUT,
-                    )
-                  ];
-                  return list;
-                },
-                icon: CircleImage(
-                  assetImage: AssetImage("images/icon.png"),
-                  size: 42,
-                ),
-                iconSize: 42,
-              ),
-            ],
-          ),
-        ),
+            preferredSize: Size.fromHeight(60),
+            child: GlobalMenu()),
         body: SingleChildScrollView(
             child: Container(
                 alignment: Alignment.center,

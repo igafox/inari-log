@@ -4,6 +4,7 @@ import 'package:inari_log/ui/detail/detail_page.dart';
 import 'package:inari_log/ui/post/post_page.dart';
 import 'package:inari_log/ui/post_list/post_list_page.dart';
 import 'package:inari_log/ui/top/top_page.dart';
+import 'package:inari_log/ui/user/user_page.dart';
 
 class AppRouter {
   static late final FluroRouter router = FluroRouter();
@@ -29,6 +30,12 @@ class AppRouter {
         return DetailPage(postId: postId);
       });
 
+  static var userDetailHandler = Handler(
+      handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+        String userId = params["id"]?.first ?? "";
+        return UserPage(userId: userId);
+      });
+
 
   static void setup() {
     router.notFoundHandler = homeHandler;
@@ -36,6 +43,7 @@ class AppRouter {
     router.define("/post", handler: postListHandler);
     router.define("/post/create", handler: postCreateHandler);
     router.define("/post/:id", handler: postDetailHandler);
+    router.define("/user/:id", handler: userDetailHandler);
   }
 
 }
