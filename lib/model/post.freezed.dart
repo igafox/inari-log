@@ -19,6 +19,7 @@ class _$PostTearOff {
   _Post call(
       {String id = "",
       String name = "",
+      String memo = "",
       String address = "",
       DateTime? createdDate,
       String userId = "",
@@ -27,6 +28,7 @@ class _$PostTearOff {
     return _Post(
       id: id,
       name: name,
+      memo: memo,
       address: address,
       createdDate: createdDate,
       userId: userId,
@@ -43,6 +45,7 @@ const $Post = _$PostTearOff();
 mixin _$Post {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get memo => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
   DateTime? get createdDate => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
@@ -60,6 +63,7 @@ abstract class $PostCopyWith<$Res> {
   $Res call(
       {String id,
       String name,
+      String memo,
       String address,
       DateTime? createdDate,
       String userId,
@@ -79,6 +83,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
+    Object? memo = freezed,
     Object? address = freezed,
     Object? createdDate = freezed,
     Object? userId = freezed,
@@ -93,6 +98,10 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      memo: memo == freezed
+          ? _value.memo
+          : memo // ignore: cast_nullable_to_non_nullable
               as String,
       address: address == freezed
           ? _value.address
@@ -126,6 +135,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
   $Res call(
       {String id,
       String name,
+      String memo,
       String address,
       DateTime? createdDate,
       String userId,
@@ -146,6 +156,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
+    Object? memo = freezed,
     Object? address = freezed,
     Object? createdDate = freezed,
     Object? userId = freezed,
@@ -160,6 +171,10 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      memo: memo == freezed
+          ? _value.memo
+          : memo // ignore: cast_nullable_to_non_nullable
               as String,
       address: address == freezed
           ? _value.address
@@ -191,6 +206,7 @@ class _$_Post implements _Post {
   const _$_Post(
       {this.id = "",
       this.name = "",
+      this.memo = "",
       this.address = "",
       this.createdDate,
       this.userId = "",
@@ -203,6 +219,9 @@ class _$_Post implements _Post {
   @JsonKey(defaultValue: "")
   @override
   final String name;
+  @JsonKey(defaultValue: "")
+  @override
+  final String memo;
   @JsonKey(defaultValue: "")
   @override
   final String address;
@@ -220,7 +239,7 @@ class _$_Post implements _Post {
 
   @override
   String toString() {
-    return 'Post(id: $id, name: $name, address: $address, createdDate: $createdDate, userId: $userId, userName: $userName, imageUrls: $imageUrls)';
+    return 'Post(id: $id, name: $name, memo: $memo, address: $address, createdDate: $createdDate, userId: $userId, userName: $userName, imageUrls: $imageUrls)';
   }
 
   @override
@@ -231,6 +250,8 @@ class _$_Post implements _Post {
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.memo, memo) ||
+                const DeepCollectionEquality().equals(other.memo, memo)) &&
             (identical(other.address, address) ||
                 const DeepCollectionEquality()
                     .equals(other.address, address)) &&
@@ -252,6 +273,7 @@ class _$_Post implements _Post {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(memo) ^
       const DeepCollectionEquality().hash(address) ^
       const DeepCollectionEquality().hash(createdDate) ^
       const DeepCollectionEquality().hash(userId) ^
@@ -268,6 +290,7 @@ abstract class _Post implements Post {
   const factory _Post(
       {String id,
       String name,
+      String memo,
       String address,
       DateTime? createdDate,
       String userId,
@@ -278,6 +301,8 @@ abstract class _Post implements Post {
   String get id => throw _privateConstructorUsedError;
   @override
   String get name => throw _privateConstructorUsedError;
+  @override
+  String get memo => throw _privateConstructorUsedError;
   @override
   String get address => throw _privateConstructorUsedError;
   @override

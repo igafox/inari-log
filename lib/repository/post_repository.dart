@@ -9,6 +9,8 @@ abstract class PostRepository {
 
   Future<List<Post>> findAll(int limit,String? startAfterId);
 
+  Future<Post> findById(String id);
+
 
   // Future<void> create(Post Post);
   //

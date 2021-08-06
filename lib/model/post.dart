@@ -8,26 +8,26 @@ abstract class Post with _$Post {
   const factory Post({
     @Default("") String id,
     @Default("") String name,
+    @Default("") String memo,
     @Default("") String address,
     DateTime? createdDate,
     @Default("") String userId,
     @Default("") String userName,
-    @Default([])List<String> imageUrls,
+    @Default([]) List<String> imageUrls,
   }) = _Post;
 
-factory Post.from(Map<String, dynamic> map) {
-  print(map);
-
-  return Post(
-    id: map["id"] ?? "",
-    name: map["name"] ?? "",
-    address: map["address"] ?? "",
-    userId: map["userId"] ?? "",
-    userName: map["userName"] ?? "",
-    imageUrls: (map["images"] as List<dynamic>).map((e) => e as String).toList(),
-    createdDate: (map["createdDate"] as Timestamp).toDate()
-  );
-}
+  factory Post.from(Map<String, dynamic> map) {
+    return Post(
+        id: map["id"] ?? "",
+        name: map["name"] ?? "",
+        memo: map["memo"] ?? "",
+        address: map["address"] ?? "",
+        userId: map["userId"] ?? "",
+        userName: map["userName"] ?? "",
+        imageUrls:
+            (map["images"] as List<dynamic>).map((e) => e as String).toList(),
+        createdDate: (map["createdDate"] as Timestamp).toDate());
+  }
 
 // Map<String, dynamic> toMap() {
 //   return {

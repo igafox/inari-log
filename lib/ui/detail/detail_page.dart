@@ -7,6 +7,8 @@ import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 
+import 'detail_view_model.dart';
+
 enum Menu {
   MY_PAGE,
   EDIT_PROFILE,
@@ -20,7 +22,7 @@ class DetailPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = useProvider(topViewModelProvider);
+    final viewModel = useProvider(detailViewModelProvider(postId));
 
     return Scaffold(
       appBar: PreferredSize(
@@ -40,25 +42,24 @@ class DetailPage extends HookWidget {
                       padding: EdgeInsets.all(15),
                       child: Row(children: [
                         CircleImage(
-                            size: 40,
-                            image: AssetImage("images/icon.png")),
+                            size: 40, image: AssetImage("images/icon.png")),
                         SizedBox(
                           width: 10,
                         ),
                         Column(
                           children: [
-                            Text("iga",
+                            Text(viewModel.post?.userName ?? "",
                                 style: TextStyle(
                                     fontSize: 13,
                                     fontFamily: FontFamily.NOTOSANS_BOLD)),
                             Text(
-                              "装束稲荷神社",
+                              viewModel.post?.name ?? "",
                               style: TextStyle(
                                   fontSize: 15,
                                   fontFamily: FontFamily.NOTOSANS_REGULAR),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Text("東京都北区",
+                            Text(viewModel.post?.address ?? "",
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontFamily: FontFamily.NOTOSANS_REGULAR))
@@ -76,8 +77,8 @@ class DetailPage extends HookWidget {
                             .toDouble(),
                         child: Stack(
                           children: [
-                            Image.asset(
-                              "images/syouzoku.jpg",
+                            Image.network(
+                              viewModel.post?.imageUrls.first ?? "",
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
@@ -113,9 +114,10 @@ class DetailPage extends HookWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                    child: Text(
-                                        "毎年大晦日の夜に行われる「王子狐の行列」の出発地点となる稲荷神社")),
-                                Text("2021/08/05 14:67")
+                                    child: Text(viewModel.post?.memo ?? "")),
+                                Text(viewModel.post?.createdDate
+                                        ?.toIso8601String() ??
+                                    "")
                               ],
                             ),
                           )),

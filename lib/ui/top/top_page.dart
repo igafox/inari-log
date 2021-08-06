@@ -217,7 +217,6 @@ class TopPage extends HookWidget {
   }
 
   List<Widget> _buildPostItems(BuildContext context, List<Post> list) {
-    print("count:" + list.toString());
     return list.map((item) {
       return Card(
         child: InkWell(

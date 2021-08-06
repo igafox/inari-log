@@ -36,6 +36,13 @@ class PostRepositoryImp implements PostRepository {
     return post;
   }
 
+  @override
+  Future<Post> findById(String id) async {
+    final result = await postCollection.doc(id).get();
+    final post = Post.from(result.data()!);
+    return post;
+  }
+
 // @override
 // Future<List<Post>> findAll(int limit) async {
 //     final result = await postCollection.limit(limit).get();
