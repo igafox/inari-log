@@ -30,7 +30,19 @@ class GlobalMenu extends HookWidget {
               style: TextStyle(fontSize: 15, color: Colors.white),
             ),
             onPressed: () {
-              AppRouter.router.navigateTo(context, "/post",transition: TransitionType.native);
+              AppRouter.router.navigateTo(context, "/post",
+                  transition: TransitionType.native);
+            }),
+        TextButton(
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                    EdgeInsets.only(left: 15, right: 15))),
+            child: Text(
+              '更新',
+              style: TextStyle(fontSize: 15, color: Colors.white),
+            ),
+            onPressed: () {
+              viewModel.checkLoginStatus();
             }),
         Visibility(
           visible: viewModel.isLogin,
@@ -70,7 +82,8 @@ class GlobalMenu extends HookWidget {
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
-                  viewModel.changeStatus(!viewModel.isLogin);
+                  AppRouter.router.navigateTo(context, "/login",
+                      transition: TransitionType.native);
                 },
               ),
             )),

@@ -48,6 +48,8 @@ dependencies:
 
   geocoding: ^2.0.0
 
+  font_awesome_flutter: ^9.1.0
+
   file_picker: ^3.0.4
   image_picker_web: ^2.0.3
   fluro: ^2.0.3

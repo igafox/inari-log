@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:inari_log/ui/detail/detail_page.dart';
+import 'package:inari_log/ui/login/login_page.dart';
 import 'package:inari_log/ui/post/post_page.dart';
 import 'package:inari_log/ui/post_list/post_list_page.dart';
 import 'package:inari_log/ui/top/top_page.dart';
@@ -37,6 +38,10 @@ class AppRouter {
         return UserPage(userId: userId);
       });
 
+  static var loginHandler = Handler(
+      handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+        return LoginPage();
+      });
 
   static void setup() {
     router.notFoundHandler = homeHandler;
@@ -45,6 +50,7 @@ class AppRouter {
     router.define("/post/create", handler: postCreateHandler);
     router.define("/post/:id", handler: postDetailHandler);
     router.define("/user/:id", handler: userDetailHandler);
+    router.define("/login", handler:loginHandler);
   }
 
 }
