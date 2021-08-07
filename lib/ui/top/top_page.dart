@@ -152,9 +152,21 @@ class TopPage extends HookWidget {
                     height: 10,
                   ),
                   Align(
-                    child: Text(
-                      "もっとみる",
-                      style: TextStyle(fontSize: 15),
+                    child: SizedBox(
+                      height: 40,
+                      width: 130,
+                      child: TextButton(
+                          child: Text(
+                            "もっと見る",
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                          onPressed: () {
+                            AppRouter.router.navigateTo(
+                              context,
+                              "/post",
+                              transition: TransitionType.native,
+                            );
+                          }),
                     ),
                     alignment: Alignment.centerRight,
                   ),
