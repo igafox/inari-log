@@ -10,13 +10,20 @@ abstract class Post implements _$Post {
     @Default("") String name,
     @Default("") String memo,
     @Default("") String address,
-    DateTime? createdDate,
+    DateTime? createdAt,
     @Default("") String userId,
     @Default("") String userName,
+    @Default("") String userIcon,
     @Default([]) List<String> imageUrls,
   }) = _Post;
 
   factory Post.from(Map<String, dynamic> map) {
+    List<String> imageUrls = [];
+    if (map["imageUrls"] is List<dynamic>) {
+      imageUrls =
+          (map["imageUrls"] as List<dynamic>).map((e) => e as String).toList();
+    }
+
     return Post(
         id: map["id"] ?? "",
         name: map["name"] ?? "",
@@ -24,21 +31,21 @@ abstract class Post implements _$Post {
         address: map["address"] ?? "",
         userId: map["userId"] ?? "",
         userName: map["userName"] ?? "",
-        imageUrls:
-            (map["images"] as List<dynamic>).map((e) => e as String).toList(),
-        createdDate: (map["createdDate"] as Timestamp).toDate());
+        userIcon: map["userIcon"] ?? "",
+        imageUrls: imageUrls,
+        createdAt: (map["createdAt"] as Timestamp).toDate());
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     "id": this.id,
-  //     "name": this.name,
-  //     "memo": this.memo,
-  //     "address": this.address,
-  //     "userId": this.userId,
-  //     "userName": this.userName,
-  //     "images": this.imageUrls,
-  //     "createDate": this.createdDate
-  //   };
-  // }
+// Map<String, dynamic> toMap() {
+//   return {
+//     "id": this.id,
+//     "name": this.name,
+//     "memo": this.memo,
+//     "address": this.address,
+//     "userId": this.userId,
+//     "userName": this.userName,
+//     "images": this.imageUrls,
+//     "createDate": this.createdDate
+//   };
+// }
 }

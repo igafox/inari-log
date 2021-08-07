@@ -5,6 +5,7 @@ import 'package:inari_log/ui/post/post_page.dart';
 import 'package:inari_log/ui/post_list/post_list_page.dart';
 import 'package:inari_log/ui/top/top_page.dart';
 import 'package:inari_log/ui/user/user_page.dart';
+import 'package:collection/collection.dart';
 
 class AppRouter {
   static late final FluroRouter router = FluroRouter();
@@ -26,13 +27,13 @@ class AppRouter {
 
   static var postDetailHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-        String postId = params["id"]?.first ?? "";
+        String postId = params["id"]?.firstOrNull ?? "";
         return DetailPage(postId: postId);
       });
 
   static var userDetailHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-        String userId = params["id"]?.first ?? "";
+        String userId = params["id"]?.firstOrNull ?? "";
         return UserPage(userId: userId);
       });
 

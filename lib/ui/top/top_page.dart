@@ -10,6 +10,7 @@ import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
+import 'package:collection/collection.dart';
 
 enum Menu {
   MY_PAGE,
@@ -229,7 +230,7 @@ class TopPage extends HookWidget {
             children: [
               Expanded(
                   child: CachedNetworkImage(
-                imageUrl: item.imageUrls.first,
+                imageUrl: item.imageUrls.firstOrNull ?? "",
                 fit: BoxFit.cover,
               )),
               Container(

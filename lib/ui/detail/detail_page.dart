@@ -6,6 +6,7 @@ import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
+import 'package:collection/collection.dart';
 
 import 'detail_view_model.dart';
 
@@ -78,7 +79,7 @@ class DetailPage extends HookWidget {
                         child: Stack(
                           children: [
                             Image.network(
-                              viewModel.post?.imageUrls.first ?? "",
+                              viewModel.post?.imageUrls.firstOrNull ?? "",
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
@@ -115,7 +116,7 @@ class DetailPage extends HookWidget {
                               children: [
                                 Expanded(
                                     child: Text(viewModel.post?.memo ?? "")),
-                                Text(viewModel.post?.createdDate
+                                Text(viewModel.post?.createdAt
                                         ?.toIso8601String() ??
                                     "")
                               ],

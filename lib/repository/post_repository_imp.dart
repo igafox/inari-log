@@ -26,13 +26,13 @@ class PostRepositoryImp implements PostRepository {
       final doc = await postCollection.doc(startAfterId).get();
       result = await postCollection
           .limit(limit)
-          .orderBy("createdDate", descending: false)
+          .orderBy("createdAt", descending: false)
           .startAfterDocument(doc)
           .get();
     } else {
       result = await postCollection
           .limit(limit)
-          .orderBy("createdDate", descending: false)
+          .orderBy("createdAt", descending: false)
           .get();
     }
 
@@ -52,77 +52,40 @@ class PostRepositoryImp implements PostRepository {
     // final uid = _firebaseAuth.currentUser?.uid ?? "iga_fox";
     // if(uid == null) return false;
 
+    //uid取得
     final uid = "iga_fox";
 
+    //ユーザーデータ取得
     final userResult = await userCollection.doc(uid).get();
-    if(userResult.data() == null) return false;
+    if (userResult.data() == null) return false;
     final user = Model.User.from(userResult.data()!);
+    post = post.copyWith(userId: user.id!, userName: user.name!);
 
-    post.copyWith(userId: user.id ?? "", userName: user.name ?? "");
+    //idが未設定の場合、生成する
+    if (post.id.isEmpty) {
+      post = post.copyWith(id: userCollection.doc().id);
+    }
 
-    final userPostsCollection = userCollection.doc(uid).collection("posts");
-    final id = userPostsCollection.doc().id;
+    final data = {
+      "id": post.id,
+      "name": post.name,
+      "memo": post.memo,
+      "address": post.address,
+      "userId": post.userId,
+      "userName": post.userName,
+      "userIcon": post.userIcon,
+      "imageUrls": post.imageUrls,
+      "createdAt": FieldValue.serverTimestamp()
+    };
 
-    final map = {
-          "id": post.id,
-          "name": post.name,
-          "memo": post.memo,
-          "address": post.address,
-          "userId": post.userId,
-          "userName": post.userName,
-          "images": post.imageUrls,
-          "createdDate": post.createdDate
-        };
+    await postCollection.doc(post.id).set(data);
 
-    await postCollection.doc(id).set(map);
-    await userPostsCollection.doc(id).set(map);
     return true;
   }
 
-
-
-// @override
-// Future<List<Post>> findAll(int limit) async {
-//     final result = await postCollection.limit(limit).get();
-//     final posts = result.docs.map((e) => Post.from(e.data())).toList();
-//     return posts;
-// }
-
-// @override
-// Future<void> create(Vote vote) {
-//   // var id = voteCollection.doc().id;
-//   // var tempVote = vote.copyWith(id: id);
-//   // return voteCollection.doc(id).set(data)
-//
-//   return voteCollection.doc(vote.id).set({});
-//
-// }
-//
-// @override
-// Future<void> delete(String id) async {
-//   return voteCollection.doc(id).delete();
-// }
-//
-// @override
-// Future<Vote> select(String id) async {
-//   final result = await voteCollection.doc(id).get();
-//   final vote = Vote.from(result.data() as Map);
-//   return vote;
-// }
-//
-// @override
-// Future<List<Vote>> selectAll() async {
-//   final result = await voteCollection.get();
-//   final votes = result.docs.map((e) => Vote.from(e.data())).toList();
-//   return votes;
-// }
-//
-// @override
-// Future<void> update(Vote vote) {
-//   return voteCollection.doc("id").set({
-//     'title': vote.title,
-//     'open': vote.open,
-//   });
-// }
+  @override
+  Future<String> generateId() async {
+    return postCollection.doc().id;
+  }
 
 }

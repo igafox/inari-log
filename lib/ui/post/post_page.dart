@@ -198,7 +198,7 @@ class PostPage extends HookWidget {
                               crossAxisSpacing: 15,
                               shrinkWrap: true,
                               children:
-                                  _buildUploadImages(viewModel.imagePaths)),
+                                  _buildUploadImages(viewModel.uploadImages)),
                           SizedBox(
                             height: 40,
                           ),

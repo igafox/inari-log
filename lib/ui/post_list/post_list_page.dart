@@ -8,8 +8,8 @@ import 'package:inari_log/model/post.dart';
 import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/post_list/post_list_view_model.dart';
-import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
+import 'package:collection/collection.dart';
 
 enum Menu {
   MY_PAGE,
@@ -95,7 +95,7 @@ class PostListPage extends HookWidget {
           children: [
             Expanded(
                 child: Image.network(
-              post.imageUrls.first,
+              post.imageUrls.firstOrNull ?? "",
               height: double.infinity,
               width: double.infinity,
               fit: BoxFit.cover,
