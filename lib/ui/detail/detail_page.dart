@@ -7,6 +7,7 @@ import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 
 import 'detail_view_model.dart';
 
@@ -116,9 +117,7 @@ class DetailPage extends HookWidget {
                               children: [
                                 Expanded(
                                     child: Text(viewModel.post?.memo ?? "")),
-                                Text(viewModel.post?.createdAt
-                                        ?.toIso8601String() ??
-                                    "")
+                                Text((DateFormat('yyyy/MM/dd/ HH:mm')).format(viewModel.post!.createdAt ?? DateTime.now()))
                               ],
                             ),
                           )),

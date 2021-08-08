@@ -88,7 +88,7 @@ class PostListPage extends HookWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/post/1",
+          AppRouter.router.navigateTo(context, "/post/" + post.id,
               transition: TransitionType.native);
         },
         child: Column(

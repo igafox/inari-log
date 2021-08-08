@@ -26,13 +26,13 @@ class PostRepositoryImp implements PostRepository {
       final doc = await postCollection.doc(startAfterId).get();
       result = await postCollection
           .limit(limit)
-          .orderBy("createdAt", descending: false)
+          .orderBy("createdAt", descending: true)
           .startAfterDocument(doc)
           .get();
     } else {
       result = await postCollection
           .limit(limit)
-          .orderBy("createdAt", descending: false)
+          .orderBy("createdAt", descending: true)
           .get();
     }
 

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_compression/image_compression.dart';
@@ -46,12 +47,10 @@ class ImageRepositoryImp implements ImageRepository {
     print("upload start");
     var start = DateTime.now().millisecondsSinceEpoch;
 
-
-    final uid = "iga_fox";
+    final uid = _firebaseAuth.currentUser!.uid;
     final fileName = RandomString.generate(15) + ".jpg";
-
-    //final compressedImage = await compressImage(image);
     final imageRef = _firebaseStorage.ref("images/post/$uid/$postId/").child(fileName);
+
     final result = await imageRef.putData(image,SettableMetadata(contentType: "image/jpeg"));
     final imageUrl = await result.ref.getDownloadURL();
 
@@ -64,11 +63,9 @@ class ImageRepositoryImp implements ImageRepository {
 
   @override
   Future<List<String>> uploadImages(String postId, List<Uint8List> images) async {
-    List<String> imageUrl = [];
-    for(var image in images) {
-      var url = await uploadImage(postId, image);
-      imageUrl.add(url);
-    }
+
+    final tasks = images.map((image) =>uploadImage(postId, image));
+    final imageUrl = Future.wait(tasks);
 
     return imageUrl;
   }
