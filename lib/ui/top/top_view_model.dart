@@ -5,7 +5,7 @@ import 'package:inari_log/repository/post_repository.dart';
 import 'package:inari_log/repository/post_repository_imp.dart';
 
 final topViewModelProvider =
-    ChangeNotifierProvider((ref) => TopViewModel(ref.read));
+    ChangeNotifierProvider.autoDispose((ref) => TopViewModel(ref.read));
 
 class TopViewModel extends ChangeNotifier {
   TopViewModel(this._reader) {

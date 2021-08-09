@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_compression/image_compression.dart';
+import 'package:inari_log/extension/image_util.dart';
 import 'package:inari_log/model/post.dart';
 import 'package:inari_log/model/user.dart' as Model;
 import 'package:inari_log/provider/firebase_provider.dart';
@@ -48,10 +49,12 @@ class ImageRepositoryImp implements ImageRepository {
     var start = DateTime.now().millisecondsSinceEpoch;
 
     final uid = _firebaseAuth.currentUser!.uid;
-    final fileName = RandomString.generate(15) + ".jpg";
+    final extension = ImageUtil.getExtension(image);
+    final fileName = RandomString.generate(15) + extension;
     final imageRef = _firebaseStorage.ref("images/post/$uid/$postId/").child(fileName);
 
-    final result = await imageRef.putData(image,SettableMetadata(contentType: "image/jpeg"));
+    final contentType = ImageUtil.getContentType(image);
+    final result = await imageRef.putData(image,SettableMetadata(contentType: contentType));
     final imageUrl = await result.ref.getDownloadURL();
 
     var end = DateTime.now().millisecondsSinceEpoch;

@@ -40,7 +40,9 @@ class PostListPage extends HookWidget {
             ),
             onPressed: () {
               AppRouter.router.navigateTo(context, "/post/create",
-                  transition: TransitionType.native);
+                  transition: TransitionType.native).then(
+                      (value) => viewModel.load()
+              );
             }),
         body: Container(
           alignment: Alignment.topCenter,

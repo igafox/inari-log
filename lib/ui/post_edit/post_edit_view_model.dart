@@ -13,10 +13,10 @@ import 'package:inari_log/repository/post_repository.dart';
 import 'package:inari_log/repository/post_repository_imp.dart';
 
 final postViewModelProvider =
-    ChangeNotifierProvider.autoDispose((ref) => PostViewModel(ref.read));
+    ChangeNotifierProvider.autoDispose((ref) => PostEditViewModel(ref.read));
 
-class PostViewModel extends ChangeNotifier {
-  PostViewModel(this._reader);
+class PostEditViewModel extends ChangeNotifier {
+  PostEditViewModel(this._reader);
 
   final Reader _reader;
 

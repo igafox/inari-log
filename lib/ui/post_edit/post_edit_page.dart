@@ -21,7 +21,7 @@ enum Menu {
   LOGOUT,
 }
 
-class PostPage extends HookWidget {
+class PostEditPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = useProvider(postViewModelProvider);
