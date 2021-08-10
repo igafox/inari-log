@@ -5,7 +5,7 @@ import 'package:inari_log/repository/post_repository.dart';
 import 'package:inari_log/repository/post_repository_imp.dart';
 
 final postListViewModelProvider =
-    ChangeNotifierProvider((ref) => PostListViewModel(ref.read));
+    ChangeNotifierProvider.autoDispose((ref) => PostListViewModel(ref.read));
 
 class PostListViewModel extends ChangeNotifier {
   PostListViewModel(this._reader) {

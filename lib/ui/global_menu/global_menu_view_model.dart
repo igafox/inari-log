@@ -32,11 +32,9 @@ class GlobalMenuViewModel extends ChangeNotifier {
 
     //再リロード時にnullが返ってくる場合があるため、遅延して再チェック
     if(_isLogin == false) {
-      print("hoge");
       await Future.delayed(Duration(seconds: 1));
       _user = await _repository.getCurrentUser();
       _isLogin = _user != null;
-      print("hoge");
       notifyListeners();
     }
 

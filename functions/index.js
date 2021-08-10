@@ -5,69 +5,90 @@ const spawn = require('child-process-promise').spawn;
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
-const { storage } = require('firebase-admin');
+const { storage, firestore } = require('firebase-admin');
 
-exports.generateThumbnail = functions.region("asia-northeast1").storage.object().onFinalize(async (object) => {
 
-  
-  const fileBucket = object.bucket; // The Storage bucket that contains the file.
-  const filePath = object.name;
-  const fileName = path.basename(filePath); // File path in the bucket.
-  const contentType = object.contentType; // File content type.
-  const metageneration = object.metageneration; // Number of times metadata has been generated. New objects have a value of 1.
-
-  //画像のみリサイズ
-  if (!contentType.startsWith('image/')) {
-    return functions.logger.log('Skip:This is not an image.');
-  }
-  
-  //オリジナル画像はリサイズしない
-  if(fileName.endsWith('.orig')) {
-        return functions.logger.log('Skip:This is original image.')
-      }
-
-  const fileMetadata = await admin.storage().bucket(fileBucket).file(filePath).getMetadata();
-  functions.logger.log(fileMetadata[0]);
-  const metadata = fileMetadata[0];
-  const isConverted = metadata.metadata.isConverted;
-  //変換済チェック
-  if(isConverted) {
-    return functions.logger.log('${file.name} is already converted.');
-  }
-
-  //画像を一時ダウンロード
-  const bucket = admin.storage().bucket(fileBucket);
-  const tempFilePath = path.join(os.tmpdir(), fileName);
-  await bucket.file(filePath).download({destination: tempFilePath});
-  functions.logger.log('Image downloaded locally to', tempFilePath);
-
-  //オリジナル画像をバックアップ
-  const backupFileName = `${fileName}.orig`
-  const backupFilePath = path.join(path.dirname(filePath), backupFileName);
-  await bucket.upload(tempFilePath, {
-    destination: backupFilePath,
-    metadata: { contentType: contentType },
+exports.createUserData = functions.region("asia-northeast1").auth
+  .user()
+  .onCreate((user) => {
+    const userId = user.uid;
+    functions.logger.log('create user${userId};');
   });
-  functions.logger.log('complete upload backup image:${file.name}');
-  
-  //画像リサイズ
-  await spawn('convert', [tempFilePath, '-thumbnail', '700x700>', tempFilePath]);
-  functions.logger.log('complete image rezie:${file.name}');
 
-  //リサイズ画像を上書き
-  await bucket.upload(tempFilePath, {
-    destination: filePath,
-    metadata: { 
-      contentType: contentType,
-      metadata :{
-        isConverted:true
-      }
-    },
+exports.deleteUserData = functions.region("asia-northeast1").auth
+  .user()
+  .onDelete((user) => {
+    const userId = user.uid;
+    functions.logger.log('delete user${userId};');
   });
-  functions.logger.log('complete upload resized image:${file.name}');
-  
-  // Once the thumbnail has been uploaded delete the local file to free up disk space.
-  return fs.unlinkSync(tempFilePath);
-  // [END thumbnailGeneration]
-});
-// [END generateThumbnail]
+
+
+exports.deletePostImage = functions.region("asia-northeast1").firestore
+  .document('post/{postId}')
+  .onDelete((snap, context) => {
+    const deletedValue = snap.data();
+  });
+
+
+exports.resizeImage = functions.region("asia-northeast1").storage
+  .object()
+  .onFinalize(async (object) => {
+    const fileBucket = object.bucket;
+    const filePath = object.name;
+    const fileName = path.basename(filePath);
+    const contentType = object.contentType;
+    const metageneration = object.metageneration;
+
+    //画像のみリサイズ
+    if (!contentType.startsWith('image/')) {
+      return functions.logger.log('Skip:This is not an image.');
+    }
+
+    //オリジナル画像はリサイズしない
+    if (fileName.endsWith('.orig')) {
+      return functions.logger.log('Skip:This is original image.')
+    }
+
+    const fileMetadata = await admin.storage().bucket(fileBucket).file(filePath).getMetadata();
+    functions.logger.log(fileMetadata[0]);
+    const metadata = fileMetadata[0];
+    const isConverted = metadata.metadata.isConverted;
+    //変換済チェック
+    if (isConverted) {
+      return functions.logger.log('${file.name} is already converted.');
+    }
+
+    //画像を一時ダウンロード
+    const bucket = admin.storage().bucket(fileBucket);
+    const tempFilePath = path.join(os.tmpdir(), fileName);
+    await bucket.file(filePath).download({ destination: tempFilePath });
+    functions.logger.log('Image downloaded locally to', tempFilePath);
+
+    //オリジナル画像をバックアップ
+    const backupFileName = `${fileName}.orig`
+    const backupFilePath = path.join(path.dirname(filePath), backupFileName);
+    await bucket.upload(tempFilePath, {
+      destination: backupFilePath,
+      metadata: { contentType: contentType },
+    });
+    functions.logger.log('complete upload backup image:${file.name}');
+
+    //画像リサイズ
+    await spawn('convert', [tempFilePath, '-thumbnail', '700x700>', tempFilePath]);
+    functions.logger.log('complete image rezie:${file.name}');
+
+    //リサイズ画像を上書き
+    await bucket.upload(tempFilePath, {
+      destination: filePath,
+      metadata: {
+        contentType: contentType,
+        metadata: {
+          isConverted: true
+        }
+      },
+    });
+    functions.logger.log('complete upload resized image:${file.name}');
+
+    return fs.unlinkSync(tempFilePath);
+  });
+

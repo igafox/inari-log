@@ -232,6 +232,7 @@ class TopPage extends HookWidget {
 
   List<Widget> _buildPostItems(BuildContext context, List<Post> list) {
     return list.map((item) {
+      print(item.id);
       return Card(
         child: InkWell(
           onTap: () {
