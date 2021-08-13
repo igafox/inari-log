@@ -12,12 +12,6 @@ import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 import 'package:collection/collection.dart';
 
-enum Menu {
-  MY_PAGE,
-  EDIT_PROFILE,
-  LOGOUT,
-}
-
 class TopPage extends HookWidget {
   @override
   Widget build(BuildContext context) {

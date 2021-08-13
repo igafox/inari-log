@@ -16,7 +16,6 @@ class GlobalMenuViewModel extends ChangeNotifier {
       print("change auth");
       checkLoginStatus();
     });
-    //checkLoginStatus();
   }
 
   final Reader _reader;

@@ -2,6 +2,7 @@
   "name": "generate-thumbnail-functions-quickstart",
   "description": "Generate Thumbnail Firebase Functions sample",
   "dependencies": {
+    "basic-auth-connect": "^1.0.0",
     "child-process-promise": "^2.2.1",
     "firebase-admin": "^9.11.0",
     "firebase-functions": "^3.14.1",

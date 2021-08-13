@@ -7,27 +7,41 @@ const os = require('os');
 const fs = require('fs');
 const { storage, firestore } = require('firebase-admin');
 
+const express = require('express')
+const basicAuth = require('basic-auth-connect')
+const app = express()
 
-exports.createUserData = functions.region("asia-northeast1").auth
-  .user()
-  .onCreate((user) => {
-    const userId = user.uid;
-    functions.logger.log('create user${userId};');
-  });
+//basic認証
+app.all('/*', basicAuth(function(user, password) {
+ return user === 'iga' && password === 'lioleus';
+}));
+//webディレクト設定
+app.use(express.static(__dirname + '/web/'));
+//全てのリクエストをindex.htmlへ
+app.all('*', (req, res, next) => {
+  res.sendFile(path.resolve(__dirname, 'web/index.html'));
+})
+exports.app = functions.region("us-central1").https.onRequest(app);
 
-exports.deleteUserData = functions.region("asia-northeast1").auth
-  .user()
-  .onDelete((user) => {
-    const userId = user.uid;
-    functions.logger.log('delete user${userId};');
-  });
+// exports.createUserData = functions.region("asia-northeast1").auth
+//   .user()
+//   .onCreate((user) => {
+//     const userId = user.uid;
+//     functions.logger.log('create user${userId};');
+//   });
 
+// exports.deleteUserData = functions.region("asia-northeast1").auth
+//   .user()
+//   .onDelete((user) => {
+//     const userId = user.uid;
+//     functions.logger.log('delete user${userId};');
+//   });
 
-exports.deletePostImage = functions.region("asia-northeast1").firestore
-  .document('post/{postId}')
-  .onDelete((snap, context) => {
-    const deletedValue = snap.data();
-  });
+// exports.deletePostImage = functions.region("asia-northeast1").firestore
+//   .document('post/{postId}')
+//   .onDelete((snap, context) => {
+//     const deletedValue = snap.data();
+//   });
 
 
 exports.resizeImage = functions.region("asia-northeast1").storage
