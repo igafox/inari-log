@@ -53,8 +53,8 @@ class GlobalMenu extends HookWidget {
               ];
               return list;
             },
-            icon: const CircleImage(
-              image: AssetImage("images/icon.png"),
+            icon: CircleImage(
+              image: NetworkImage(viewModel.user?.iconUrl ?? ""),
               size: 42,
             ),
             iconSize: 42,

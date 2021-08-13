@@ -213,7 +213,7 @@ class LoginPage extends HookWidget {
                               onPrimary: Colors.black,
                             ),
                             onPressed: () async {
-                              //viewModel.login();
+                              viewModel.onClickRegisterEmail(context);
                             },
                           ),
                         )

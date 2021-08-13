@@ -14,7 +14,7 @@ abstract class User implements _$User {
     return User(
       id: map["id"],
       name: map["name"],
-      iconUrl: map["iconUrl"],
+      iconUrl: map["imageUrl"],
     );
   }
 

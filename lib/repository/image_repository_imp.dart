@@ -66,9 +66,8 @@ class ImageRepositoryImp implements ImageRepository {
 
   @override
   Future<List<String>> uploadImages(String postId, List<Uint8List> images) async {
-
     final tasks = images.map((image) =>uploadImage(postId, image));
-    final imageUrl = Future.wait(tasks);
+    final imageUrl = await Future.wait(tasks);
 
     return imageUrl;
   }

@@ -37,10 +37,12 @@ class TopViewModel extends ChangeNotifier {
   void load() async {
     _loading = true;
     _repository.findAll(3,null).then((value) {
+      print("取得");
+      print(value.length);
       _post = value;
     }).catchError((dynamic error) {
-      print(error);
       _errorMessage = error.toString();
+      print("エラー");
     }).whenComplete(() {
       _loading = false;
       notifyListeners();

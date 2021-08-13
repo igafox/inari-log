@@ -106,6 +106,7 @@ class PostViewModel extends ChangeNotifier {
 
     final id = await _poreRepository.generateId();
     final imageUrls = await _imageRepository.uploadImages(id, _uploadImages);
+    print(imageUrls);
 
     final post = Post(
         id: id,

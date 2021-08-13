@@ -52,35 +52,51 @@ class PostRepositoryImp implements PostRepository {
     // final uid = _firebaseAuth.currentUser?.uid ?? "iga_fox";
     // if(uid == null) return false;
 
-    //uid取得
-    final uid = "iga_fox";
+    print("create data");
 
-    //ユーザーデータ取得
-    final userResult = await userCollection.doc(uid).get();
-    if (userResult.data() == null) return false;
-    final user = Model.User.from(userResult.data()!);
-    post = post.copyWith(userId: user.id!, userName: user.name!);
+    try {
+      //uid取得
+      final currentUser = _firebaseAuth.currentUser;
+      final uid = currentUser?.uid ?? "";
+      final displayName = currentUser?.displayName ?? "";
 
-    //idが未設定の場合、生成する
-    if (post.id.isEmpty) {
-      post = post.copyWith(id: userCollection.doc().id);
+
+      // //ユーザーデータ取得
+      // final userResult = await userCollection.doc(uid).get();
+      // if (userResult.data() == null) return false;
+      // final user = Model.User.from(userResult.data()!);
+      post = post.copyWith(userId: uid, userName: displayName);
+
+      print(post);
+
+      //idが未設定の場合、生成する
+      if (post.id.isEmpty) {
+        post = post.copyWith(id: userCollection
+            .doc()
+            .id);
+      }
+
+
+      final data = {
+        "id": post.id,
+        "name": post.name,
+        "memo": post.memo,
+        "address": post.address,
+        "userId": post.userId,
+        "userName": post.userName,
+        "userIcon": post.userIcon,
+        "imageUrls": post.imageUrls,
+        "createdAt": FieldValue.serverTimestamp()
+      };
+
+      await postCollection.doc(post.id).set(data);
+      print("create done");
+      return true;
+    } catch(e) {
+      print("create failed");
+      print(e);
+      return false;
     }
-
-    final data = {
-      "id": post.id,
-      "name": post.name,
-      "memo": post.memo,
-      "address": post.address,
-      "userId": post.userId,
-      "userName": post.userName,
-      "userIcon": post.userIcon,
-      "imageUrls": post.imageUrls,
-      "createdAt": FieldValue.serverTimestamp()
-    };
-
-    await postCollection.doc(post.id).set(data);
-
-    return true;
   }
 
   @override

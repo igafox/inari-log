@@ -83,7 +83,13 @@ class LoginViewModel extends ChangeNotifier {
 
   void onClickTwiterLoginButton() async {}
 
-  void onClickGoogleLoginButton() async {}
+  void onClickGoogleLoginButton() async {
+
+  }
+
+  void onClickRegisterEmail(BuildContext context) {
+    AppRouter.router.navigateTo(context, "/user/create",transition: TransitionType.native);
+  }
 
   void load() async {
     _loading = true;
