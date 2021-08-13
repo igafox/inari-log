@@ -11,11 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-      - uses: actions/checkout@develop
-
+        uses: actions/checkout@v2
 
       - name: Install Flutter
-      - uses: actions/checkout@v2
         run: git clone https://github.com/flutter/flutter.git
 
       - name: Add Flutter path
@@ -23,13 +21,9 @@ jobs:
 
       - name: Download Flutter packages
         run: flutter pub get
-        working-directory: ./clientapp
 
       - name: Build Flutter
-      - run: "flutter build web --web-renderer html"
-        working-directory: ./clientapp  
-
-
+        run: "flutter build web --web-renderer html"
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
