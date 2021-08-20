@@ -29,11 +29,6 @@ class TopViewModel extends ChangeNotifier {
   List<Post> _post = [];
   List<Post> get post => _post;
 
-  void setVisibleFab(bool visible) {
-    _isVisibleFab = visible;
-    notifyListeners();
-  }
-
   void load() async {
     _loading = true;
     _repository.findAll(3,null).then((value) {

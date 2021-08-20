@@ -13,6 +13,7 @@ import 'package:collection/collection.dart';
 import 'login_view_model.dart';
 
 class LoginPage extends HookWidget {
+
   @override
   Widget build(BuildContext context) {
     final viewModel = useProvider(loginViewModelProvider);

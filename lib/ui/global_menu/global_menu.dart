@@ -21,7 +21,7 @@ class GlobalMenu extends HookWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      title: Text('おいなりログ'),
+      title: Text('稲荷ログ'),
       actions: [
         TextButton(
             style: ButtonStyle(
@@ -51,9 +51,6 @@ class GlobalMenu extends HookWidget {
                 PopupMenuItem(
                   child: Text("ログアウト"),
                   value: Menu.LOGOUT,
-                  onTap: () {
-                    viewModel.logout(context);
-                  },
                 )
               ];
               return list;
@@ -63,6 +60,22 @@ class GlobalMenu extends HookWidget {
               size: 42,
             ),
             iconSize: 42,
+            onSelected: (value) {
+              switch (value) {
+                case Menu.MY_PAGE:
+                  AppRouter.router.navigateTo(
+                      context, "/user/${user.data?.value?.id}",
+                      transition: TransitionType.native);
+                  break;
+
+                case Menu.EDIT_PROFILE:
+                  break;
+
+                case Menu.LOGOUT:
+                  viewModel.logout(context);
+                  break;
+              }
+            },
           ),
         ),
         Visibility(

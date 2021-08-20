@@ -41,6 +41,7 @@ class AppRouter {
   static var userDetailHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
         String userId = params["id"]?.firstOrNull ?? "";
+        print(userId);
         return UserPage(userId: userId);
       });
 

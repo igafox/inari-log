@@ -114,42 +114,6 @@ class UserPage extends HookWidget {
                         mainAxisSpacing: 15,
                         crossAxisSpacing: 15,
                         children: [
-                      _createItem(
-                          context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                      _createItem(
-                          context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
-                      _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                          "images/takayasiki.jpg"),
-                      _createItem(
-                          context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                      _createItem(
-                          context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
-                      _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                          "images/takayasiki.jpg"),
-                      _createItem(
-                          context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                      _createItem(
-                          context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
-                      _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                          "images/takayasiki.jpg"),
-                      _createItem(
-                          context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                      _createItem(
-                          context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
-                      _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                          "images/takayasiki.jpg"),
-                      _createItem(
-                          context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                      _createItem(
-                          context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
-                      _createItem(context, "高屋敷稲荷神社", "福島県郡山市",
-                          "images/takayasiki.jpg"),
-                      _createItem(
-                          context, "王子稲荷神社", "東京都北区", "images/ouji.jpg"),
-                      _createItem(
-                          context, "装束稲荷神社", "東京都北区", "images/syouzoku.jpg"),
-                      _createItem(
-                          context, "高屋敷稲荷神社", "福島県郡山市", "images/takayasiki.jpg")
                     ]))
               ])),
         ));

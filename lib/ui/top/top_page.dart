@@ -169,7 +169,7 @@ class TopPage extends HookWidget {
                   ),
                   Align(
                     child: Text(
-                      "おいなりログとは",
+                      "稲荷ログとは",
                       style: TextStyle(
                           fontSize: 27, fontFamily: FontFamily.NOTOSANS_BOLD),
                     ),

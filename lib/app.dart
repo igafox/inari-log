@@ -9,7 +9,7 @@ class MyApp extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'おいなりログ',
+        title: '稲荷ログ',
         theme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: FontFamily.NOTOSANS_REGULAR,

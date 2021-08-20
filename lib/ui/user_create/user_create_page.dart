@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:crop_your_image/crop_your_image.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -33,7 +34,7 @@ class UserCreatePage extends HookWidget {
               alignment: Alignment.topCenter,
               child: Container(
                   margin:
-                      EdgeInsets.only(top: 50, right: 30, left: 30, bottom: 24),
+                  EdgeInsets.only(top: 50, right: 30, left: 30, bottom: 24),
                   constraints: BoxConstraints(maxWidth: 450),
                   child: Column(children: [
                     Container(
@@ -101,7 +102,7 @@ class UserCreatePage extends HookWidget {
                                   prefixIcon: Icon(Icons.account_circle),
                                   border: OutlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.white24))),
+                                      BorderSide(color: Colors.white24))),
                               onChanged: (text) {
                                 viewModel.setUserName(text);
                               },
@@ -117,7 +118,7 @@ class UserCreatePage extends HookWidget {
                                   prefixIcon: Icon(Icons.mail_outline),
                                   border: OutlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.white24))),
+                                      BorderSide(color: Colors.white24))),
                               onChanged: (text) {
                                 viewModel.setEmail(text);
                               },
@@ -134,7 +135,7 @@ class UserCreatePage extends HookWidget {
                                   prefixIcon: Icon(Icons.lock_outline_rounded),
                                   border: OutlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.white24))),
+                                      BorderSide(color: Colors.white24))),
                               onChanged: (text) {
                                 viewModel.setPassword(text);
                               },
@@ -151,7 +152,7 @@ class UserCreatePage extends HookWidget {
                                   prefixIcon: Icon(Icons.lock_outline_rounded),
                                   border: OutlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.white24))),
+                                      BorderSide(color: Colors.white24))),
                               onChanged: (text) {
                                 viewModel.setConfirmPassword(text);
                               },
@@ -287,54 +288,4 @@ class UserCreatePage extends HookWidget {
         ));
   }
 
-  Widget _createItem(BuildContext context, Post post) {
-    return Card(
-      child: InkWell(
-        onTap: () {
-          AppRouter.router.navigateTo(context, "/post/1",
-              transition: TransitionType.native);
-        },
-        child: Column(
-          children: [
-            Expanded(
-                child: Image.network(
-              post.imageUrls.firstOrNull ?? "",
-              height: double.infinity,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            )),
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Row(children: [
-                CircleImage(size: 45, image: AssetImage("images/icon.png")),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  children: [
-                    Text(post.userName,
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontFamily: FontFamily.NOTOSANS_BOLD)),
-                    Text(
-                      post.name,
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: FontFamily.NOTOSANS_REGULAR),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(post.address,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: FontFamily.NOTOSANS_REGULAR))
-                  ],
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                ),
-              ]),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
