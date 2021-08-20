@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
+import 'package:inari_log/provider/user_provider.dart';
 import 'package:inari_log/ui/global_menu/global_menu_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 
@@ -13,7 +14,7 @@ enum Menu {
 }
 
 class GlobalMenu extends HookWidget {
-  final viewModel = useProvider(globalMenuViewModelProvider);
+  final user = useProvider(userProvider);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class GlobalMenu extends HookWidget {
                   transition: TransitionType.native);
             }),
         Visibility(
-          visible: viewModel.isLogin,
+          visible: user.data?.value?.id?.isNotEmpty ?? false,
           child: PopupMenuButton<Menu>(
             itemBuilder: (context) {
               var list = <PopupMenuEntry<Menu>>[
@@ -54,14 +55,14 @@ class GlobalMenu extends HookWidget {
               return list;
             },
             icon: CircleImage(
-              image: NetworkImage(viewModel.user?.iconUrl ?? ""),
+              image: NetworkImage(user.data?.value?.iconUrl ?? ""),
               size: 42,
             ),
             iconSize: 42,
           ),
         ),
         Visibility(
-            visible: !viewModel.isLogin,
+            visible: user.data?.value?.id?.isEmpty ?? true,
             child: Padding(
               padding: EdgeInsets.all(10),
               child: ElevatedButton(

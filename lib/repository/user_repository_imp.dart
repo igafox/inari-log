@@ -2,9 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:inari_log/extension/image_util.dart';
 import 'package:inari_log/model/post.dart';
 import 'package:inari_log/model/user.dart' as Model;
 import 'package:inari_log/provider/firebase_provider.dart';
@@ -19,7 +17,6 @@ class UserRepositoryImp implements UserRepository {
 
   late final FirebaseFirestore _firestore = _reader(firebaseFirestoreProvider);
   late final FirebaseAuth _firebaseAuth = _reader(firebaseAuthProvider);
-  late final FirebaseStorage _firebaseStorage = _reader(firebaseStorageProvider);
 
   late final postCollection = _firestore.collection("post");
   late final userCollection = _firestore.collection("user");
@@ -87,88 +84,57 @@ class UserRepositoryImp implements UserRepository {
   //
   //   return true;
   // }
-  //
+
+  @override
+  Future<String> generateId() async {
+    return postCollection.doc().id;
+  }
+
   // @override
-  // Future<String> generateId() async {
-  //   return postCollection.doc().id;
-  // }
+  // Future<User?> getCurrentUser() async {
+  //   final uid = _firebaseAuth.currentUser?.uid;
   //
-  // // @override
-  // // Future<User?> getCurrentUser() async {
-  // //   final uid = _firebaseAuth.currentUser?.uid;
-  // //
-  // //   if(uid == null) return null;
-  // //
-  // //   final result = await userCollection.doc(uid).get();
-  // //   final data = result.data();
-  // //
-  // //   if(data == null) return User();
-  // //
-  // //   final user = User.from(data);
-  // //   return user;
-  // // }
+  //   if(uid == null) return null;
+  //
+  //   final result = await userCollection.doc(uid).get();
+  //   final data = result.data();
+  //
+  //   if(data == null) return User();
+  //
+  //   final user = User.from(data);
+  //   return user;
+  // }
 
   @override
-  Future<bool> isLogin() async{
-    if(_firebaseAuth.currentUser != null) {
-      return true;
-    } else {
-      return false;
-    }
+  Future<bool> isLogin() async {
+    final user = await FirebaseAuth.instance.authStateChanges().first;
+    return user != null;
   }
 
   @override
-  Future<Model.User?> getCurrentUser() async{
-    final currentUser = await  _firebaseAuth.currentUser;
+  Stream<Model.User?> getCurrentUser()  {
+    return FirebaseAuth.instance.authStateChanges().asyncMap((user) async {
+      if (user == null) return null;
+      //ユーザーデータ取得
+      final result = await userCollection.doc(user.uid).get();
+      final data = result.data();
 
-    if (currentUser == null) return null;
-    final result = await userCollection.doc(currentUser.uid).get();
-    final data = result.data();
+      //Firestoreにデータが存在しない場合は、FirebaseAuthのデータを使用する
+      if (data == null) {
+        return Model.User(id: user.uid, iconUrl: user.photoURL);
+      }
 
-    if (data == null) return null;
+      final userData = Model.User.from(data);
 
-    final user = Model.User.from(data);
-    return user;
+      return userData;
+    });
+
   }
 
   @override
-  Future<bool> create(String email, String password, String userName, Uint8List profileImage) async {
-    //ユーザー作成
-    print("ユーザー作成開始");
-    final result = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-    final user = await _firebaseAuth.currentUser!;
-    print(user.toString());
-    final uid = user.uid;
-    print("ユーザー作成完了");
-
-    //ユーザー名更新
-    print("ユーザー名更新開始");
-    await user.updateDisplayName(userName);
-    print("ユーザー更新完了");
-
-    //プロフィール画像更新
-    print("プロフィール画像更新開始");
-    final extension = ImageUtil.getExtension(profileImage);
-    final fileName = "icon" + extension;
-    final imageRef = _firebaseStorage.ref("images/user/$uid/").child(fileName);
-    final contentType = ImageUtil.getContentType(profileImage);
-    print("プロフィール画像アップロード開始");
-    final uploadResult = await imageRef.putData(profileImage,SettableMetadata(contentType: contentType));
-    final imageUrl = await uploadResult.ref.getDownloadURL();
-    print("プロフィール画像アップロード完了");
-    await user.updatePhotoURL(imageUrl);
-    print("プロフィール画像更新完了");
-
-    print("ユーザーデータ作成開始開始");
-    final userData = {
-      "id":user.uid,
-      "name":userName,
-      "imageUrl":imageUrl
-    };
-    await userCollection.doc(user.uid).set(userData);
-    print("ユーザーデータ作成完了");
-
-    return true;
+  Future<bool> create(
+      String email, String password, String userName, Uint8List profileImage) {
+    // TODO: implement create
+    throw UnimplementedError();
   }
-
 }

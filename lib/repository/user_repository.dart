@@ -8,6 +8,6 @@ abstract class UserRepository {
 
   Future<bool> isLogin();
 
-  Future<User?> getCurrentUser();
+  Stream<User?> getCurrentUser();
 
 }
