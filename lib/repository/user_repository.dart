@@ -10,4 +10,9 @@ abstract class UserRepository {
 
   Stream<User?> getCurrentUser();
 
+  Future<bool> logout();
+
+  Future<bool> delete();
+
+
 }

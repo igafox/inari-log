@@ -63,7 +63,6 @@ class LoginViewModel extends ChangeNotifier {
           email: _email, password: _password);
 
       if (result.user != null) {
-        _globalMenuViewModel.checkLoginStatus();
         AppRouter.router.navigateTo(
             context, "/", transition: TransitionType.native);
       } else {

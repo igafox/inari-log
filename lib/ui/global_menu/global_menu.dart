@@ -15,6 +15,7 @@ enum Menu {
 
 class GlobalMenu extends HookWidget {
   final user = useProvider(userProvider);
+  final viewModel = useProvider(globalMenuViewModelProvider);
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,9 @@ class GlobalMenu extends HookWidget {
                 PopupMenuItem(
                   child: Text("ログアウト"),
                   value: Menu.LOGOUT,
+                  onTap: () {
+                    viewModel.logout(context);
+                  },
                 )
               ];
               return list;
