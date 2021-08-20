@@ -92,8 +92,8 @@ class PostEditViewModel extends ChangeNotifier {
 
       _name = _post.name;
       _address = _post.address;
-      _memo = _post.memo;
-      _uploadedImages = _post.imageUrls;
+      // _memo = _post.memo;
+      // _uploadedImages = _post.imageUrls;
 
 
     } catch (e) {
@@ -146,17 +146,17 @@ class PostEditViewModel extends ChangeNotifier {
 
     final imageUrls = await _imageRepository.uploadImages(id, appendImages);
 
-    final post = Post(
-        id: id,
-        name: _name,
-        memo: _memo,
-        address: _address,
-        imageUrls: imageUrls);
-    await _postRepository.create(post);
-
-    AppRouter.router.pop(context);
-
-    _loading = false;
-    notifyListeners();
+    // final post = Post(
+    //     id: id,
+    //     name: _name,
+    //     memo: _memo,
+    //     address: _address,
+    //     imageUrls: imageUrls);
+    // await _postRepository.create(post);
+    //
+    // AppRouter.router.pop(context);
+    //
+    // _loading = false;
+    // notifyListeners();
   }
 }

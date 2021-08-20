@@ -79,7 +79,7 @@ class DetailPage extends HookWidget {
                         child: Stack(
                           children: [
                             Image.network(
-                              viewModel.post?.imageUrls.firstOrNull ?? "",
+                              "",
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
@@ -115,7 +115,7 @@ class DetailPage extends HookWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                    child: Text(viewModel.post?.memo ?? "")),
+                                    child: Text("")),
                                 Text((DateFormat('yyyy/MM/dd/ HH:mm')).format(viewModel.post!.createdAt ?? DateTime.now()))
                               ],
                             ),

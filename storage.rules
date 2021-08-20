@@ -6,7 +6,13 @@ service firebase.storage {
     match /images/post/{userId}/{postId}/{allPaths=**} {
       allow read;
       allow write: if request.auth.uid == userId;
-    }    
+    }
+    
+    //User
+    match /images/user/{userId}/{allPaths=**} {
+      allow read;
+      allow write: if request.auth.uid == userId;
+    }   
     
   }
 }

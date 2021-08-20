@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inari_log/model/post_memo.dart';
 
 part 'post.freezed.dart';
 
@@ -8,31 +9,29 @@ abstract class Post implements _$Post {
   const factory Post({
     @Default("") String id,
     @Default("") String name,
-    @Default("") String memo,
     @Default("") String address,
-    DateTime? createdAt,
+    @Default([]) List<PostMemo> memos,
     @Default("") String userId,
     @Default("") String userName,
     @Default("") String userIcon,
-    @Default([]) List<String> imageUrls,
+    DateTime? createdAt,
   }) = _Post;
 
   factory Post.from(Map<String, dynamic> map) {
-    List<String> imageUrls = [];
-    if (map["imageUrls"] is List<dynamic>) {
-      imageUrls =
-          (map["imageUrls"] as List<dynamic>).map((e) => e as String).toList();
+    List<PostMemo> memos = [];
+    if (map["memos"] is List<dynamic>) {
+      memos =
+          (map["memos"] as List<dynamic>).map((e) => PostMemo.from(e)).toList();
     }
 
     return Post(
         id: map["id"] ?? "",
         name: map["name"] ?? "",
-        memo: map["memo"] ?? "",
         address: map["address"] ?? "",
+        memos: memos,
         userId: map["userId"] ?? "",
         userName: map["userName"] ?? "",
         userIcon: map["userIcon"] ?? "",
-        imageUrls: imageUrls,
         createdAt: (map["createdAt"] as Timestamp).toDate());
   }
 

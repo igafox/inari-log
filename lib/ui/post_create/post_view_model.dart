@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -7,10 +9,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/model/post.dart';
+import 'package:inari_log/model/post_memo.dart';
 import 'package:inari_log/repository/image_repository.dart';
 import 'package:inari_log/repository/image_repository_imp.dart';
 import 'package:inari_log/repository/post_repository.dart';
 import 'package:inari_log/repository/post_repository_imp.dart';
+import 'package:tuple/tuple.dart';
 
 final postViewModelProvider =
     ChangeNotifierProvider.autoDispose((ref) => PostViewModel(ref.read));
@@ -24,26 +28,35 @@ class PostViewModel extends ChangeNotifier {
 
   late final PostRepository _poreRepository = _reader(postRepositoryProvider);
 
-  late final ImageRepository _imageRepository = _reader(imageRepositoryProvider);
+  late final ImageRepository _imageRepository =
+      _reader(imageRepositoryProvider);
+
+  String _name = "";
+
+  String get name => _name;
+
+  String _address = "";
+
+  String get address => _address;
 
   LatLng _location = LatLng(35.680400, 139.769017);
 
   LatLng get location => _location;
 
-  String _name = "";
-  String get name => _name;
+  List<Tuple2<String, Uint8List?>> _memos = [Tuple2("", null)];
 
-  String _address = "";
-  String get address => _address;
+  List<Tuple2<String, Uint8List?>> get memos => _memos;
 
-  String _memo = "";
-  String get memo => _address;
+  List<String> _memoTexts = [""];
 
-  List<Uint8List> _uploadImages = [];
+  List<String> get memosTexts => _memoTexts;
 
-  List<Uint8List> get uploadImages => _uploadImages;
+  List<Uint8List?> _memoImages = [null];
+
+  List<Uint8List?> get memoImagess => _memoImages;
 
   bool _loading = false;
+
   bool get loading => _loading;
 
   Set<Marker> _marker = {
@@ -70,8 +83,20 @@ class PostViewModel extends ChangeNotifier {
     _address = text;
   }
 
-  void onChangeMemo(String text) {
-    _memo = text;
+  void removeMemo() {}
+
+  void addMemo(String text,Uint8List image) {
+    memos.add(Tuple2(text, image));
+    notifyListeners();
+  }
+
+  void onChangeMemoText(int index, String text) {}
+
+  void onChangeMemoImage(int index, Uint8List image) {
+    final text = memos[index].item1;
+    _memos[index] = _memos[index].withItem2(image);
+    log(_memos.toString());
+    notifyListeners();
   }
 
   // void changeLocation(LatLng latLng) async {
@@ -95,25 +120,34 @@ class PostViewModel extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addUploadImage(List<Uint8List> imgs) {
-    _uploadImages = imgs.take(5).toList();
-    notifyListeners();
-  }
+  // void addUploadImage(List<Uint8List> imgs) {
+  //   _uploadImages = imgs.take(5).toList();
+  //   notifyListeners();
+  // }
 
   void post(BuildContext context) async {
     _loading = true;
     notifyListeners();
 
-    final id = await _poreRepository.generateId();
-    final imageUrls = await _imageRepository.uploadImages(id, _uploadImages);
-    print(imageUrls);
+    final postId = await _poreRepository.generateId();
+
+    final hasNoImageMemo = memos.where((element) => element.item2 == null).isNotEmpty;
+    if(hasNoImageMemo) {
+      log("画像が設定されていないメモがあります");
+      return;
+    }
+
+    final uploadMemos = await Future.wait(memos.map((memo) async {
+      final imageUrl = await _imageRepository.uploadImage(postId, memo.item2!);
+      return PostMemo(text: memo.item1, imageUrl: imageUrl);
+    }).toList());
 
     final post = Post(
-        id: id,
-        name: _name,
-        memo: _memo,
-        address: _address,
-        imageUrls: imageUrls);
+      id: postId,
+      name: _name,
+      address: _address,
+      memos: uploadMemos,
+    );
     await _poreRepository.create(post);
 
     AppRouter.router.pop(context);

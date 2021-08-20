@@ -136,7 +136,7 @@ class UserPage extends HookWidget {
           children: [
             Expanded(
                 child: Image.network(
-                  post.imageUrls.firstOrNull ?? "",
+                 "",
                   height: double.infinity,
                   width: double.infinity,
                   fit: BoxFit.cover,

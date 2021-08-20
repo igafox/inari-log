@@ -20,23 +20,21 @@ class _$PostTearOff {
   _Post call(
       {String id = "",
       String name = "",
-      String memo = "",
       String address = "",
-      DateTime? createdAt,
+      List<PostMemo> memos = const [],
       String userId = "",
       String userName = "",
       String userIcon = "",
-      List<String> imageUrls = const []}) {
+      DateTime? createdAt}) {
     return _Post(
       id: id,
       name: name,
-      memo: memo,
       address: address,
-      createdAt: createdAt,
+      memos: memos,
       userId: userId,
       userName: userName,
       userIcon: userIcon,
-      imageUrls: imageUrls,
+      createdAt: createdAt,
     );
   }
 }
@@ -48,13 +46,12 @@ const $Post = _$PostTearOff();
 mixin _$Post {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get memo => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
-  DateTime? get createdAt => throw _privateConstructorUsedError;
+  List<PostMemo> get memos => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get userName => throw _privateConstructorUsedError;
   String get userIcon => throw _privateConstructorUsedError;
-  List<String> get imageUrls => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PostCopyWith<Post> get copyWith => throw _privateConstructorUsedError;
@@ -67,13 +64,12 @@ abstract class $PostCopyWith<$Res> {
   $Res call(
       {String id,
       String name,
-      String memo,
       String address,
-      DateTime? createdAt,
+      List<PostMemo> memos,
       String userId,
       String userName,
       String userIcon,
-      List<String> imageUrls});
+      DateTime? createdAt});
 }
 
 /// @nodoc
@@ -88,13 +84,12 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
-    Object? memo = freezed,
     Object? address = freezed,
-    Object? createdAt = freezed,
+    Object? memos = freezed,
     Object? userId = freezed,
     Object? userName = freezed,
     Object? userIcon = freezed,
-    Object? imageUrls = freezed,
+    Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -105,18 +100,14 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      memo: memo == freezed
-          ? _value.memo
-          : memo // ignore: cast_nullable_to_non_nullable
-              as String,
       address: address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: createdAt == freezed
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      memos: memos == freezed
+          ? _value.memos
+          : memos // ignore: cast_nullable_to_non_nullable
+              as List<PostMemo>,
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -129,10 +120,10 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.userIcon
           : userIcon // ignore: cast_nullable_to_non_nullable
               as String,
-      imageUrls: imageUrls == freezed
-          ? _value.imageUrls
-          : imageUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -145,13 +136,12 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
   $Res call(
       {String id,
       String name,
-      String memo,
       String address,
-      DateTime? createdAt,
+      List<PostMemo> memos,
       String userId,
       String userName,
       String userIcon,
-      List<String> imageUrls});
+      DateTime? createdAt});
 }
 
 /// @nodoc
@@ -167,13 +157,12 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
-    Object? memo = freezed,
     Object? address = freezed,
-    Object? createdAt = freezed,
+    Object? memos = freezed,
     Object? userId = freezed,
     Object? userName = freezed,
     Object? userIcon = freezed,
-    Object? imageUrls = freezed,
+    Object? createdAt = freezed,
   }) {
     return _then(_Post(
       id: id == freezed
@@ -184,18 +173,14 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      memo: memo == freezed
-          ? _value.memo
-          : memo // ignore: cast_nullable_to_non_nullable
-              as String,
       address: address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: createdAt == freezed
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      memos: memos == freezed
+          ? _value.memos
+          : memos // ignore: cast_nullable_to_non_nullable
+              as List<PostMemo>,
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -208,10 +193,10 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.userIcon
           : userIcon // ignore: cast_nullable_to_non_nullable
               as String,
-      imageUrls: imageUrls == freezed
-          ? _value.imageUrls
-          : imageUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -222,13 +207,12 @@ class _$_Post implements _Post {
   const _$_Post(
       {this.id = "",
       this.name = "",
-      this.memo = "",
       this.address = "",
-      this.createdAt,
+      this.memos = const [],
       this.userId = "",
       this.userName = "",
       this.userIcon = "",
-      this.imageUrls = const []});
+      this.createdAt});
 
   @JsonKey(defaultValue: "")
   @override
@@ -238,12 +222,10 @@ class _$_Post implements _Post {
   final String name;
   @JsonKey(defaultValue: "")
   @override
-  final String memo;
-  @JsonKey(defaultValue: "")
-  @override
   final String address;
+  @JsonKey(defaultValue: const [])
   @override
-  final DateTime? createdAt;
+  final List<PostMemo> memos;
   @JsonKey(defaultValue: "")
   @override
   final String userId;
@@ -253,13 +235,12 @@ class _$_Post implements _Post {
   @JsonKey(defaultValue: "")
   @override
   final String userIcon;
-  @JsonKey(defaultValue: const [])
   @override
-  final List<String> imageUrls;
+  final DateTime? createdAt;
 
   @override
   String toString() {
-    return 'Post(id: $id, name: $name, memo: $memo, address: $address, createdAt: $createdAt, userId: $userId, userName: $userName, userIcon: $userIcon, imageUrls: $imageUrls)';
+    return 'Post(id: $id, name: $name, address: $address, memos: $memos, userId: $userId, userName: $userName, userIcon: $userIcon, createdAt: $createdAt)';
   }
 
   @override
@@ -270,14 +251,11 @@ class _$_Post implements _Post {
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.memo, memo) ||
-                const DeepCollectionEquality().equals(other.memo, memo)) &&
             (identical(other.address, address) ||
                 const DeepCollectionEquality()
                     .equals(other.address, address)) &&
-            (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.memos, memos) ||
+                const DeepCollectionEquality().equals(other.memos, memos)) &&
             (identical(other.userId, userId) ||
                 const DeepCollectionEquality().equals(other.userId, userId)) &&
             (identical(other.userName, userName) ||
@@ -286,9 +264,9 @@ class _$_Post implements _Post {
             (identical(other.userIcon, userIcon) ||
                 const DeepCollectionEquality()
                     .equals(other.userIcon, userIcon)) &&
-            (identical(other.imageUrls, imageUrls) ||
+            (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
-                    .equals(other.imageUrls, imageUrls)));
+                    .equals(other.createdAt, createdAt)));
   }
 
   @override
@@ -296,13 +274,12 @@ class _$_Post implements _Post {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(memo) ^
       const DeepCollectionEquality().hash(address) ^
-      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(memos) ^
       const DeepCollectionEquality().hash(userId) ^
       const DeepCollectionEquality().hash(userName) ^
       const DeepCollectionEquality().hash(userIcon) ^
-      const DeepCollectionEquality().hash(imageUrls);
+      const DeepCollectionEquality().hash(createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -314,24 +291,21 @@ abstract class _Post implements Post {
   const factory _Post(
       {String id,
       String name,
-      String memo,
       String address,
-      DateTime? createdAt,
+      List<PostMemo> memos,
       String userId,
       String userName,
       String userIcon,
-      List<String> imageUrls}) = _$_Post;
+      DateTime? createdAt}) = _$_Post;
 
   @override
   String get id => throw _privateConstructorUsedError;
   @override
   String get name => throw _privateConstructorUsedError;
   @override
-  String get memo => throw _privateConstructorUsedError;
-  @override
   String get address => throw _privateConstructorUsedError;
   @override
-  DateTime? get createdAt => throw _privateConstructorUsedError;
+  List<PostMemo> get memos => throw _privateConstructorUsedError;
   @override
   String get userId => throw _privateConstructorUsedError;
   @override
@@ -339,7 +313,7 @@ abstract class _Post implements Post {
   @override
   String get userIcon => throw _privateConstructorUsedError;
   @override
-  List<String> get imageUrls => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;

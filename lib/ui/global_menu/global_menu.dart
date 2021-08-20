@@ -21,13 +21,13 @@ class GlobalMenu extends HookWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      title: Text('稲荷ログ'),
+      title: const Text('稲荷ログ'),
       actions: [
         TextButton(
             style: ButtonStyle(
                 padding: MaterialStateProperty.all(
                     EdgeInsets.only(left: 15, right: 15))),
-            child: Text(
+            child:const Text(
               '神社一覧',
               style: TextStyle(fontSize: 15, color: Colors.white),
             ),

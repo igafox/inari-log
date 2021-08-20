@@ -237,7 +237,7 @@ class TopPage extends HookWidget {
             children: [
               Expanded(
                   child: CachedNetworkImage(
-                imageUrl: item.imageUrls.firstOrNull ?? "",
+                imageUrl: "",
                 fit: BoxFit.cover,
               )),
               Container(

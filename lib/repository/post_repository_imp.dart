@@ -99,12 +99,11 @@ class PostRepositoryImp implements PostRepository {
       final data = {
         "id": post.id,
         "name": post.name,
-        "memo": post.memo,
+        "memos": post.memos,
         "address": post.address,
         "userId": post.userId,
         "userName": post.userName,
         "userIcon": post.userIcon,
-        "imageUrls": post.imageUrls,
         "createdAt": FieldValue.serverTimestamp()
       };
 
