@@ -48,6 +48,29 @@ class PostRepositoryImp implements PostRepository {
   }
 
   @override
+  Future<List<Post>> findByUserId(String userId, int limit, String? startAfterId) async {
+    final QuerySnapshot<Map<String, dynamic>> result;
+    if (startAfterId != null) {
+      final doc = await postCollection.doc(startAfterId).get();
+      result = await postCollection
+          .limit(limit)
+          .where("userId", isEqualTo: userId)
+          .orderBy("createdAt", descending: true)
+          .startAfterDocument(doc)
+          .get();
+    } else {
+      result = await postCollection
+          .limit(limit)
+          .where("userId", isEqualTo: userId)
+          .orderBy("createdAt", descending: true)
+          .get();
+    }
+
+    final post = result.docs.map((e) => Post.from(e.data())).toList();
+    return post;
+  }
+
+  @override
   Future<bool> create(Post post) async {
     // final uid = _firebaseAuth.currentUser?.uid ?? "iga_fox";
     // if(uid == null) return false;
@@ -60,7 +83,6 @@ class PostRepositoryImp implements PostRepository {
       final uid = currentUser?.uid ?? "";
       final displayName = currentUser?.displayName ?? "";
 
-
       // //ユーザーデータ取得
       // final userResult = await userCollection.doc(uid).get();
       // if (userResult.data() == null) return false;
@@ -71,11 +93,8 @@ class PostRepositoryImp implements PostRepository {
 
       //idが未設定の場合、生成する
       if (post.id.isEmpty) {
-        post = post.copyWith(id: userCollection
-            .doc()
-            .id);
+        post = post.copyWith(id: userCollection.doc().id);
       }
-
 
       final data = {
         "id": post.id,
@@ -92,7 +111,7 @@ class PostRepositoryImp implements PostRepository {
       await postCollection.doc(post.id).set(data);
       print("create done");
       return true;
-    } catch(e) {
+    } catch (e) {
       print("create failed");
       print(e);
       return false;

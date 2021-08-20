@@ -1,6 +1,8 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:inari_log/app_router.dart';
 import 'package:inari_log/constant.dart';
 import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
@@ -10,12 +12,6 @@ import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 
 import 'detail_view_model.dart';
-
-enum Menu {
-  MY_PAGE,
-  EDIT_PROFILE,
-  LOGOUT,
-}
 
 class DetailPage extends HookWidget {
   DetailPage({required this.postId});
@@ -68,6 +64,9 @@ class DetailPage extends HookWidget {
                           ],
                           crossAxisAlignment: CrossAxisAlignment.start,
                         ),
+                        IconButton(onPressed: () {
+                          AppRouter.router.navigateTo(context, "/post/edit/$postId",transition: TransitionType.native);
+                        }, icon: Icon(Icons.edit),)
                       ]),
                     ),
                     Container(

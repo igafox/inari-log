@@ -1,9 +1,11 @@
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/constant.dart';
+import 'package:inari_log/model/post.dart';
 import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/user/user_view_model.dart';
@@ -22,7 +24,7 @@ class UserPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = useProvider(userViewModelProvider);
+    final viewModel = useProvider(userViewModelProvider(userId));
 
     return Scaffold(
         appBar: PreferredSize(
@@ -99,65 +101,67 @@ class UserPage extends HookWidget {
                   height: 20,
                 ),
                 Expanded(
-                    child: GridView.count(
-                        childAspectRatio: Responsive.value(
-                            context: context,
-                            desktop: 1 / 1,
-                            tablet: 1 / 1,
-                            mobile: 1 / 1),
-                        crossAxisCount: Responsive.value(
-                                context: context,
-                                desktop: 3,
-                                tablet: 3,
-                                mobile: 1)
-                            .toInt(),
-                        mainAxisSpacing: 15,
-                        crossAxisSpacing: 15,
-                        children: [
-                    ]))
+                    child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: Responsive.value(
+                              context: context,
+                              desktop: 1 / 1,
+                              tablet: 1 / 1,
+                              mobile: 1 / 1),
+                          crossAxisCount: Responsive.value(
+                              context: context,
+                              desktop: 3,
+                              tablet: 3,
+                              mobile: 1)
+                              .toInt(),
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 15,
+                        ),
+                        itemCount: viewModel.posts.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _createItem(context, viewModel.posts[index]);
+                        }))
               ])),
         ));
   }
 
-  Widget _createItem(
-      BuildContext context, String name, String address, String imageName) {
+  Widget _createItem(BuildContext context, Post post) {
     return Card(
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/post/1",
+          AppRouter.router.navigateTo(context, "/post_create/" + post.id,
               transition: TransitionType.native);
         },
         child: Column(
           children: [
             Expanded(
-                child: Image.asset(
-              imageName,
-              height: double.infinity,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            )),
+                child: Image.network(
+                  post.imageUrls.firstOrNull ?? "",
+                  height: double.infinity,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                )),
             Container(
               padding: EdgeInsets.all(10),
               child: Row(children: [
-                CircleImage(
-                    size: 45, image: AssetImage("images/icon.png")),
+                CircleImage(size: 45, image: NetworkImage(post.userIcon)),
                 SizedBox(
                   width: 10,
                 ),
                 Column(
                   children: [
-                    Text("iga",
+                    Text(post.userName,
                         style: TextStyle(
                             fontSize: 13,
                             fontFamily: FontFamily.NOTOSANS_BOLD)),
                     Text(
-                      name,
+                      post.name,
                       style: TextStyle(
                           fontSize: 15,
                           fontFamily: FontFamily.NOTOSANS_REGULAR),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(address,
+                    Text(post.address,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: FontFamily.NOTOSANS_REGULAR))
@@ -171,4 +175,5 @@ class UserPage extends HookWidget {
       ),
     );
   }
+
 }

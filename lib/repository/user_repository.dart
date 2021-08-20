@@ -8,11 +8,12 @@ abstract class UserRepository {
 
   Future<bool> isLogin();
 
+  Future<User?> getUser(String id);
+
   Stream<User?> getCurrentUser();
 
   Future<bool> logout();
 
   Future<bool> delete();
-
 
 }

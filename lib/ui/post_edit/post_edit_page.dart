@@ -1,8 +1,5 @@
-import 'dart:html';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,26 +7,34 @@ import 'package:image_picker_web/image_picker_web.dart';
 import 'package:inari_log/constant.dart';
 import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
-import 'package:inari_log/ui/post/post_view_model.dart';
-import 'package:inari_log/ui/widget/circle_image.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:inari_log/ui/post_edit/post_edit_view_model.dart';
 import 'package:inari_log/ui/widget/loading_view.dart';
 
-enum Menu {
-  MY_PAGE,
-  EDIT_PROFILE,
-  LOGOUT,
-}
-
 class PostEditPage extends HookWidget {
+  PostEditPage({required this.postId});
+
+  final String postId;
+
   @override
   Widget build(BuildContext context) {
-    final viewModel = useProvider(postViewModelProvider);
+    final viewModel = useProvider(postEditViewModelProvider(postId));
+
+    //名前フォーム上書き
+    final nameTextController = TextEditingController();
+    nameTextController.value = nameTextController.value.copyWith(
+      text: viewModel.name,
+    );
 
     //住所フォーム上書き
     final adressTextController = TextEditingController();
     adressTextController.value = adressTextController.value.copyWith(
       text: viewModel.address,
+    );
+
+    //メモフォーム上書き
+    final memoTextController = TextEditingController();
+    memoTextController.value = adressTextController.value.copyWith(
+      text: viewModel.memo,
     );
 
     print(viewModel.loading);
@@ -51,7 +56,7 @@ class PostEditPage extends HookWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                "新しい稲荷を投稿",
+                                "投稿を編集",
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: FontFamily.NOTOSANS_BOLD),
@@ -81,6 +86,7 @@ class PostEditPage extends HookWidget {
                                   decoration: InputDecoration(
                                     hintText: "名前を追加",
                                   ),
+                                  controller: nameTextController,
                                   onChanged: (text) {
                                     viewModel.onChangeName(text);
                                   }),
@@ -153,6 +159,7 @@ class PostEditPage extends HookWidget {
                                   maxLines: null,
                                   decoration:
                                       InputDecoration(hintText: "メモを追加"),
+                                  controller: memoTextController,
                                   onChanged: (text) {
                                     viewModel.onChangeMemo(text);
                                   },
@@ -214,8 +221,7 @@ class PostEditPage extends HookWidget {
                                   mainAxisSpacing: 15,
                                   crossAxisSpacing: 15,
                                   shrinkWrap: true,
-                                  children: _buildUploadImages(
-                                      viewModel.uploadImages)),
+                                  children: _buildUploadImages(viewModel.uploadImages,viewModel.appendImages)),
                               SizedBox(
                                 height: 40,
                               ),
@@ -232,7 +238,7 @@ class PostEditPage extends HookWidget {
                                         onPrimary: Colors.white,
                                       ),
                                       onPressed: () async {
-                                        viewModel.post(context);
+                                        viewModel.postEdit(context);
                                       },
                                     ),
                                   ),
@@ -244,8 +250,8 @@ class PostEditPage extends HookWidget {
                             ]))))));
   }
 
-  List<Widget> _buildUploadImages(List<Uint8List> imagePaths) {
-    if (imagePaths.isEmpty) {
+  List<Widget> _buildUploadImages(List<String> uploadedImages,List<Uint8List> appendImages) {
+    if (uploadedImages.isEmpty && appendImages.isEmpty) {
       final empty = Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white24),
@@ -256,7 +262,8 @@ class PostEditPage extends HookWidget {
       return [empty];
     }
 
-    final images = imagePaths.map((image) => Image.memory(image)).toList();
+    var images = uploadedImages.map((image) => Image.network(image)).toList();
+    images += appendImages.map((image) => Image.memory(image)).toList();
     return images;
   }
 }

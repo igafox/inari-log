@@ -1,8 +1,9 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:inari_log/ui/detail/detail_page.dart';
 import 'package:inari_log/ui/login/login_page.dart';
-import 'package:inari_log/ui/post/post_page.dart';
+import 'package:inari_log/ui/post_create/post_page.dart';
+import 'package:inari_log/ui/post_detail/detail_page.dart';
+import 'package:inari_log/ui/post_edit/post_edit_page.dart';
 import 'package:inari_log/ui/post_list/post_list_page.dart';
 import 'package:inari_log/ui/top/top_page.dart';
 import 'package:inari_log/ui/user/user_page.dart';
@@ -25,6 +26,12 @@ class AppRouter {
   static var postListHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
         return PostListPage();
+      });
+
+  static var postEditHandler = Handler(
+      handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+        String postId = params["id"]?.firstOrNull ?? "";
+        return PostEditPage(postId: postId);
       });
 
   static var postDetailHandler = Handler(
@@ -56,6 +63,7 @@ class AppRouter {
     router.define("/post", handler: postListHandler);
     router.define("/post/create", handler: postCreateHandler);
     router.define("/post/:id", handler: postDetailHandler);
+    router.define("/post/edit/:id", handler: postEditHandler);
     router.define("/user/create", handler: userCreateHandler);
     router.define("/user/:id", handler: userDetailHandler);
     router.define("/login", handler:loginHandler);

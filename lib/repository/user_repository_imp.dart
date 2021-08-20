@@ -108,4 +108,17 @@ class UserRepositoryImp implements UserRepository {
     return true;
   }
 
+  @override
+  Future<Model.User?> getUser(String id) async {
+    final result = await userCollection.doc(id).get();
+    final data = result.data();
+
+    if (data == null) {
+      return null;
+    }
+
+    final user = Model.User.from(data);
+    return user;
+  }
+
 }

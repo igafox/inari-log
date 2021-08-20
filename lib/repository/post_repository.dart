@@ -6,6 +6,8 @@ abstract class PostRepository {
 
   Future<List<Post>> findAll(int limit,String? startAfterId);
 
+  Future<List<Post>> findByUserId(String userId,int limit,String? startAfterId);
+
   Future<Post> findById(String id);
 
   Future<bool> create(Post post);

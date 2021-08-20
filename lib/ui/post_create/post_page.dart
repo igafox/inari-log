@@ -1,8 +1,5 @@
-import 'dart:html';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,16 +7,9 @@ import 'package:image_picker_web/image_picker_web.dart';
 import 'package:inari_log/constant.dart';
 import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
-import 'package:inari_log/ui/post/post_view_model.dart';
-import 'package:inari_log/ui/widget/circle_image.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:inari_log/ui/post_create/post_view_model.dart';
 import 'package:inari_log/ui/widget/loading_view.dart';
 
-enum Menu {
-  MY_PAGE,
-  EDIT_PROFILE,
-  LOGOUT,
-}
 
 class PostPage extends HookWidget {
   @override
