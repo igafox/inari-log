@@ -30,7 +30,6 @@ class GlobalMenuViewModel extends ChangeNotifier {
 
   void logout(BuildContext context) async {
     await _repository.logout();
-    AppRouter.router.navigateTo(context, "/",
-        transition: TransitionType.native, replace: true);
+    AppRouter.router.navigateTo(context, "/", replace: true);
   }
 }

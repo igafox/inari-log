@@ -21,11 +21,9 @@ class _AuthCheckPageState extends State<AuthCheckPage> {
   initState() {
     FirebaseAuth.instance.authStateChanges().first.then((currentUser) {
       final nextRoute = (currentUser != null) ? widget.authedPath : widget.unAuthPath;
-      AppRouter.router.navigateTo(context, nextRoute,
-          transition: TransitionType.native,);
+      AppRouter.router.navigateTo(context, nextRoute);
     }).catchError((err) {
-      AppRouter.router.navigateTo(context, "/",
-          transition: TransitionType.native,);
+      AppRouter.router.navigateTo(context, "/");
     });
     super.initState();
   }

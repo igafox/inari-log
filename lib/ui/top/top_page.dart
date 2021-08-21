@@ -34,8 +34,7 @@ class TopPage extends HookWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            AppRouter.router.navigateTo(context, "/post/create",
-                transition: TransitionType.native);
+            AppRouter.router.navigateTo(context, "/post/create",);
           }),
       body: SingleChildScrollView(
         child: Column(
@@ -95,8 +94,7 @@ class TopPage extends HookWidget {
                                   ),
                                   onPressed: () {
                                     AppRouter.router.navigateTo(
-                                        context, "/post/create",
-                                        transition: TransitionType.native);
+                                        context, "/post/create",);
                                   },
                                 ),
                               )
@@ -158,7 +156,6 @@ class TopPage extends HookWidget {
                             AppRouter.router.navigateTo(
                               context,
                               "/post",
-                              transition: TransitionType.native,
                             );
                           }),
                     ),
@@ -230,8 +227,7 @@ class TopPage extends HookWidget {
       return Card(
         child: InkWell(
           onTap: () {
-            AppRouter.router.navigateTo(context, "/post/" + item.id,
-                transition: TransitionType.native);
+            AppRouter.router.navigateTo(context, "/post/" + item.id,);
           },
           child: Column(
             children: [

@@ -64,7 +64,7 @@ class LoginViewModel extends ChangeNotifier {
 
       if (result.user != null) {
         AppRouter.router.navigateTo(
-            context, "/", transition: TransitionType.native);
+            context, "/");
       } else {
         _errorMessage = "ユーザーの読み込みに失敗しました";
       }
@@ -87,7 +87,7 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void onClickRegisterEmail(BuildContext context) {
-    AppRouter.router.navigateTo(context, "/user/create",transition: TransitionType.native);
+    AppRouter.router.navigateTo(context, "/user/create",);
   }
 
   void load() async {

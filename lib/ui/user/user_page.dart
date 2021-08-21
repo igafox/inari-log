@@ -43,8 +43,7 @@ class UserPage extends HookWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              AppRouter.router.navigateTo(context, "/post/create",
-                  transition: TransitionType.native);
+              AppRouter.router.navigateTo(context, "/post/create",);
             }),
         body: Container(
           alignment: Alignment.topCenter,
@@ -129,8 +128,7 @@ class UserPage extends HookWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/post_create/" + post.id,
-              transition: TransitionType.native);
+          AppRouter.router.navigateTo(context, "/post_create/" + post.id,);
         },
         child: Column(
           children: [

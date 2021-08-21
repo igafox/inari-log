@@ -32,8 +32,7 @@ class GlobalMenu extends HookWidget {
               style: TextStyle(fontSize: 15, color: Colors.white),
             ),
             onPressed: () {
-              AppRouter.router.navigateTo(context, "/post",
-                  transition: TransitionType.native);
+              AppRouter.router.navigateTo(context, "/post");
             }),
         Visibility(
           visible: user.data?.value?.id?.isNotEmpty ?? false,
@@ -64,8 +63,7 @@ class GlobalMenu extends HookWidget {
               switch (value) {
                 case Menu.MY_PAGE:
                   AppRouter.router.navigateTo(
-                      context, "/user/${user.data?.value?.id}",
-                      transition: TransitionType.native);
+                      context, "/user/${user.data?.value?.id}",);
                   break;
 
                 case Menu.EDIT_PROFILE:
@@ -89,8 +87,7 @@ class GlobalMenu extends HookWidget {
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
-                  AppRouter.router.navigateTo(context, "/login",
-                      transition: TransitionType.native);
+                  AppRouter.router.navigateTo(context, "/login",);
                 },
               ),
             )),

@@ -79,7 +79,7 @@ class UserCreateViewModel extends ChangeNotifier {
 
     try {
       await _userRepository.create(_email, _password, _userName, _profileImage!);
-      AppRouter.router.navigateTo(context, "/",transition: TransitionType.native);
+      AppRouter.router.navigateTo(context, "/");
     } on FirebaseAuthException catch (e) {
       print(e);
       _errorMessage = FirebaseAuthUtil.getDisplayMessage(e);

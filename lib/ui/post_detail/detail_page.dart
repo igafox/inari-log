@@ -78,8 +78,7 @@ class DetailPage extends HookWidget {
                         IconButton(
                           onPressed: () {
                             AppRouter.router.navigateTo(
-                                context, "/post/edit/$postId",
-                                transition: TransitionType.native);
+                                context, "/post/edit/$postId",);
                           },
                           icon: Icon(Icons.edit),
                         )
