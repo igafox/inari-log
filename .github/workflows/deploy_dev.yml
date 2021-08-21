@@ -28,8 +28,8 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_OINARI_LOG }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_OINARI_LOG_DEV }}'
           channelId: live
-          projectId: oinari-log
+          projectId: oinari-log-dev
 
 
