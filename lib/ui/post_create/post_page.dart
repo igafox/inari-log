@@ -26,8 +26,8 @@ class PostPage extends HookWidget {
     print(viewModel.loading);
 
     return Scaffold(
-        // appBar: PreferredSize(
-        //     preferredSize: Size.fromHeight(60), child: GlobalMenu()),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60), child: GlobalMenu()),
         body: LoadingView(
             progress: viewModel.loading,
             child: SingleChildScrollView(
@@ -189,7 +189,7 @@ class PostPage extends HookWidget {
                               // ),
                               SizedBox(height: 20),
                               ListView.builder(
-                                itemCount: viewModel.memos.length,
+                                itemCount: viewModel.memosTexts.length,
                                 itemBuilder: (context, index) {
                                   return _buildMemo(context, index);
                                 },
@@ -212,7 +212,7 @@ class PostPage extends HookWidget {
                                 height: 40,
                               ),
                               Visibility(
-                                  visible: (viewModel.memos.length >= 1)
+                                  visible: (viewModel.memoImages.length >= 1)
                                       ? true
                                       : false,
                                   child: SizedBox(
@@ -223,12 +223,11 @@ class PostPage extends HookWidget {
                                       label: Text("メモを追加"),
                                       style: ElevatedButton.styleFrom(),
                                       onPressed: () async {
-                                        // final fromPicker =
-                                        // await ImagePickerWeb.getMultiImages(
-                                        //     outputType: ImageType.bytes)
-                                        // as List<Uint8List>;
-                                        // print(fromPicker.length.toString());
-                                        // viewModel.addUploadImage(fromPicker);
+                                        final image =
+                                            await ImagePickerWeb.getImage(
+                                                    outputType: ImageType.bytes)
+                                                as Uint8List;
+                                        viewModel.addNewMemo("", image);
                                       },
                                     ),
                                   )),
@@ -257,7 +256,7 @@ class PostPage extends HookWidget {
   }
 
   Widget _buildMemo(BuildContext context, int index) {
-    final memo = context.read(postViewModelProvider).memos[index];
+    final memoImage = context.read(postViewModelProvider).memoImages[index];
 
     return GestureDetector(
       child: Container(
@@ -265,23 +264,43 @@ class PostPage extends HookWidget {
           border: Border.all(color: Colors.white24),
           borderRadius: BorderRadius.circular(3),
         ),
-        child: Stack(
-          alignment: AlignmentDirectional.center,
+        child: Column(
           children: [
-            Column(
+            Stack(
+              alignment: AlignmentDirectional.center,
               children: [
-                Icon(Icons.photo, size: 40),
-                SizedBox(
-                  height: 15,
+                Column(
+                  children: [
+                    Icon(Icons.photo, size: 40),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      "画像を追加",
+                      style: TextStyle(
+                          fontFamily: FontFamily.NOTOSANS_BOLD, fontSize: 16),
+                    )
+                  ],
                 ),
-                Text(
-                  "画像を追加",
-                  style: TextStyle(
-                      fontFamily: FontFamily.NOTOSANS_BOLD, fontSize: 16),
-                )
+                if (memoImage != null) Image.memory(memoImage)
               ],
             ),
-            if (memo.item2 != null) Image.memory(memo.item2!)
+            SizedBox(
+              height: 20,
+            ),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: 200),
+              child: TextField(
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration(hintText: "メモを追加"),
+                onChanged: (text) {
+                  context
+                      .read(postViewModelProvider)
+                      .onChangeMemoText(index, text);
+                },
+              ),
+            ),
           ],
         ),
       ),

@@ -144,7 +144,7 @@ class UserPage extends HookWidget {
             Container(
               padding: EdgeInsets.all(10),
               child: Row(children: [
-                CircleImage(size: 45, image: NetworkImage(post.userIcon)),
+                CircleImage(size: 45, image: NetworkImage(post.userIconUrl)),
                 SizedBox(
                   width: 10,
                 ),

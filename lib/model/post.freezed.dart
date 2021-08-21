@@ -24,7 +24,7 @@ class _$PostTearOff {
       List<PostMemo> memos = const [],
       String userId = "",
       String userName = "",
-      String userIcon = "",
+      String userIconUrl = "",
       DateTime? createdAt}) {
     return _Post(
       id: id,
@@ -33,7 +33,7 @@ class _$PostTearOff {
       memos: memos,
       userId: userId,
       userName: userName,
-      userIcon: userIcon,
+      userIconUrl: userIconUrl,
       createdAt: createdAt,
     );
   }
@@ -50,7 +50,7 @@ mixin _$Post {
   List<PostMemo> get memos => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get userName => throw _privateConstructorUsedError;
-  String get userIcon => throw _privateConstructorUsedError;
+  String get userIconUrl => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -68,7 +68,7 @@ abstract class $PostCopyWith<$Res> {
       List<PostMemo> memos,
       String userId,
       String userName,
-      String userIcon,
+      String userIconUrl,
       DateTime? createdAt});
 }
 
@@ -88,7 +88,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? memos = freezed,
     Object? userId = freezed,
     Object? userName = freezed,
-    Object? userIcon = freezed,
+    Object? userIconUrl = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
@@ -116,9 +116,9 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      userIcon: userIcon == freezed
-          ? _value.userIcon
-          : userIcon // ignore: cast_nullable_to_non_nullable
+      userIconUrl: userIconUrl == freezed
+          ? _value.userIconUrl
+          : userIconUrl // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: createdAt == freezed
           ? _value.createdAt
@@ -140,7 +140,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       List<PostMemo> memos,
       String userId,
       String userName,
-      String userIcon,
+      String userIconUrl,
       DateTime? createdAt});
 }
 
@@ -161,7 +161,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? memos = freezed,
     Object? userId = freezed,
     Object? userName = freezed,
-    Object? userIcon = freezed,
+    Object? userIconUrl = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_Post(
@@ -189,9 +189,9 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      userIcon: userIcon == freezed
-          ? _value.userIcon
-          : userIcon // ignore: cast_nullable_to_non_nullable
+      userIconUrl: userIconUrl == freezed
+          ? _value.userIconUrl
+          : userIconUrl // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: createdAt == freezed
           ? _value.createdAt
@@ -203,7 +203,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Post implements _Post {
+class _$_Post extends _Post {
   const _$_Post(
       {this.id = "",
       this.name = "",
@@ -211,8 +211,9 @@ class _$_Post implements _Post {
       this.memos = const [],
       this.userId = "",
       this.userName = "",
-      this.userIcon = "",
-      this.createdAt});
+      this.userIconUrl = "",
+      this.createdAt})
+      : super._();
 
   @JsonKey(defaultValue: "")
   @override
@@ -234,13 +235,13 @@ class _$_Post implements _Post {
   final String userName;
   @JsonKey(defaultValue: "")
   @override
-  final String userIcon;
+  final String userIconUrl;
   @override
   final DateTime? createdAt;
 
   @override
   String toString() {
-    return 'Post(id: $id, name: $name, address: $address, memos: $memos, userId: $userId, userName: $userName, userIcon: $userIcon, createdAt: $createdAt)';
+    return 'Post(id: $id, name: $name, address: $address, memos: $memos, userId: $userId, userName: $userName, userIconUrl: $userIconUrl, createdAt: $createdAt)';
   }
 
   @override
@@ -261,9 +262,9 @@ class _$_Post implements _Post {
             (identical(other.userName, userName) ||
                 const DeepCollectionEquality()
                     .equals(other.userName, userName)) &&
-            (identical(other.userIcon, userIcon) ||
+            (identical(other.userIconUrl, userIconUrl) ||
                 const DeepCollectionEquality()
-                    .equals(other.userIcon, userIcon)) &&
+                    .equals(other.userIconUrl, userIconUrl)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
                     .equals(other.createdAt, createdAt)));
@@ -278,7 +279,7 @@ class _$_Post implements _Post {
       const DeepCollectionEquality().hash(memos) ^
       const DeepCollectionEquality().hash(userId) ^
       const DeepCollectionEquality().hash(userName) ^
-      const DeepCollectionEquality().hash(userIcon) ^
+      const DeepCollectionEquality().hash(userIconUrl) ^
       const DeepCollectionEquality().hash(createdAt);
 
   @JsonKey(ignore: true)
@@ -287,7 +288,7 @@ class _$_Post implements _Post {
       __$PostCopyWithImpl<_Post>(this, _$identity);
 }
 
-abstract class _Post implements Post {
+abstract class _Post extends Post {
   const factory _Post(
       {String id,
       String name,
@@ -295,8 +296,9 @@ abstract class _Post implements Post {
       List<PostMemo> memos,
       String userId,
       String userName,
-      String userIcon,
+      String userIconUrl,
       DateTime? createdAt}) = _$_Post;
+  const _Post._() : super._();
 
   @override
   String get id => throw _privateConstructorUsedError;
@@ -311,7 +313,7 @@ abstract class _Post implements Post {
   @override
   String get userName => throw _privateConstructorUsedError;
   @override
-  String get userIcon => throw _privateConstructorUsedError;
+  String get userIconUrl => throw _privateConstructorUsedError;
   @override
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @override

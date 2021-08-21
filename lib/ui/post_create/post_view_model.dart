@@ -43,17 +43,13 @@ class PostViewModel extends ChangeNotifier {
 
   LatLng get location => _location;
 
-  List<Tuple2<String, Uint8List?>> _memos = [Tuple2("", null)];
-
-  List<Tuple2<String, Uint8List?>> get memos => _memos;
-
   List<String> _memoTexts = [""];
 
   List<String> get memosTexts => _memoTexts;
 
   List<Uint8List?> _memoImages = [null];
 
-  List<Uint8List?> get memoImagess => _memoImages;
+  List<Uint8List?> get memoImages => _memoImages;
 
   bool _loading = false;
 
@@ -83,19 +79,26 @@ class PostViewModel extends ChangeNotifier {
     _address = text;
   }
 
-  void removeMemo() {}
-
-  void addMemo(String text,Uint8List image) {
-    memos.add(Tuple2(text, image));
+  void removeMemo(int index) {
+    _memoTexts.removeAt(index);
+    _memoImages.removeAt(index);
     notifyListeners();
   }
 
-  void onChangeMemoText(int index, String text) {}
+  void addNewMemo(String text,Uint8List image) {
+    _memoTexts.add(text);
+    _memoImages.add(image);
+    notifyListeners();
+  }
+
+  void onChangeMemoText(int index, String text) {
+    log(text);
+    _memoTexts[index] = text;
+    notifyListeners();
+  }
 
   void onChangeMemoImage(int index, Uint8List image) {
-    final text = memos[index].item1;
-    _memos[index] = _memos[index].withItem2(image);
-    log(_memos.toString());
+    _memoImages[index] = image;
     notifyListeners();
   }
 
@@ -131,25 +134,33 @@ class PostViewModel extends ChangeNotifier {
 
     final postId = await _poreRepository.generateId();
 
-    final hasNoImageMemo = memos.where((element) => element.item2 == null).isNotEmpty;
+    //未設定画像判定
+    final hasNoImageMemo = memoImages.where((element) => element == null).isNotEmpty;
     if(hasNoImageMemo) {
       log("画像が設定されていないメモがあります");
       return;
     }
 
-    final uploadMemos = await Future.wait(memos.map((memo) async {
-      final imageUrl = await _imageRepository.uploadImage(postId, memo.item2!);
-      return PostMemo(text: memo.item1, imageUrl: imageUrl);
+    log(_memoImages.length.toString());
+
+    //画像アップロード処理
+    final uploadMemos = await Future.wait(_memoImages.mapIndexed((index,image) async {
+      final imageUrl = await _imageRepository.uploadImage(postId, image!);
+      final text = _memoTexts[index];
+      return PostMemo(text: text, imageUrl: imageUrl);
     }).toList());
 
+    //投稿データ作成
     final post = Post(
       id: postId,
       name: _name,
       address: _address,
       memos: uploadMemos,
     );
+    //データ登録
     await _poreRepository.create(post);
 
+    //前の画面に戻る
     AppRouter.router.pop(context);
 
     _loading = false;

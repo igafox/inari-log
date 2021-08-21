@@ -32,18 +32,9 @@ class DetailViewModel extends ChangeNotifier {
 
   String get errorMessage => _errorMessage;
 
-  bool _isVisibleFab = false;
-
-  bool get isVisibleFab => _isVisibleFab;
-
   Post? _post;
 
   Post? get post => _post;
-
-  void setVisibleFab(bool visible) {
-    _isVisibleFab = visible;
-    notifyListeners();
-  }
 
   void load() async {
     _loading = true;

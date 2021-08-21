@@ -4,6 +4,9 @@ part 'post_memo.freezed.dart';
 
 @freezed
 abstract class PostMemo implements _$PostMemo {
+
+  const PostMemo._();
+
   const factory PostMemo({
     @Default("") String text,
     @Default("") String imageUrl,
@@ -16,16 +19,11 @@ abstract class PostMemo implements _$PostMemo {
     );
   }
 
-// Map<String, dynamic> toMap() {
-//   return {
-//     "id": this.id,
-//     "name": this.name,
-//     "memo": this.memo,
-//     "address": this.address,
-//     "userId": this.userId,
-//     "userName": this.userName,
-//     "images": this.imageUrls,
-//     "createDate": this.createdDate
-//   };
-// }
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'text': text,
+      'imageUrl': imageUrl,
+    };
+  }
+
 }

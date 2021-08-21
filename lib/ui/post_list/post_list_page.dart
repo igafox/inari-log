@@ -80,13 +80,13 @@ class PostListPage extends HookWidget {
                         ),
                         itemCount: viewModel.post.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return _createItem(context, viewModel.post[index]);
+                          return _buildPost(context, viewModel.post[index]);
                         }))
               ])),
         ));
   }
 
-  Widget _createItem(BuildContext context, Post post) {
+  Widget _buildPost(BuildContext context, Post post) {
     return Card(
       child: InkWell(
         onTap: () {
@@ -97,7 +97,7 @@ class PostListPage extends HookWidget {
           children: [
             Expanded(
                 child: Image.network(
-                  "",
+                  post.memos.firstOrNull?.imageUrl ?? "",
               height: double.infinity,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -105,7 +105,7 @@ class PostListPage extends HookWidget {
             Container(
               padding: EdgeInsets.all(10),
               child: Row(children: [
-                CircleImage(size: 45, image: AssetImage("images/icon.png")),
+                CircleImage(size: 45, image: NetworkImage(post.userIconUrl)),
                 SizedBox(
                   width: 10,
                 ),

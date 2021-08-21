@@ -108,8 +108,8 @@ class __$PostMemoCopyWithImpl<$Res> extends _$PostMemoCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_PostMemo implements _PostMemo {
-  const _$_PostMemo({this.text = "", this.imageUrl = ""});
+class _$_PostMemo extends _PostMemo {
+  const _$_PostMemo({this.text = "", this.imageUrl = ""}) : super._();
 
   @JsonKey(defaultValue: "")
   @override
@@ -146,8 +146,9 @@ class _$_PostMemo implements _PostMemo {
       __$PostMemoCopyWithImpl<_PostMemo>(this, _$identity);
 }
 
-abstract class _PostMemo implements PostMemo {
+abstract class _PostMemo extends PostMemo {
   const factory _PostMemo({String text, String imageUrl}) = _$_PostMemo;
+  const _PostMemo._() : super._();
 
   @override
   String get text => throw _privateConstructorUsedError;

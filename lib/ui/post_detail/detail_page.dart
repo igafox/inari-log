@@ -4,6 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/constant.dart';
+import 'package:inari_log/model/post.dart';
+import 'package:inari_log/model/post_memo.dart';
 import 'package:inari_log/responsive.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
@@ -29,8 +31,10 @@ class DetailPage extends HookWidget {
       ),
       body: SingleChildScrollView(
           child: Container(
+              margin: EdgeInsets.only(top: 16, bottom: 24),
               alignment: Alignment.center,
-              child: Container(
+              child: Card(
+                  child: Container(
                 constraints: BoxConstraints(minWidth: 100, maxWidth: 800),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,177 +44,178 @@ class DetailPage extends HookWidget {
                       padding: EdgeInsets.all(15),
                       child: Row(children: [
                         CircleImage(
-                            size: 40, image: AssetImage("images/icon.png")),
+                            size: 48,
+                            image: NetworkImage(
+                                viewModel.post?.userIconUrl ?? "")),
                         SizedBox(
                           width: 10,
                         ),
                         Column(
                           children: [
                             Text(viewModel.post?.userName ?? "",
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    fontFamily: FontFamily.NOTOSANS_BOLD)),
-                            Text(
-                              viewModel.post?.name ?? "",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: FontFamily.NOTOSANS_REGULAR),
-                              overflow: TextOverflow.ellipsis,
+                                style:Theme.of(context).textTheme.bodyText1),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text("10分前に投稿",
+                                    style: Theme.of(context).textTheme.caption,)
+                              ],
                             ),
-                            Text(viewModel.post?.address ?? "",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: FontFamily.NOTOSANS_REGULAR))
+                            // Text(
+                            //   viewModel.post?.name ?? "",
+                            //   style: TextStyle(
+                            //       fontSize: 15,
+                            //       fontFamily: FontFamily.NOTOSANS_REGULAR),
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
+                            // Text(viewModel.post?.address ?? "",
+                            //     style: TextStyle(
+                            //         fontSize: 12,
+                            //         fontFamily: FontFamily.NOTOSANS_REGULAR))
                           ],
                           crossAxisAlignment: CrossAxisAlignment.start,
                         ),
-                        IconButton(onPressed: () {
-                          AppRouter.router.navigateTo(context, "/post/edit/$postId",transition: TransitionType.native);
-                        }, icon: Icon(Icons.edit),)
+                        IconButton(
+                          onPressed: () {
+                            AppRouter.router.navigateTo(
+                                context, "/post/edit/$postId",
+                                transition: TransitionType.native);
+                          },
+                          icon: Icon(Icons.edit),
+                        )
                       ]),
                     ),
                     Container(
-                        height: Responsive.value(
-                                context: context,
-                                desktop: 390,
-                                tablet: 390,
-                                mobile: 250)
-                            .toDouble(),
-                        child: Stack(
-                          children: [
-                            Image.network(
-                              "",
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(left: 40),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                              ),
-                            )
-                          ],
-                        )),
-                    Container(
-                      padding: EdgeInsets.all(8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "メモ",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: FontFamily.NOTOSANS_BOLD),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Card(
-                              child: Container(
-                            padding: EdgeInsets.all(12),
-                            height: 250,
-                            width: double.infinity,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                    child: Text("")),
-                                Text((DateFormat('yyyy/MM/dd/ HH:mm')).format(viewModel.post!.createdAt ?? DateTime.now()))
-                              ],
-                            ),
-                          )),
-                          SizedBox(
-                            height: 10,
+                          ListView.builder(
+                            itemCount: viewModel.post?.memos.length ?? 0,
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                return _buildFirstMemo(context, viewModel.post!,
+                                    viewModel.post!.memos[index]);
+                              } else {
+                                return _buildMemo(
+                                    context, viewModel.post!.memos[index]);
+                              }
+                            },
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
-              ))),
+              )))),
     );
   }
 
-  Widget _createItem(
-      BuildContext context, String name, String address, String imageName) {
-    return Card(
+  Widget _buildFirstMemo(BuildContext context, Post post, PostMemo memo) {
+    return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-              child: Image.asset(
-            imageName,
-            height: double.infinity,
+          Image.network(
+            memo.imageUrl,
+            fit: BoxFit.fill,
             width: double.infinity,
-            fit: BoxFit.cover,
-          )),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Row(children: [
-              CircleImage(size: 45, image: AssetImage("images/icon.png")),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                children: [
-                  Text("iga",
-                      style: TextStyle(
-                          fontSize: 13, fontFamily: FontFamily.NOTOSANS_BOLD)),
-                  Text(
-                    name,
-                    style: TextStyle(
-                        fontSize: 15, fontFamily: FontFamily.NOTOSANS_REGULAR),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(address,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: FontFamily.NOTOSANS_REGULAR))
-                ],
-                crossAxisAlignment: CrossAxisAlignment.start,
-              ),
-            ]),
           ),
+          Container(
+            padding: EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  post.name ?? "",
+                  style: TextStyle(
+                      fontSize: 17, fontFamily: FontFamily.NOTOSANS_BOLD),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.place,
+                      size: 18,
+                    ),
+                    Text(post?.address ?? "",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: FontFamily.NOTOSANS_REGULAR)),
+                  ],
+                ),
+                SizedBox(height: 3),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 1,
+                    ),
+                    Icon(
+                      Icons.calendar_today,
+                      size: 16,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text("参拝:2018/10/11",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: FontFamily.NOTOSANS_REGULAR))
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: 200),
+                    child: Text(memo.text)),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 
-  Widget _buildMore(String title, String message, String imageName) {
-    return Column(
-      children: [
-        Expanded(
-            flex: 3,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Image.asset(
-                imageName,
-                height: double.infinity,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            )),
-        Expanded(
-          flex: 2,
-          child: Container(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+  Widget _buildMemo(BuildContext context, PostMemo memo) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.network(
+            memo.imageUrl,
+            fit: BoxFit.fill,
+            width: double.infinity,
+          ),
+          Container(
+            padding: EdgeInsets.all(12),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                      fontFamily: FontFamily.NOTOSANS_BOLD, fontSize: 18),
-                ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
-                Text(message),
+                ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: 200),
+                    child: Text(memo.text)),
+                SizedBox(
+                  height: 10,
+                ),
               ],
             ),
-          ),
-        ),
-      ],
-      mainAxisSize: MainAxisSize.min,
+          )
+        ],
+      ),
     );
   }
 }

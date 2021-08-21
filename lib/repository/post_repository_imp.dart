@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -71,50 +73,38 @@ class PostRepositoryImp implements PostRepository {
   }
 
   @override
-  Future<bool> create(Post post) async {
-    // final uid = _firebaseAuth.currentUser?.uid ?? "iga_fox";
-    // if(uid == null) return false;
-
-    print("create data");
+  Future<bool> create(Post post) async{
+    //ユーザー情報取得
+    final currentUser = _firebaseAuth.currentUser;
+    final uid = currentUser!.uid;
+    var userName = "";
+    var userIconUrl = "";
 
     try {
-      //uid取得
-      final currentUser = _firebaseAuth.currentUser;
-      final uid = currentUser?.uid ?? "";
-      final displayName = currentUser?.displayName ?? "";
-
-      // //ユーザーデータ取得
-      // final userResult = await userCollection.doc(uid).get();
-      // if (userResult.data() == null) return false;
-      // final user = Model.User.from(userResult.data()!);
-      post = post.copyWith(userId: uid, userName: displayName);
-
-      print(post);
-
-      //idが未設定の場合、生成する
-      if (post.id.isEmpty) {
-        post = post.copyWith(id: userCollection.doc().id);
-      }
-
-      final data = {
-        "id": post.id,
-        "name": post.name,
-        "memos": post.memos,
-        "address": post.address,
-        "userId": post.userId,
-        "userName": post.userName,
-        "userIcon": post.userIcon,
-        "createdAt": FieldValue.serverTimestamp()
-      };
-
-      await postCollection.doc(post.id).set(data);
-      print("create done");
-      return true;
-    } catch (e) {
-      print("create failed");
-      print(e);
-      return false;
+      final userDataResult = await userCollection.doc(uid).get();
+      final userData = userDataResult.data();
+      final user = Model.User.from(userData!);
+      userName = user.name!;
+      userIconUrl = user.iconUrl!;
+    } catch(e) {
+      userName = currentUser.displayName ?? "";
+      userIconUrl = currentUser.photoURL ?? "";
     }
+
+    //ユーザー情報上書き
+    post = post.copyWith(userId: uid, userName: userName,userIconUrl: userIconUrl);
+
+    //idが未設定の場合、生成する
+    if (post.id.isEmpty) {
+      post = post.copyWith(id: userCollection.doc().id);
+    }
+
+    //データ登録
+    final data = post.toMap();
+    data["createdAt"] = FieldValue.serverTimestamp(); //Firebaseのタイムスタンプを使用
+    await postCollection.doc(post.id).set(data);
+
+    return true;
   }
 
   @override
