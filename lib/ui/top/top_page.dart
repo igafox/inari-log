@@ -237,13 +237,13 @@ class TopPage extends HookWidget {
             children: [
               Expanded(
                   child: CachedNetworkImage(
-                imageUrl: "",
+                imageUrl: item.memos.firstOrNull?.imageUrl ?? "",
                 fit: BoxFit.cover,
               )),
               Container(
                 padding: EdgeInsets.all(10),
                 child: Row(children: [
-                  CircleImage(size: 45, image: AssetImage("images/icon.png")),
+                  CircleImage(size: 45, image: NetworkImage(item.userIconUrl)),
                   SizedBox(
                     width: 10,
                   ),
