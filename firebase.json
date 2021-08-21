@@ -8,6 +8,10 @@
     ],
     "rewrites": [
       {
+        "source": "share/*",
+        "function": "returnHtmlWithOGP"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
