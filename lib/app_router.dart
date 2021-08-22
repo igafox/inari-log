@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:inari_log/ui/login/login_page.dart';
-import 'package:inari_log/ui/post_create/post_page.dart';
+import 'package:inari_log/ui/post_create/post_create_page.dart';
 import 'package:inari_log/ui/post_detail/detail_page.dart';
 import 'package:inari_log/ui/post_edit/post_edit_page.dart';
 import 'package:inari_log/ui/post_list/post_list_page.dart';
@@ -20,7 +20,7 @@ class AppRouter {
 
   static var postCreateHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-        return PostPage();
+        return PostCreatePage();
       });
 
   static var postListHandler = Handler(

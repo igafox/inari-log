@@ -6,13 +6,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:inari_log/constant.dart';
-import 'package:inari_log/responsive.dart';
+import 'package:inari_log/extension/date_time_ext.dart';
 import 'package:inari_log/ui/global_menu/global_menu.dart';
-import 'package:inari_log/ui/post_create/post_view_model.dart';
+import 'package:inari_log/ui/modal/select_location_modal.dart';
+import 'package:inari_log/ui/post_create/post_create_view_model.dart';
 import 'package:inari_log/ui/widget/loading_view.dart';
-import 'package:tuple/tuple.dart';
+import 'package:inari_log/widget/iframe_view.dart';
 
-class PostPage extends HookWidget {
+class PostCreatePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = useProvider(postViewModelProvider);
@@ -99,8 +100,83 @@ class PostPage extends HookWidget {
                                     },
                                   )),
                                   IconButton(
-                                    icon: Icon(Icons.my_location),
-                                    onPressed: () {},
+                                    icon: Icon(Icons.map),
+                                    onPressed: () async {
+                                      final latLng = await Navigator.of(context)
+                                          .push(SelectLocationModal(
+                                              viewModel.location));
+                                      if (latLng != null) {
+                                        viewModel.onChangeLocation(latLng);
+                                      }
+                                    },
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 220,
+                                    height: 220,
+                                    child: IframeView(
+                                      source:
+                                          "https://maps.google.co.jp/maps?output=embed&q=${viewModel.location.latitude},${viewModel.location.longitude}",
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  // SizedBox(
+                                  //   width: 220,
+                                  //   height: 220,
+                                  //   child: IframeView(
+                                  //     source:
+                                  //     "https://www.google.com/maps/embed/v1/streetview?location=${viewModel.location.latitude},${viewModel.location.longitude}&fov=80&heading=70&pitch=0&key=AIzaSyDwh06g-fRW_9uQb99WGP_bUSYpfZTgJN0",
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.calendar_today),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text("参拝日")
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                      viewModel.visitedAt.format("yyyy/MM/dd")),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                    child: Text("日付選択"),
+                                    style: ElevatedButton.styleFrom(),
+                                    onPressed: () async {
+                                      final DateTime? pickedDate =
+                                          await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: new DateTime(2000),
+                                              lastDate: new DateTime.now());
+                                      if (pickedDate == null) return;
+                                      viewModel.onChangeVisitedAt(pickedDate);
+                                    },
                                   )
                                 ],
                               ),
@@ -269,24 +345,28 @@ class PostPage extends HookWidget {
             Stack(
               alignment: AlignmentDirectional.center,
               children: [
-                Column(
-                  children: [
-                    Icon(Icons.photo, size: 40),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      "画像を追加",
-                      style: TextStyle(
-                          fontFamily: FontFamily.NOTOSANS_BOLD, fontSize: 16),
-                    )
-                  ],
+                ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: 300),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.photo, size: 40),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "画像を追加",
+                        style: TextStyle(
+                            fontFamily: FontFamily.NOTOSANS_BOLD, fontSize: 16),
+                      )
+                    ],
+                  ),
                 ),
                 if (memoImage != null) Image.memory(memoImage)
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             ConstrainedBox(
               constraints: BoxConstraints(maxHeight: 200),
@@ -312,68 +392,4 @@ class PostPage extends HookWidget {
       },
     );
   }
-
-// List<Widget> _buildMemos(BuildContext context) {
-//   final viewModel = context.read(postViewModelProvider);
-//   final memos = viewModel.memos;
-//
-//   if (memos.isEmpty) {
-//     final empty = GestureDetector(
-//       child: Container(
-//         decoration: BoxDecoration(
-//           border: Border.all(color: Colors.white24),
-//           borderRadius: BorderRadius.circular(3),
-//         ),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Icon(Icons.photo, size: 40),
-//             SizedBox(
-//               height: 15,
-//             ),
-//             Text(
-//               "メインの画像を追加",
-//               style: TextStyle(
-//                   fontFamily: FontFamily.NOTOSANS_BOLD, fontSize: 16),
-//             ),
-//           ],
-//         ),
-//       ),
-//       onTap: () async {
-//         final image = await ImagePickerWeb
-//             .getImage(outputType: ImageType.bytes)as Uint8List;
-//         log("画像が選択されました");
-//         viewModel.addMemo("", image);
-//       },
-//     );
-//     return [empty];
-//   }
-//
-//   return memos.map((item) {
-//     return Container(
-//       child: Column(
-//         children: [
-//           Image.memory(
-//             item.item2,
-//             height: 500,
-//             width: double.infinity,
-//             fit: BoxFit.cover,
-//           ),
-//           ConstrainedBox(
-//             constraints: BoxConstraints(maxHeight: 200),
-//             child: TextField(
-//               keyboardType: TextInputType.multiline,
-//               maxLines: null,
-//               decoration: InputDecoration(hintText: "メモを入力"),
-//               onChanged: (text) {
-//                 //変更
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }).toList();
-// }
-
 }

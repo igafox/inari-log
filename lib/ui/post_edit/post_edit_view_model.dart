@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/model/post.dart';
@@ -34,9 +33,9 @@ class PostEditViewModel extends ChangeNotifier {
   late final ImageRepository _imageRepository =
       _reader(imageRepositoryProvider);
 
-  LatLng _location = LatLng(35.680400, 139.769017);
-
-  LatLng get location => _location;
+  // LatLng _location = LatLng(35.680400, 139.769017);
+  //
+  // LatLng get location => _location;
 
   Post _post = Post();
 
@@ -64,14 +63,14 @@ class PostEditViewModel extends ChangeNotifier {
 
   bool get loading => _loading;
 
-  Set<Marker> _marker = {
-    Marker(
-      position: LatLng(35.680400, 139.769017),
-      markerId: MarkerId("pin"),
-    )
-  };
-
-  Set<Marker> get marker => _marker;
+  // Set<Marker> _marker = {
+  //   Marker(
+  //     position: LatLng(35.680400, 139.769017),
+  //     markerId: MarkerId("pin"),
+  //   )
+  // };
+  //
+  // Set<Marker> get marker => _marker;
 
   // void changeAddress(String address) async {
   //   print(address);

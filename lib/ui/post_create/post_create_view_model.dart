@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
@@ -14,7 +13,6 @@ import 'package:inari_log/repository/image_repository.dart';
 import 'package:inari_log/repository/image_repository_imp.dart';
 import 'package:inari_log/repository/post_repository.dart';
 import 'package:inari_log/repository/post_repository_imp.dart';
-import 'package:tuple/tuple.dart';
 
 final postViewModelProvider =
     ChangeNotifierProvider.autoDispose((ref) => PostViewModel(ref.read));
@@ -43,6 +41,10 @@ class PostViewModel extends ChangeNotifier {
 
   LatLng get location => _location;
 
+  DateTime _visitedAt = DateTime.now();
+
+  DateTime get visitedAt => _visitedAt;
+
   List<String> _memoTexts = [""];
 
   List<String> get memosTexts => _memoTexts;
@@ -55,14 +57,14 @@ class PostViewModel extends ChangeNotifier {
 
   bool get loading => _loading;
 
-  Set<Marker> _marker = {
-    Marker(
-      position: LatLng(35.680400, 139.769017),
-      markerId: MarkerId("pin"),
-    )
-  };
-
-  Set<Marker> get marker => _marker;
+  // Set<Marker> _marker = {
+  //   Marker(
+  //     position: LatLng(35.680400, 139.769017),
+  //     markerId: MarkerId("pin"),
+  //   )
+  // };
+  //
+  // Set<Marker> get marker => _marker;
 
   // void changeAddress(String address) async {
   //   print(address);
@@ -79,13 +81,18 @@ class PostViewModel extends ChangeNotifier {
     _address = text;
   }
 
+  void onChangeVisitedAt(DateTime date) {
+    _visitedAt = date;
+    notifyListeners();
+  }
+
   void removeMemo(int index) {
     _memoTexts.removeAt(index);
     _memoImages.removeAt(index);
     notifyListeners();
   }
 
-  void addNewMemo(String text,Uint8List image) {
+  void addNewMemo(String text, Uint8List image) {
     _memoTexts.add(text);
     _memoImages.add(image);
     notifyListeners();
@@ -102,26 +109,26 @@ class PostViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void changeLocation(LatLng latLng) async {
-  //   _location = latLng;
-  //   // var places =
-  //   //     await placemarkFromCoordinates(_location.latitude, _location.longitude);
-  //   // var place = places.first;
-  //   // _address = place.street ?? "";
-  //
-  //   _marker = {
-  //     Marker(
-  //       position: latLng,
-  //       markerId: MarkerId(DateTime.now().toIso8601String()),
-  //     )
-  //   };
-  //
-  //   print(marker.first.position.latitude.toString());
-  //
-  //   _address = latLng.latitude.toString() + ":" + latLng.longitude.toString();
-  //
-  //   notifyListeners();
-  // }
+  void onChangeLocation(LatLng latLng) async {
+    _location = latLng;
+    // var places =
+    //     await placemarkFromCoordinates(_location.latitude, _location.longitude);
+    // var place = places.first;
+    // _address = place.street ?? "";
+
+    // _marker = {
+    //   Marker(
+    //     position: latLng,
+    //     markerId: MarkerId(DateTime.now().toIso8601String()),
+    //   )
+    // };
+    //
+    // print(marker.first.position.latitude.toString());
+    //
+    // _address = latLng.latitude.toString() + ":" + latLng.longitude.toString();
+
+    notifyListeners();
+  }
 
   // void addUploadImage(List<Uint8List> imgs) {
   //   _uploadImages = imgs.take(5).toList();
@@ -135,8 +142,9 @@ class PostViewModel extends ChangeNotifier {
     final postId = await _poreRepository.generateId();
 
     //未設定画像判定
-    final hasNoImageMemo = memoImages.where((element) => element == null).isNotEmpty;
-    if(hasNoImageMemo) {
+    final hasNoImageMemo =
+        memoImages.where((element) => element == null).isNotEmpty;
+    if (hasNoImageMemo) {
       log("画像が設定されていないメモがあります");
       return;
     }
@@ -144,7 +152,8 @@ class PostViewModel extends ChangeNotifier {
     log(_memoImages.length.toString());
 
     //画像アップロード処理
-    final uploadMemos = await Future.wait(_memoImages.mapIndexed((index,image) async {
+    final uploadMemos =
+        await Future.wait(_memoImages.mapIndexed((index, image) async {
       final imageUrl = await _imageRepository.uploadImage(postId, image!);
       final text = _memoTexts[index];
       return PostMemo(text: text, imageUrl: imageUrl);

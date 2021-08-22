@@ -127,7 +127,7 @@ class DetailPage extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  post.name ?? "",
+                  post.name,
                   style: TextStyle(
                       fontSize: 17, fontFamily: FontFamily.NOTOSANS_BOLD),
                   overflow: TextOverflow.ellipsis,
@@ -141,7 +141,7 @@ class DetailPage extends HookWidget {
                       Icons.place,
                       size: 18,
                     ),
-                    Text(post?.address ?? "",
+                    Text(post.address,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: FontFamily.NOTOSANS_REGULAR)),
