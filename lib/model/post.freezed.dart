@@ -25,6 +25,9 @@ class _$PostTearOff {
       String userId = "",
       String userName = "",
       String userIconUrl = "",
+      GeoPoint? location,
+      DateTime? visitedDate,
+      DateTime? updatedAt,
       DateTime? createdAt}) {
     return _Post(
       id: id,
@@ -34,6 +37,9 @@ class _$PostTearOff {
       userId: userId,
       userName: userName,
       userIconUrl: userIconUrl,
+      location: location,
+      visitedDate: visitedDate,
+      updatedAt: updatedAt,
       createdAt: createdAt,
     );
   }
@@ -51,6 +57,9 @@ mixin _$Post {
   String get userId => throw _privateConstructorUsedError;
   String get userName => throw _privateConstructorUsedError;
   String get userIconUrl => throw _privateConstructorUsedError;
+  GeoPoint? get location => throw _privateConstructorUsedError;
+  DateTime? get visitedDate => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -69,6 +78,9 @@ abstract class $PostCopyWith<$Res> {
       String userId,
       String userName,
       String userIconUrl,
+      GeoPoint? location,
+      DateTime? visitedDate,
+      DateTime? updatedAt,
       DateTime? createdAt});
 }
 
@@ -89,6 +101,9 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? userId = freezed,
     Object? userName = freezed,
     Object? userIconUrl = freezed,
+    Object? location = freezed,
+    Object? visitedDate = freezed,
+    Object? updatedAt = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
@@ -120,6 +135,18 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.userIconUrl
           : userIconUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as GeoPoint?,
+      visitedDate: visitedDate == freezed
+          ? _value.visitedDate
+          : visitedDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: updatedAt == freezed
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -141,6 +168,9 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       String userId,
       String userName,
       String userIconUrl,
+      GeoPoint? location,
+      DateTime? visitedDate,
+      DateTime? updatedAt,
       DateTime? createdAt});
 }
 
@@ -162,6 +192,9 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? userId = freezed,
     Object? userName = freezed,
     Object? userIconUrl = freezed,
+    Object? location = freezed,
+    Object? visitedDate = freezed,
+    Object? updatedAt = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(_Post(
@@ -193,6 +226,18 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.userIconUrl
           : userIconUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as GeoPoint?,
+      visitedDate: visitedDate == freezed
+          ? _value.visitedDate
+          : visitedDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: updatedAt == freezed
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -212,6 +257,9 @@ class _$_Post extends _Post {
       this.userId = "",
       this.userName = "",
       this.userIconUrl = "",
+      this.location,
+      this.visitedDate,
+      this.updatedAt,
       this.createdAt})
       : super._();
 
@@ -237,11 +285,17 @@ class _$_Post extends _Post {
   @override
   final String userIconUrl;
   @override
+  final GeoPoint? location;
+  @override
+  final DateTime? visitedDate;
+  @override
+  final DateTime? updatedAt;
+  @override
   final DateTime? createdAt;
 
   @override
   String toString() {
-    return 'Post(id: $id, name: $name, address: $address, memos: $memos, userId: $userId, userName: $userName, userIconUrl: $userIconUrl, createdAt: $createdAt)';
+    return 'Post(id: $id, name: $name, address: $address, memos: $memos, userId: $userId, userName: $userName, userIconUrl: $userIconUrl, location: $location, visitedDate: $visitedDate, updatedAt: $updatedAt, createdAt: $createdAt)';
   }
 
   @override
@@ -265,6 +319,15 @@ class _$_Post extends _Post {
             (identical(other.userIconUrl, userIconUrl) ||
                 const DeepCollectionEquality()
                     .equals(other.userIconUrl, userIconUrl)) &&
+            (identical(other.location, location) ||
+                const DeepCollectionEquality()
+                    .equals(other.location, location)) &&
+            (identical(other.visitedDate, visitedDate) ||
+                const DeepCollectionEquality()
+                    .equals(other.visitedDate, visitedDate)) &&
+            (identical(other.updatedAt, updatedAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.updatedAt, updatedAt)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
                     .equals(other.createdAt, createdAt)));
@@ -280,6 +343,9 @@ class _$_Post extends _Post {
       const DeepCollectionEquality().hash(userId) ^
       const DeepCollectionEquality().hash(userName) ^
       const DeepCollectionEquality().hash(userIconUrl) ^
+      const DeepCollectionEquality().hash(location) ^
+      const DeepCollectionEquality().hash(visitedDate) ^
+      const DeepCollectionEquality().hash(updatedAt) ^
       const DeepCollectionEquality().hash(createdAt);
 
   @JsonKey(ignore: true)
@@ -297,6 +363,9 @@ abstract class _Post extends Post {
       String userId,
       String userName,
       String userIconUrl,
+      GeoPoint? location,
+      DateTime? visitedDate,
+      DateTime? updatedAt,
       DateTime? createdAt}) = _$_Post;
   const _Post._() : super._();
 
@@ -314,6 +383,12 @@ abstract class _Post extends Post {
   String get userName => throw _privateConstructorUsedError;
   @override
   String get userIconUrl => throw _privateConstructorUsedError;
+  @override
+  GeoPoint? get location => throw _privateConstructorUsedError;
+  @override
+  DateTime? get visitedDate => throw _privateConstructorUsedError;
+  @override
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
   @override
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @override

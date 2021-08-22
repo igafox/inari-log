@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/model/post.dart';
 import 'package:inari_log/model/post_memo.dart';
+import 'package:inari_log/repository/address_repository.dart';
+import 'package:inari_log/repository/address_repository_imp.dart';
 import 'package:inari_log/repository/image_repository.dart';
 import 'package:inari_log/repository/image_repository_imp.dart';
 import 'package:inari_log/repository/post_repository.dart';
@@ -26,6 +29,9 @@ class PostViewModel extends ChangeNotifier {
 
   late final PostRepository _poreRepository = _reader(postRepositoryProvider);
 
+  late final AddressRepository _addressRepository =
+      _reader(addressRepositoryProvider);
+
   late final ImageRepository _imageRepository =
       _reader(imageRepositoryProvider);
 
@@ -41,9 +47,9 @@ class PostViewModel extends ChangeNotifier {
 
   LatLng get location => _location;
 
-  DateTime _visitedAt = DateTime.now();
+  DateTime _visitedDate = DateTime.now();
 
-  DateTime get visitedAt => _visitedAt;
+  DateTime get visitedDate => _visitedDate;
 
   List<String> _memoTexts = [""];
 
@@ -82,7 +88,7 @@ class PostViewModel extends ChangeNotifier {
   }
 
   void onChangeVisitedAt(DateTime date) {
-    _visitedAt = date;
+    _visitedDate = date;
     notifyListeners();
   }
 
@@ -111,21 +117,13 @@ class PostViewModel extends ChangeNotifier {
 
   void onChangeLocation(LatLng latLng) async {
     _location = latLng;
-    // var places =
-    //     await placemarkFromCoordinates(_location.latitude, _location.longitude);
-    // var place = places.first;
-    // _address = place.street ?? "";
 
-    // _marker = {
-    //   Marker(
-    //     position: latLng,
-    //     markerId: MarkerId(DateTime.now().toIso8601String()),
-    //   )
-    // };
-    //
-    // print(marker.first.position.latitude.toString());
-    //
-    // _address = latLng.latitude.toString() + ":" + latLng.longitude.toString();
+    var newAddress = await _addressRepository.findByLocation(
+        latLng.latitude, latLng.longitude);
+
+    _address = newAddress;
+
+    print(address);
 
     notifyListeners();
   }
@@ -164,7 +162,9 @@ class PostViewModel extends ChangeNotifier {
       id: postId,
       name: _name,
       address: _address,
+      location: GeoPoint(_location.latitude,_location.longitude),
       memos: uploadMemos,
+      visitedDate: _visitedDate
     );
     //データ登録
     await _poreRepository.create(post);

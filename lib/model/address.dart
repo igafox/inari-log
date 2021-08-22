@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'address.freezed.dart';
@@ -14,18 +16,27 @@ abstract class Address implements _$Address {
     @Default("") String homeNumber,
   }) = _Address;
 
-  factory Address.from(Map<String, dynamic> map) {
+  factory Address.fromJson(Map<String, dynamic> map) {
+    print(map);
     final result = map["result"] as Map<String, dynamic>?;
-    final prefecture = result?["prefecture"];
-    final municipality = result?["municipality"];
-    final local = result?["local"];
+
+    final prefecture = result?["prefecture"]?["pname"] ?? "";
+    final municipality = result?["municipality"]?["mname"] ?? "";
+    final local = result?["local"] as List<dynamic>?;
+    final section = local?.firstOrNull["section"] ?? "";
+    final homeNumber = local?.firstOrNull["homenumber"] ?? "";
 
     return Address(
-        prefecture: prefecture["pname"],
-        municipality: municipality["mname"],
-        localSection: local["section"],
-        homeNumber: local["homenumber"]
+        prefecture: prefecture,
+        municipality: municipality,
+        localSection: section,
+        homeNumber: homeNumber
     );
+  }
+
+  @override
+  String toString() {
+    return prefecture + municipality + localSection + homeNumber;
   }
 
 }

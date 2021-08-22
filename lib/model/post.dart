@@ -6,7 +6,6 @@ part 'post.freezed.dart';
 
 @freezed
 abstract class Post implements _$Post {
-
   const Post._();
 
   const factory Post({
@@ -17,6 +16,9 @@ abstract class Post implements _$Post {
     @Default("") String userId,
     @Default("") String userName,
     @Default("") String userIconUrl,
+    GeoPoint? location,
+    DateTime? visitedDate,
+    DateTime? updatedAt,
     DateTime? createdAt,
   }) = _Post;
 
@@ -30,23 +32,30 @@ abstract class Post implements _$Post {
         id: map["id"] ?? "",
         name: map["name"] ?? "",
         address: map["address"] ?? "",
+        location: map["location"] ?? null,
         memos: memos,
         userId: map["userId"] ?? "",
         userName: map["userName"] ?? "",
         userIconUrl: map["userIconUrl"] ?? "",
-        createdAt: (map["createdAt"] as Timestamp).toDate());
+        visitedDate:
+            (map["visitedDate"] as Timestamp?)?.toDate() ?? DateTime(0),
+        updatedAt: (map["updatedAt"] as Timestamp?)?.toDate() ?? DateTime(0),
+        createdAt: (map["createdAt"] as Timestamp?)?.toDate() ?? DateTime(0));
   }
 
-Map<String, dynamic> toMap() {
-  return {
-    "id": this.id,
-    "name": this.name,
-    "address": this.address,
-    "memos": this.memos.map((e) => e.toMap()),
-    "userId": this.userId,
-    "userName": this.userName,
-    "userIconUrl": this.userIconUrl,
-    "createdAt": this.createdAt
-  };
-}
+  Map<String, dynamic> toMap() {
+    return {
+      "id": this.id,
+      "name": this.name,
+      "address": this.address,
+      "location": this.location,
+      "memos": this.memos.map((e) => e.toMap()),
+      "userId": this.userId,
+      "userName": this.userName,
+      "userIconUrl": this.userIconUrl,
+      "visitedDate": this.visitedDate,
+      "updatedAt": this.updatedAt,
+      "createdAt": this.createdAt
+    };
+  }
 }

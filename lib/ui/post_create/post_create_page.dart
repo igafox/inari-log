@@ -160,7 +160,7 @@ class PostCreatePage extends HookWidget {
                                     width: 5,
                                   ),
                                   Text(
-                                      viewModel.visitedAt.format("yyyy/MM/dd")),
+                                      viewModel.visitedDate.format("yyyy/MM/dd")),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -302,7 +302,8 @@ class PostCreatePage extends HookWidget {
                                         final image =
                                             await ImagePickerWeb.getImage(
                                                     outputType: ImageType.bytes)
-                                                as Uint8List;
+                                                as Uint8List?;
+                                        if(image == null) return;
                                         viewModel.addNewMemo("", image);
                                       },
                                     ),
@@ -386,7 +387,8 @@ class PostCreatePage extends HookWidget {
       ),
       onTap: () async {
         final image = await ImagePickerWeb.getImage(outputType: ImageType.bytes)
-            as Uint8List;
+            as Uint8List?;
+        if(image == null) return;
         log("メモ画像が選択されました");
         context.read(postViewModelProvider).onChangeMemoImage(index, image);
       },

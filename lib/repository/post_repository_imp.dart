@@ -101,7 +101,8 @@ class PostRepositoryImp implements PostRepository {
 
     //データ登録
     final data = post.toMap();
-    data["createdAt"] = FieldValue.serverTimestamp(); //Firebaseのタイムスタンプを使用
+    data["updatedAt"] = FieldValue.serverTimestamp(); //Firebaseのタイムスタンプを使用
+    data["createdAt"] = FieldValue.serverTimestamp();
     await postCollection.doc(post.id).set(data);
 
     return true;
