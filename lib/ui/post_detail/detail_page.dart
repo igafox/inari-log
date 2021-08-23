@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/constant.dart';
+import 'package:inari_log/extension/date_time_ext.dart';
 import 'package:inari_log/model/post.dart';
 import 'package:inari_log/model/post_memo.dart';
 import 'package:inari_log/responsive.dart';
@@ -11,6 +12,7 @@ import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/top/top_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 import 'package:collection/collection.dart';
+import 'package:inari_log/widget/iframe_view.dart';
 import 'package:intl/intl.dart';
 
 import 'detail_view_model.dart';
@@ -53,12 +55,15 @@ class DetailPage extends HookWidget {
                         Column(
                           children: [
                             Text(viewModel.post?.userName ?? "",
-                                style:Theme.of(context).textTheme.bodyText1),
+                                style: Theme.of(context).textTheme.bodyText1),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text("10分前に投稿",
-                                    style: Theme.of(context).textTheme.caption,)
+                                Text(
+                                  viewModel.post?.createdAt?.elapsedTime() ??
+                                      "",
+                                  style: Theme.of(context).textTheme.caption,
+                                )
                               ],
                             ),
                             // Text(
@@ -78,7 +83,9 @@ class DetailPage extends HookWidget {
                         IconButton(
                           onPressed: () {
                             AppRouter.router.navigateTo(
-                                context, "/post/edit/$postId",);
+                              context,
+                              "/post/edit/$postId",
+                            );
                           },
                           icon: Icon(Icons.edit),
                         )
@@ -160,12 +167,42 @@ class DetailPage extends HookWidget {
                     SizedBox(
                       width: 4,
                     ),
-                    Text("参拝:2018/10/11",
+                    Text(post.visitedDate?.format("参拝日:yyyy/MM/dd")?? "-",
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: FontFamily.NOTOSANS_REGULAR))
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                if (post.location != null)
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Container(
+                        height: 200,
+                        child: IframeView(
+                          source:
+                              "https://maps.google.co.jp/maps?output=embed&q"
+                              "=${post.location!.latitude},${post.location!.longitude}",
+                        ),
+                      )),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                          child: Container(
+                        height: 200,
+                        child: IframeView(
+                          source:
+                              "https://www.google.com/maps/embed/v1/streetview?location"
+                              "=${post.location!.latitude},${post.location!.longitude}"
+                              "&fov=80&heading=70&pitch=0&key=AIzaSyDwh06g-fRW_9uQb99WGP_bUSYpfZTgJN0",
+                        ),
+                      ))
+                    ],
+                  ),
                 SizedBox(
                   height: 20,
                 ),

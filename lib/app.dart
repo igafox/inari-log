@@ -15,7 +15,7 @@ class MyApp extends HookWidget {
           fontFamily: FontFamily.NOTOSANS_REGULAR,
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: "/post/create",
+        initialRoute: "post/H0YbPhKk0fCTujuc234p",
         onGenerateRoute: AppRouter.router.generator);
   }
 

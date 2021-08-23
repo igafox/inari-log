@@ -36,7 +36,7 @@ abstract class Address implements _$Address {
 
   @override
   String toString() {
-    return prefecture + municipality + localSection + homeNumber;
+    return prefecture + municipality + localSection;
   }
 
 }
