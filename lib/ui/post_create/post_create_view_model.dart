@@ -16,16 +16,28 @@ import 'package:inari_log/repository/image_repository.dart';
 import 'package:inari_log/repository/image_repository_imp.dart';
 import 'package:inari_log/repository/post_repository.dart';
 import 'package:inari_log/repository/post_repository_imp.dart';
+import 'package:inari_log/repository/user_repository.dart';
+import 'package:inari_log/repository/user_repository_imp.dart';
+import 'package:inari_log/ui/post_edit/post_image_source.dart';
 
-final postViewModelProvider =
-    ChangeNotifierProvider.autoDispose((ref) => PostViewModel(ref.read));
+import '../../constant.dart';
 
-class PostViewModel extends ChangeNotifier {
-  PostViewModel(this._reader);
+final postCreateViewModelProvider =
+    ChangeNotifierProvider.autoDispose((ref) => PostCreateViewModel(ref.read));
+
+enum PostCreateDialogType {
+  FILE_SIZE_OVER_ERROR,
+  NOT_SET_IMAGE,
+  FAILED_POST,
+  SUCCESS_POST
+}
+
+class PostCreateViewModel extends ChangeNotifier {
+  PostCreateViewModel(this._reader);
 
   final Reader _reader;
 
-  // late final AuthRepository _repository = _reader(authRepositoryProvider);
+  late final UserRepository _userRepository = _reader(userRepositoryProvider);
 
   late final PostRepository _poreRepository = _reader(postRepositoryProvider);
 
@@ -35,144 +47,178 @@ class PostViewModel extends ChangeNotifier {
   late final ImageRepository _imageRepository =
       _reader(imageRepositoryProvider);
 
-  String _name = "";
+  PostCreateDialogType? _currentDialogType;
 
-  String get name => _name;
-
-  String _address = "";
-
-  String get address => _address;
-
-  LatLng _location = LatLng(35.680400, 139.769017);
-
-  LatLng get location => _location;
-
-  DateTime _visitedDate = DateTime.now();
-
-  DateTime get visitedDate => _visitedDate;
-
-  List<String> _memoTexts = [""];
-
-  List<String> get memosTexts => _memoTexts;
-
-  List<Uint8List?> _memoImages = [null];
-
-  List<Uint8List?> get memoImages => _memoImages;
+  PostCreateDialogType? get currentDialogType => _currentDialogType;
 
   bool _loading = false;
 
   bool get loading => _loading;
 
-  // Set<Marker> _marker = {
-  //   Marker(
-  //     position: LatLng(35.680400, 139.769017),
-  //     markerId: MarkerId("pin"),
-  //   )
-  // };
-  //
-  // Set<Marker> get marker => _marker;
+  Post _post = Post();
 
-  // void changeAddress(String address) async {
-  //   print(address);
-  //   var locations = await locationFromAddress(address);
-  //   _location = LatLng(locations.first.latitude, locations.first.longitude);
-  //   notifyListeners();
-  // }
+  Post get post => _post;
+
+  String _name = "";
+
+  String get name => _name;
+
+  String _prefecture = "";
+
+  String get prefecture => _prefecture;
+
+  String _municipality = "";
+
+  String get municipality => _municipality;
+
+  String _houseNumber = "";
+
+  String get houseNumber => _houseNumber;
+
+  LatLng? _location;
+
+  LatLng? get location => _location;
+
+  DateTime _visitedDate = DateTime.now();
+
+  DateTime get visitedDate => _visitedDate;
+
+  List<PostImageSource> _postImages = [UrlImageSource("", "")];
+
+  List<PostImageSource> get postImages => _postImages;
+
+  void onCompleteShowDialog() {
+    _currentDialogType = null;
+  }
+
+  void load() async {
+    _loading = true;
+    // try {
+    //   final user = await _userRepository.getCurrentUser().first;
+    //   if(user == null) {
+    //     AppRouter.router.navigateTo(context, "/login",clearStack: true);
+    //   }
+    //
+    // } catch (e) {
+    //
+    // }
+
+    _loading = false;
+    notifyListeners();
+  }
 
   void onChangeName(String text) {
     _name = text;
   }
 
+  void onChangePrefecture(String text) {
+    _prefecture = text;
+  }
+
+  void onChangeMunicipality(String text) {
+    _municipality = text;
+  }
+
+  void onChangeLocalSection(String text) {
+    _houseNumber = text;
+  }
+
   void onChangeAddress(String text) {
-    _address = text;
+    // _address = text;
   }
 
-  void onChangeVisitedAt(DateTime date) {
-    _visitedDate = date;
-    notifyListeners();
-  }
-
-  void removeMemo(int index) {
-    _memoTexts.removeAt(index);
-    _memoImages.removeAt(index);
-    notifyListeners();
-  }
-
-  void addNewMemo(String text, Uint8List image) {
-    _memoTexts.add(text);
-    _memoImages.add(image);
-    notifyListeners();
-  }
-
-  void onChangeMemoText(int index, String text) {
-    log(text);
-    _memoTexts[index] = text;
-    notifyListeners();
-  }
-
-  void onChangeMemoImage(int index, Uint8List image) {
-    _memoImages[index] = image;
+  void onChangeVisitedAt(DateTime pickedDate) {
+    _visitedDate = pickedDate;
     notifyListeners();
   }
 
   void onChangeLocation(LatLng latLng) async {
     _location = latLng;
 
-    var newAddress = await _addressRepository.findByLocation(
+    final address = await _addressRepository.findByLocation(
         latLng.latitude, latLng.longitude);
 
-    _address = newAddress;
-
-    print(address);
+    _prefecture = address.prefecture;
+    _municipality = address.municipality + address.localSection;
+    _houseNumber = address.homeNumber;
 
     notifyListeners();
   }
 
-  // void addUploadImage(List<Uint8List> imgs) {
-  //   _uploadImages = imgs.take(5).toList();
-  //   notifyListeners();
-  // }
-
-  void post(BuildContext context) async {
-    _loading = true;
-    notifyListeners();
-
-    final postId = await _poreRepository.generateId();
-
-    //未設定画像判定
-    final hasNoImageMemo =
-        memoImages.where((element) => element == null).isNotEmpty;
-    if (hasNoImageMemo) {
-      log("画像が設定されていないメモがあります");
+  void addNewMemo(String s, Uint8List image) {
+    if (image.lengthInBytes > Const.IMAGE_UPLOAD_BYTE_LIMIT) {
+      _currentDialogType = PostCreateDialogType.FILE_SIZE_OVER_ERROR;
+      notifyListeners();
       return;
     }
 
-    log(_memoImages.length.toString());
-
-    //画像アップロード処理
-    final uploadMemos =
-        await Future.wait(_memoImages.mapIndexed((index, image) async {
-      final imageUrl = await _imageRepository.uploadImage(postId, image!);
-      final text = _memoTexts[index];
-      return PostMemo(text: text, imageUrl: imageUrl);
-    }).toList());
-
-    //投稿データ作成
-    final post = Post(
-      id: postId,
-      name: _name,
-      address: _address,
-      location: GeoPoint(_location.latitude,_location.longitude),
-      memos: uploadMemos,
-      visitedDate: _visitedDate
-    );
-    //データ登録
-    await _poreRepository.create(post);
-
-    //前の画面に戻る
-    AppRouter.router.pop(context);
-
-    _loading = false;
+    _postImages.add(ByteImageSource(image, ""));
     notifyListeners();
+  }
+
+  void onRemoveMemo(int index) {
+    _postImages.removeAt(index);
+
+    if (_postImages.isEmpty) {
+      _postImages.add(UrlImageSource("", ""));
+    }
+
+    notifyListeners();
+  }
+
+  void onChangeMemoText(int index, String text) {
+    _postImages[index].text = text;
+  }
+
+  void onChangeMemoImage(index, Uint8List image) {
+    final text = postImages[index].text;
+    _postImages[index] = ByteImageSource(image, text);
+    notifyListeners();
+  }
+
+  void createPost(BuildContext context) async {
+    _loading = true;
+    notifyListeners();
+
+    try {
+      final postId = await _poreRepository.generateId();
+
+      //未設定画像チェック
+      final hasNoImageMemo =
+          postImages.where((element) => !element.hasImage()).isNotEmpty;
+      if (hasNoImageMemo) {
+        _currentDialogType = PostCreateDialogType.NOT_SET_IMAGE;
+        notifyListeners();
+        return;
+      }
+
+      //画像アップロード処理
+      final uploadMemos = await Future.wait(_postImages.map((image) async {
+        final source = image as ByteImageSource;
+        final imageUrl =
+            await _imageRepository.uploadImage(postId, source.data);
+        final text = source.text;
+        return PostMemo(text: text, imageUrl: imageUrl);
+      }).toList());
+
+      //投稿データ作成
+      final post = Post(
+          id: postId,
+          name: _name,
+          prefecture: _prefecture,
+          municipality: _municipality,
+          houseNumber: _houseNumber,
+          location: GeoPoint(_location!.latitude, _location!.longitude),
+          memos: uploadMemos,
+          visitedDate: _visitedDate);
+      //データ登録
+      await _poreRepository.create(post);
+      _currentDialogType = PostCreateDialogType.SUCCESS_POST;
+    } catch (e) {
+      _currentDialogType = PostCreateDialogType.FAILED_POST;
+    } finally {
+      notifyListeners();
+      _loading = false;
+    }
   }
 }

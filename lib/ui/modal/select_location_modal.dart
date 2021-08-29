@@ -11,10 +11,13 @@ import 'package:location/location.dart';
 
 class SelectLocationModal extends ModalRoute<LatLng> {
   SelectLocationModal(this.latLng) {
-    addMarker(latLng);
+    if (latLng == null) {
+      return;
+    }
+    addMarker(latLng!);
   }
 
-  final LatLng latLng;
+  LatLng? latLng;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 500);
@@ -92,12 +95,14 @@ class SelectLocationModal extends ModalRoute<LatLng> {
           height: double.infinity,
           width: double.infinity,
           child: GoogleMap(
-            initialCameraPosition: CameraPosition(target: latLng, zoom: 17),
+            initialCameraPosition: CameraPosition(
+                target: latLng ?? LatLng(35.680400, 139.769017), zoom: 17),
             markers: markers.values.toSet(),
             mapType: (_isSatelliteMap) ? MapType.satellite : MapType.normal,
             zoomControlsEnabled: false,
             onMapCreated: (controller) {
               _controller = controller;
+              moveMyLocation(context);
             },
             onTap: (latLng) async {
               addMarker(latLng);

@@ -1,25 +1,40 @@
+import 'dart:js';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/model/post.dart';
+import 'package:inari_log/repository/address_repository.dart';
+import 'package:inari_log/repository/address_repository_imp.dart';
 import 'package:inari_log/repository/image_repository.dart';
 import 'package:inari_log/repository/image_repository_imp.dart';
 import 'package:inari_log/repository/post_repository.dart';
 import 'package:inari_log/repository/post_repository_imp.dart';
 import 'package:inari_log/repository/user_repository.dart';
 import 'package:inari_log/repository/user_repository_imp.dart';
+import 'package:inari_log/ui/post_edit/post_image_source.dart';
+
+import '../../constant.dart';
 
 final postEditViewModelProvider =
     ChangeNotifierProvider.family<PostEditViewModel, String>((ref, id) {
   return PostEditViewModel(ref.read, id);
 });
 
+enum PostEditDialogType {
+  PERMISSION_ERROR,
+  FAILED_LOAD_DATA,
+  FILE_SIZE_OVER_ERROR,
+  FAILED_POST,
+  SUCCESS_POST,
+}
+
 class PostEditViewModel extends ChangeNotifier {
   PostEditViewModel(this._reader, this.id) {
-    _load();
+    load();
   }
 
   final String id;
@@ -30,12 +45,19 @@ class PostEditViewModel extends ChangeNotifier {
 
   late final PostRepository _postRepository = _reader(postRepositoryProvider);
 
+  late final AddressRepository _addressRepository =
+      _reader(addressRepositoryProvider);
+
   late final ImageRepository _imageRepository =
       _reader(imageRepositoryProvider);
 
-  // LatLng _location = LatLng(35.680400, 139.769017);
-  //
-  // LatLng get location => _location;
+  PostEditDialogType? _currentDialogType;
+
+  PostEditDialogType? get currentDialogType => _currentDialogType;
+
+  bool _loading = false;
+
+  bool get loading => _loading;
 
   Post _post = Post();
 
@@ -45,59 +67,64 @@ class PostEditViewModel extends ChangeNotifier {
 
   String get name => _name;
 
-  String _address = "";
+  String _prefecture = "";
 
-  String get address => _address;
+  String get prefecture => _prefecture;
 
-  String _memo = "";
+  String _municipality = "";
 
-  String get memo => _address;
+  String get municipality => _municipality;
 
-  List<String> _uploadedImages = [];
-  List<String> get uploadImages => _uploadedImages;
+  String _houseNumber = "";
 
-  List<Uint8List> _appendImages = [];
-  List<Uint8List> get appendImages => _appendImages;
+  String get houseNumber => _houseNumber;
 
-  bool _loading = false;
+  LatLng? _location;
 
-  bool get loading => _loading;
+  LatLng? get location => _location;
 
-  // Set<Marker> _marker = {
-  //   Marker(
-  //     position: LatLng(35.680400, 139.769017),
-  //     markerId: MarkerId("pin"),
-  //   )
-  // };
-  //
-  // Set<Marker> get marker => _marker;
+  DateTime _visitedDate = DateTime.now();
 
-  // void changeAddress(String address) async {
-  //   print(address);
-  //   var locations = await locationFromAddress(address);
-  //   _location = LatLng(locations.first.latitude, locations.first.longitude);
-  //   notifyListeners();
-  // }
+  DateTime get visitedDate => _visitedDate;
 
-  void _load() async {
+  List<PostImageSource> _postImages = [UrlImageSource("", "")];
+
+  List<PostImageSource> get postImages => _postImages;
+
+  void onCompleteShowDialog() {
+    _currentDialogType = null;
+  }
+
+  void load() async {
+    _loading = true;
     try {
       _post = await _postRepository.findById(id);
       final user = await _userRepository.getCurrentUser().first;
 
       if (_post.userId != user?.id) {
-        print("この投稿は権限がないため編集できません");
-        //エラー
+        _currentDialogType = PostEditDialogType.PERMISSION_ERROR;
+        notifyListeners();
+        return;
       }
 
       _name = _post.name;
-      _address = _post.address;
+      _visitedDate = post.visitedDate!;
+      _prefecture = post.prefecture;
+      _municipality = post.municipality;
+      _houseNumber = post.houseNumber;
+      _location = LatLng(_post.location!.latitude, _post.location!.longitude);
       // _memo = _post.memo;
       // _uploadedImages = _post.imageUrls;
 
-
+      final initialPostImages =
+          _post.memos.map((e) => UrlImageSource(e.imageUrl, e.text));
+      _postImages.clear();
+      _postImages.addAll(initialPostImages);
     } catch (e) {
-      print("データの取得に失敗しました:" + e.toString());
+      _currentDialogType = PostEditDialogType.FAILED_LOAD_DATA;
     }
+
+    _loading = false;
     notifyListeners();
   }
 
@@ -105,12 +132,20 @@ class PostEditViewModel extends ChangeNotifier {
     _name = text;
   }
 
-  void onChangeAddress(String text) {
-    _address = text;
+  void onChangePrefecture(String text) {
+    _prefecture = text;
   }
 
-  void onChangeMemo(String text) {
-    _memo = text;
+  void onChangeMunicipality(String text) {
+    _municipality = text;
+  }
+
+  void onChangeLocalSection(String text) {
+    _houseNumber = text;
+  }
+
+  void onChangeAddress(String text) {
+    // _address = text;
   }
 
   // void changeLocation(LatLng latLng) async {
@@ -134,16 +169,11 @@ class PostEditViewModel extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addUploadImage(List<Uint8List> imgs) {
-    _appendImages = imgs.take(5).toList();
-    notifyListeners();
-  }
-
   void postEdit(BuildContext context) async {
     _loading = true;
     notifyListeners();
 
-    final imageUrls = await _imageRepository.uploadImages(id, appendImages);
+    //final imageUrls = await _imageRepository.uploadImages(id, appendImages);
 
     // final post = Post(
     //     id: id,
@@ -157,5 +187,54 @@ class PostEditViewModel extends ChangeNotifier {
     //
     // _loading = false;
     // notifyListeners();
+  }
+
+  void onChangeVisitedAt(DateTime pickedDate) {
+    _visitedDate = pickedDate;
+    notifyListeners();
+  }
+
+  void onChangeLocation(LatLng latLng) async {
+    _location = latLng;
+
+    final address = await _addressRepository.findByLocation(
+        latLng.latitude, latLng.longitude);
+
+    _prefecture = address.prefecture;
+    _municipality = address.municipality + address.localSection;
+    _houseNumber = address.homeNumber;
+
+    notifyListeners();
+  }
+
+  void addNewMemo(String s, Uint8List image) {
+    if (image.lengthInBytes > Const.IMAGE_UPLOAD_BYTE_LIMIT) {
+      _currentDialogType = PostEditDialogType.FILE_SIZE_OVER_ERROR;
+      notifyListeners();
+      return;
+    }
+
+    _postImages.add(ByteImageSource(image, ""));
+    notifyListeners();
+  }
+
+  void onRemoveMemo(int index) {
+    _postImages.removeAt(index);
+
+    if (_postImages.isEmpty) {
+      _postImages.add(UrlImageSource("", ""));
+    }
+
+    notifyListeners();
+  }
+
+  void onChangeMemoText(int index, String text) {
+    _postImages[index].text = text;
+  }
+
+  void onChangeMemoImage(index, Uint8List image) {
+    final text = postImages[index].text;
+    _postImages[index] = ByteImageSource(image, text);
+    notifyListeners();
   }
 }

@@ -15,7 +15,7 @@ class AddressRepositoryImp implements AddressRepository {
   final Reader _reader;
 
   @override
-  Future<String> findByLocation(double latitude, double longitude) async {
+  Future<Address> findByLocation(double latitude, double longitude) async {
     final url =
         "https://aginfo.cgk.affrc.go.jp/ws/rgeocode.php?json&lat=$latitude&lon=$longitude";
 
@@ -29,6 +29,6 @@ class AddressRepositoryImp implements AddressRepository {
     // final section = result["local"][0]["section"];
     // final homeNumber = result["local"][0]["homenumber"];
 
-    return address.toString();
+    return address;
   }
 }

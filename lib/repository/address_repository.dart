@@ -1,5 +1,7 @@
+import 'package:inari_log/model/address.dart';
+
 abstract class AddressRepository {
 
-  Future<String> findByLocation(double latitude,double longitude);
+  Future<Address> findByLocation(double latitude,double longitude);
 
 }

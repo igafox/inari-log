@@ -48,8 +48,7 @@ dependencies:
   firebase_auth: ^3.0.2
   cloud_firestore: ^2.5.0
   firebase_storage: ^10.0.2
-
-  flutter_image_compress: ^1.0.0-nullsafety
+  firebase_remote_config: ^0.10.0+4
 
   font_awesome_flutter: ^9.1.0
 
@@ -64,6 +63,7 @@ dependencies:
   xml2json: ^5.3.1
 
   http: ^0.13.3
+
 
 
 dev_dependencies:
