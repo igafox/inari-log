@@ -63,7 +63,7 @@ class AppRouter {
     router.define("/post", handler: postListHandler,transitionType: TransitionType.native);
     router.define("/post/create", handler: postCreateHandler,transitionType: TransitionType.native);
     router.define("/post/:id", handler: postDetailHandler,transitionType: TransitionType.native);
-    router.define("/post/edit/:id", handler: postEditHandler,transitionType: TransitionType.native);
+    router.define("/post/:id/edit", handler: postEditHandler,transitionType: TransitionType.native);
     router.define("/user/create", handler: userCreateHandler,transitionType: TransitionType.native);
     router.define("/user/:id", handler: userDetailHandler,transitionType: TransitionType.native);
     router.define("/login", handler:loginHandler,transitionType: TransitionType.native);

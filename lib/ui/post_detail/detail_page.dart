@@ -84,7 +84,7 @@ class DetailPage extends HookWidget {
                           onPressed: () {
                             AppRouter.router.navigateTo(
                               context,
-                              "/post/edit/$postId",
+                              "/post/$postId/edit",
                             );
                           },
                           icon: Icon(Icons.edit),
