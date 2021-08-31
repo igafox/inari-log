@@ -14,11 +14,9 @@ final userViewModelProvider =
 });
 
 class UserViewModel extends ChangeNotifier {
-  UserViewModel(this._reader, this.userId) {
-    load();
-  }
+  UserViewModel(this._reader, this.userId);
 
-  static const PAGING_SIZE = 10;
+  static const PAGING_SIZE = 3 * 3;
 
   final String userId;
 
@@ -50,6 +48,7 @@ class UserViewModel extends ChangeNotifier {
 
   void load() async {
     _loading = true;
+    _hasNext = true;
     try {
       final result = await Future.wait([
         _repository.findByUserId(userId, PAGING_SIZE, null),
@@ -58,7 +57,6 @@ class UserViewModel extends ChangeNotifier {
 
       _posts = result[0] as List<Post>;
       _user = result[1] as User;
-
     } catch (e) {
       print(e);
       _loading = false;
@@ -68,25 +66,24 @@ class UserViewModel extends ChangeNotifier {
   }
 
   void loadNext() async {
-    print("load next");
     _loading = true;
 
     final lastPostId = posts.lastOrNull?.id;
-    if(lastPostId == null) return;
+    if (lastPostId == null) return;
 
     try {
-      final result = await _repository.findByUserId(userId, PAGING_SIZE, lastPostId);
+      final result =
+          await _repository.findByUserId(userId, PAGING_SIZE, lastPostId);
       _posts += result;
 
-      if(result.length < PAGING_SIZE) {
+      if (result.length < PAGING_SIZE) {
         _hasNext = false;
       }
-    } catch(e) {
+    } catch (e) {
       print(e);
     } finally {
       _loading = false;
       notifyListeners();
     }
   }
-
 }

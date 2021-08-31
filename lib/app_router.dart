@@ -9,6 +9,7 @@ import 'package:inari_log/ui/top/top_page.dart';
 import 'package:inari_log/ui/user/user_page.dart';
 import 'package:collection/collection.dart';
 import 'package:inari_log/ui/user_create/user_create_page.dart';
+import 'package:inari_log/ui/user_eidt_profile/user_edit_profile_page.dart';
 
 class AppRouter {
   static late final FluroRouter router = FluroRouter();
@@ -52,6 +53,11 @@ class AppRouter {
         return UserPage(userId: userId);
       });
 
+  static var userEditHandler = Handler(
+      handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+        return UserEditProfilePage();
+      });
+
   static var loginHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
         return LoginPage();
@@ -65,6 +71,7 @@ class AppRouter {
     router.define("/post/:id", handler: postDetailHandler,transitionType: TransitionType.native);
     router.define("/post/:id/edit", handler: postEditHandler,transitionType: TransitionType.native);
     router.define("/user/create", handler: userCreateHandler,transitionType: TransitionType.native);
+    router.define("/user/edit", handler: userCreateHandler,transitionType: TransitionType.native);
     router.define("/user/:id", handler: userDetailHandler,transitionType: TransitionType.native);
     router.define("/login", handler:loginHandler,transitionType: TransitionType.native);
   }

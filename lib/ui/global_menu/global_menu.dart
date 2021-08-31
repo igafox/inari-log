@@ -67,6 +67,8 @@ class GlobalMenu extends HookWidget {
                   break;
 
                 case Menu.EDIT_PROFILE:
+                  AppRouter.router.navigateTo(
+                    context, "/user/edit",);
                   break;
 
                 case Menu.LOGOUT:

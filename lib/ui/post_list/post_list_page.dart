@@ -39,9 +39,12 @@ class PostListPage extends HookWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              AppRouter.router.navigateTo(context, "/post/create",).then(
-                      (value) => viewModel.load()
-              );
+              AppRouter.router
+                  .navigateTo(
+                    context,
+                    "/post/create",
+                  )
+                  .then((value) => viewModel.load());
             }),
         body: Container(
           alignment: Alignment.topCenter,
@@ -89,13 +92,16 @@ class PostListPage extends HookWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/post/" + post.id,);
+          AppRouter.router.navigateTo(
+            context,
+            "/post/" + post.id,
+          );
         },
         child: Column(
           children: [
             Expanded(
                 child: Image.network(
-                  post.memos.firstOrNull?.imageUrl ?? "",
+              post.memos.firstOrNull?.imageUrl ?? "",
               height: double.infinity,
               width: double.infinity,
               fit: BoxFit.cover,
