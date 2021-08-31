@@ -11,12 +11,6 @@ import 'package:inari_log/ui/global_menu/global_menu.dart';
 import 'package:inari_log/ui/user/user_view_model.dart';
 import 'package:inari_log/ui/widget/circle_image.dart';
 
-enum Menu {
-  MY_PAGE,
-  EDIT_PROFILE,
-  LOGOUT,
-}
-
 class UserPage extends HookWidget {
   UserPage({required this.userId});
 
@@ -43,7 +37,10 @@ class UserPage extends HookWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              AppRouter.router.navigateTo(context, "/post/create",);
+              AppRouter.router.navigateTo(
+                context,
+                "/post/create",
+              );
             }),
         body: Container(
           alignment: Alignment.topCenter,
@@ -62,12 +59,13 @@ class UserPage extends HookWidget {
                           children: [
                             CircleImage(
                                 size: 45,
-                                image: AssetImage("images/icon.png")),
+                                image: NetworkImage(
+                                    viewModel.user?.iconUrl ?? "")),
                             SizedBox(
                               width: 10,
                             ),
                             Text(
-                              "iga",
+                              viewModel.user?.name ?? "",
                               style: TextStyle(
                                 fontFamily: FontFamily.NOTOSANS_BOLD,
                                 fontSize: 18,
@@ -78,8 +76,7 @@ class UserPage extends HookWidget {
                         SizedBox(
                           height: 20,
                         ),
-                        Text(
-                            "福ノ島会津出身のお狐 狐面/着物/写真/ドライブ/📷NikonZ6,SIGMAfp/🚗86/📦https://t.co/juwFaNIWQN",
+                        Text("紹介文",
                             style: TextStyle(
                               fontSize: 15,
                             )),
@@ -87,7 +84,9 @@ class UserPage extends HookWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Align(
                   child: Text(
                     "投稿一覧",
@@ -99,70 +98,81 @@ class UserPage extends HookWidget {
                 SizedBox(
                   height: 20,
                 ),
-                Expanded(
-                    child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: Responsive.value(
-                              context: context,
-                              desktop: 1 / 1,
-                              tablet: 1 / 1,
-                              mobile: 1 / 1),
-                          crossAxisCount: Responsive.value(
-                              context: context,
-                              desktop: 3,
-                              tablet: 3,
-                              mobile: 1)
-                              .toInt(),
-                          mainAxisSpacing: 15,
-                          crossAxisSpacing: 15,
-                        ),
-                        itemCount: viewModel.posts.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return _createItem(context, viewModel.posts[index]);
-                        }))
+                if (viewModel.posts.isNotEmpty)
+                  Expanded(
+                      child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: Responsive.value(
+                                context: context,
+                                desktop: 1 / 1,
+                                tablet: 1 / 1,
+                                mobile: 1 / 1),
+                            crossAxisCount: Responsive.value(
+                                    context: context,
+                                    desktop: 3,
+                                    tablet: 3,
+                                    mobile: 1)
+                                .toInt(),
+                            mainAxisSpacing: 5,
+                            crossAxisSpacing: 5,
+                          ),
+                          itemCount: viewModel.posts.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index == viewModel.posts.length - 1 &&
+                                viewModel.hasNext) {
+                              viewModel.loadNext();
+                            }
+                            return _buildPost(context, viewModel.posts[index]);
+                          })),
+                if (viewModel.posts.isEmpty)
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text("投稿がありません")
+                    ],
+                  )
               ])),
         ));
   }
 
-  Widget _createItem(BuildContext context, Post post) {
+  Widget _buildPost(BuildContext context, Post post) {
     return Card(
       child: InkWell(
         onTap: () {
-          AppRouter.router.navigateTo(context, "/post_create/" + post.id,);
+          AppRouter.router.navigateTo(
+            context,
+            "/post/" + post.id,
+          );
         },
         child: Column(
           children: [
             Expanded(
                 child: Image.network(
-                 "",
-                  height: double.infinity,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                )),
+              post.memos.firstOrNull?.imageUrl ?? "",
+              height: double.infinity,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            )),
             Container(
               padding: EdgeInsets.all(10),
               child: Row(children: [
-                CircleImage(size: 45, image: NetworkImage(post.userIconUrl)),
                 SizedBox(
                   width: 10,
                 ),
                 Column(
                   children: [
-                    Text(post.userName,
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontFamily: FontFamily.NOTOSANS_BOLD)),
                     Text(
                       post.name,
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: FontFamily.NOTOSANS_REGULAR),
-                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1!
+                          .copyWith(overflow: TextOverflow.ellipsis),
                     ),
                     Text(post.address,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: FontFamily.NOTOSANS_REGULAR))
+                        style: Theme.of(context).textTheme.caption)
                   ],
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
@@ -173,5 +183,4 @@ class UserPage extends HookWidget {
       ),
     );
   }
-
 }
