@@ -88,6 +88,9 @@ exports.resizeImage = functions.region("asia-northeast1").storage
     functions.logger.log('complete upload backup image:${file.name}');
 
     //画像リサイズ
+    if(fileName.startsWith("icon")) {
+      await spawn('convert', [tempFilePath, '-thumbnail', '400x400^','-gravity', 'center','-extent', '400x400^' ,tempFilePath]); 
+    }
     await spawn('convert', [tempFilePath, '-thumbnail', '700x700>', tempFilePath]);
     functions.logger.log('complete image rezie:${file.name}');
 
