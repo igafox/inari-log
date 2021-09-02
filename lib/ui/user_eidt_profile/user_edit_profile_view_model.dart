@@ -1,11 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as Auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:inari_log/app_router.dart';
 import 'package:inari_log/extension/FirebaseError.dart';
+import 'package:inari_log/model/user.dart';
 import 'package:inari_log/repository/user_repository.dart';
 import 'package:inari_log/repository/user_repository_imp.dart';
 
@@ -19,6 +20,9 @@ class UserEditProfileViewModel extends ChangeNotifier {
 
   late final UserRepository _userRepository = _reader(userRepositoryProvider);
 
+  User? _user;
+  User? get user => _user;
+
   bool _loading = false;
   bool get loading => _loading;
 
@@ -28,17 +32,23 @@ class UserEditProfileViewModel extends ChangeNotifier {
   String _userName = "";
   String get userName => _userName;
 
-  String _email = "";
-  String get email => _email;
+  String _location = "";
+  String get location => _location;
 
-  String _password = "";
-  String get password => _password;
-
-  String _confirmPassword = "";
-  String get confirmPassword => _confirmPassword;
+  String _comment = "";
+  String get comment => _comment;
 
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
+
+  void load() async {
+    _user = await _userRepository.getCurrentUser().first;
+    _userName = _user?.name ?? "";
+    _location = _user?.location ?? "";
+    _comment = _user?.comment ?? "";
+
+    notifyListeners();
+  }
 
   void setUserImage(Uint8List image) {
     _profileImage = image;
@@ -46,19 +56,15 @@ class UserEditProfileViewModel extends ChangeNotifier {
   }
 
   void setUserName(String text) {
-    _email = text;
+    _userName = text;
   }
 
-  void setEmail(String text) {
-    _email = text;
+  void setLocation(String text) {
+    _location = text;
   }
 
-  void setPassword(String text) {
-    _password = text;
-  }
-
-  void setConfirmPassword(String text) {
-    _confirmPassword = text;
+  void setComment(String text) {
+    _comment = text;
   }
 
   void onClickRegisterButton(BuildContext context) async {
@@ -66,36 +72,18 @@ class UserEditProfileViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _userRepository.create(_email, _password, _userName, _profileImage!);
+      await _userRepository.update(_userName, _location, _comment, _profileImage);
       AppRouter.router.navigateTo(context, "/");
-    } on FirebaseAuthException catch (e) {
+    } on Auth.FirebaseAuthException catch (e) {
       print(e);
       _errorMessage = FirebaseAuthUtil.getDisplayMessage(e);
     } catch (e) {
       print(e);
       _errorMessage = "不明なエラーが発生しました";
+    } finally {
+      _loading = false;
+      notifyListeners();
     }
-
-    _loading = false;
-    notifyListeners();
   }
-
-// void onClickTwiterLoginButton() async {}
-//
-// void onClickGoogleLoginButton() async {}
-//
-// void load() async {
-//   _loading = true;
-//   _repository.findAll(15, null).then((value) {
-//     _post = value;
-//   }).catchError((dynamic error) {
-//     print(error);
-//     _errorMessage = error.toString();
-//   }).whenComplete(() {
-//     _loading = false;
-//     notifyListeners();
-//   });
-// }
-
 
 }

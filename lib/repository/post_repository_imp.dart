@@ -85,7 +85,7 @@ class PostRepositoryImp implements PostRepository {
       final userData = userDataResult.data();
       final user = Model.User.from(userData!);
       userName = user.name!;
-      userIconUrl = user.iconUrl!;
+      userIconUrl = user.imageUrl!;
     } catch(e) {
       userName = currentUser.displayName ?? "";
       userIconUrl = currentUser.photoURL ?? "";

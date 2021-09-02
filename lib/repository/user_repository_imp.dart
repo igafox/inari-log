@@ -19,7 +19,8 @@ class UserRepositoryImp implements UserRepository {
 
   late final FirebaseFirestore _firestore = _reader(firebaseFirestoreProvider);
   late final FirebaseAuth _firebaseAuth = _reader(firebaseAuthProvider);
-  late final FirebaseStorage _firebaseStorage = _reader(firebaseStorageProvider);
+  late final FirebaseStorage _firebaseStorage =
+      _reader(firebaseStorageProvider);
 
   late final postCollection = _firestore.collection("post");
   late final userCollection = _firestore.collection("user");
@@ -29,7 +30,6 @@ class UserRepositoryImp implements UserRepository {
     return postCollection.doc().id;
   }
 
-
   @override
   Future<bool> isLogin() async {
     final user = await FirebaseAuth.instance.authStateChanges().first;
@@ -37,7 +37,7 @@ class UserRepositoryImp implements UserRepository {
   }
 
   @override
-  Stream<Model.User?> getCurrentUser()  {
+  Stream<Model.User?> getCurrentUser() {
     return FirebaseAuth.instance.authStateChanges().asyncMap((user) async {
       if (user == null) return null;
       //ユーザーデータ取得
@@ -46,21 +46,22 @@ class UserRepositoryImp implements UserRepository {
 
       //Firestoreにデータが存在しない場合は、FirebaseAuthのデータを使用する
       if (data == null) {
-        return Model.User(id: user.uid, iconUrl: user.photoURL);
+        return Model.User(id: user.uid, imageUrl: user.photoURL);
       }
 
       final userData = Model.User.from(data);
 
       return userData;
     });
-
   }
 
   @override
-  Future<bool> create(String email, String password, String userName, Uint8List profileImage) async {
+  Future<bool> create(String email, String password, String userName,
+      Uint8List profileImage) async {
     //ユーザー作成
     print("ユーザー作成開始");
-    final result = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+    final result = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
     final user = await _firebaseAuth.currentUser!;
     print(user.toString());
     final uid = user.uid;
@@ -78,18 +79,15 @@ class UserRepositoryImp implements UserRepository {
     final imageRef = _firebaseStorage.ref("images/user/$uid/").child(fileName);
     final contentType = ImageUtil.getContentType(profileImage);
     print("プロフィール画像アップロード開始");
-    final uploadResult = await imageRef.putData(profileImage,SettableMetadata(contentType: contentType));
+    final uploadResult = await imageRef.putData(
+        profileImage, SettableMetadata(contentType: contentType));
     final imageUrl = await uploadResult.ref.getDownloadURL();
     print("プロフィール画像アップロード完了");
     await user.updatePhotoURL(imageUrl);
     print("プロフィール画像更新完了");
 
     print("ユーザーデータ作成開始開始");
-    final userData = {
-      "id":user.uid,
-      "name":userName,
-      "imageUrl":imageUrl
-    };
+    final userData = {"id": user.uid, "name": userName, "imageUrl": imageUrl};
     await userCollection.doc(user.uid).set(userData);
     print("ユーザーデータ作成完了");
 
@@ -119,6 +117,33 @@ class UserRepositoryImp implements UserRepository {
 
     final user = Model.User.from(data);
     return user;
+  }
+
+  @override
+  Future<bool> update(String userName, String location, String comment,
+      Uint8List? profileImage) async {
+    final user = await getCurrentUser().first;
+    final uid = user!.id;
+
+    String? iconImageUrl;
+    if(profileImage != null) {
+      final extension = ImageUtil.getExtension(profileImage);
+      final fileName = "icon" + extension;
+      final imageRef =
+      _firebaseStorage.ref("images/user/$uid").child(fileName);
+      final contentType = ImageUtil.getContentType(profileImage);
+      final uploadResult = await imageRef.putData(
+          profileImage, SettableMetadata(contentType: contentType));
+      iconImageUrl = await uploadResult.ref.getDownloadURL();
+    }
+
+    var updateUser = user.copyWith(name: userName,location: location,comment: comment);
+    if(iconImageUrl != null) {
+      updateUser.copyWith(imageUrl: iconImageUrl);
+    }
+
+    await userCollection.doc(user.id).update(updateUser.toMap());
+    return true;
   }
 
 }

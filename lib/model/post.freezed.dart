@@ -18,7 +18,7 @@ class _$PostTearOff {
   const _$PostTearOff();
 
   _Post call(
-      {String id = "",
+      {dynamic id = "",
       String name = "",
       String prefecture = "",
       String municipality = "",
@@ -56,7 +56,7 @@ const $Post = _$PostTearOff();
 
 /// @nodoc
 mixin _$Post {
-  String get id => throw _privateConstructorUsedError;
+  dynamic get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get prefecture => throw _privateConstructorUsedError;
   String get municipality => throw _privateConstructorUsedError;
@@ -80,7 +80,7 @@ abstract class $PostCopyWith<$Res> {
   factory $PostCopyWith(Post value, $Res Function(Post) then) =
       _$PostCopyWithImpl<$Res>;
   $Res call(
-      {String id,
+      {dynamic id,
       String name,
       String prefecture,
       String municipality,
@@ -125,7 +125,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as dynamic,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -188,7 +188,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       __$PostCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String id,
+      {dynamic id,
       String name,
       String prefecture,
       String municipality,
@@ -231,10 +231,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? createdAt = freezed,
   }) {
     return _then(_Post(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
+      id: id == freezed ? _value.id : id,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -313,7 +310,7 @@ class _$_Post extends _Post {
 
   @JsonKey(defaultValue: "")
   @override
-  final String id;
+  final dynamic id;
   @JsonKey(defaultValue: "")
   @override
   final String name;
@@ -425,7 +422,7 @@ class _$_Post extends _Post {
 
 abstract class _Post extends Post {
   const factory _Post(
-      {String id,
+      {dynamic id,
       String name,
       String prefecture,
       String municipality,
@@ -442,7 +439,7 @@ abstract class _Post extends Post {
   const _Post._() : super._();
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  dynamic get id => throw _privateConstructorUsedError;
   @override
   String get name => throw _privateConstructorUsedError;
   @override

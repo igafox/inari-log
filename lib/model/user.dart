@@ -4,26 +4,34 @@ part 'user.freezed.dart';
 
 @freezed
 abstract class User implements _$User {
+  const User._();
+
   factory User({
     String? id,
     String? name,
-    String? iconUrl,
+    String? location,
+    String? comment,
+    String? imageUrl,
   }) = _User;
 
   factory User.from(Map<dynamic, dynamic> map) {
     return User(
       id: map["id"],
       name: map["name"],
-      iconUrl: map["imageUrl"],
+      location: map["location"],
+      comment: map["comment"],
+      imageUrl: map["imageUrl"],
     );
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     "id": this.id,
-  //     "name": this.name,
-  //     "iconUrl": this.iconUrl,
-  //   };
-  // }
+  Map<String, dynamic> toMap() {
+    return {
+      "id": this.id,
+      "name": this.name,
+      "location": this.location,
+      "comment": this.comment,
+      "imageUrl":this.imageUrl,
+    };
+  }
 
 }

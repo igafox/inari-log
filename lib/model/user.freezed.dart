@@ -17,11 +17,18 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$UserTearOff {
   const _$UserTearOff();
 
-  _User call({String? id, String? name, String? iconUrl}) {
+  _User call(
+      {String? id,
+      String? name,
+      String? location,
+      String? comment,
+      String? imageUrl}) {
     return _User(
       id: id,
       name: name,
-      iconUrl: iconUrl,
+      location: location,
+      comment: comment,
+      imageUrl: imageUrl,
     );
   }
 }
@@ -33,7 +40,9 @@ const $User = _$UserTearOff();
 mixin _$User {
   String? get id => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
-  String? get iconUrl => throw _privateConstructorUsedError;
+  String? get location => throw _privateConstructorUsedError;
+  String? get comment => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
@@ -43,7 +52,12 @@ mixin _$User {
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res>;
-  $Res call({String? id, String? name, String? iconUrl});
+  $Res call(
+      {String? id,
+      String? name,
+      String? location,
+      String? comment,
+      String? imageUrl});
 }
 
 /// @nodoc
@@ -58,7 +72,9 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
-    Object? iconUrl = freezed,
+    Object? location = freezed,
+    Object? comment = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -69,9 +85,17 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      iconUrl: iconUrl == freezed
-          ? _value.iconUrl
-          : iconUrl // ignore: cast_nullable_to_non_nullable
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as String?,
+      comment: comment == freezed
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: imageUrl == freezed
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -82,7 +106,12 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) then) =
       __$UserCopyWithImpl<$Res>;
   @override
-  $Res call({String? id, String? name, String? iconUrl});
+  $Res call(
+      {String? id,
+      String? name,
+      String? location,
+      String? comment,
+      String? imageUrl});
 }
 
 /// @nodoc
@@ -98,7 +127,9 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
-    Object? iconUrl = freezed,
+    Object? location = freezed,
+    Object? comment = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_User(
       id: id == freezed
@@ -109,9 +140,17 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      iconUrl: iconUrl == freezed
-          ? _value.iconUrl
-          : iconUrl // ignore: cast_nullable_to_non_nullable
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as String?,
+      comment: comment == freezed
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: imageUrl == freezed
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -119,19 +158,24 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_User implements _User {
-  _$_User({this.id, this.name, this.iconUrl});
+class _$_User extends _User {
+  _$_User({this.id, this.name, this.location, this.comment, this.imageUrl})
+      : super._();
 
   @override
   final String? id;
   @override
   final String? name;
   @override
-  final String? iconUrl;
+  final String? location;
+  @override
+  final String? comment;
+  @override
+  final String? imageUrl;
 
   @override
   String toString() {
-    return 'User(id: $id, name: $name, iconUrl: $iconUrl)';
+    return 'User(id: $id, name: $name, location: $location, comment: $comment, imageUrl: $imageUrl)';
   }
 
   @override
@@ -142,8 +186,15 @@ class _$_User implements _User {
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.iconUrl, iconUrl) ||
-                const DeepCollectionEquality().equals(other.iconUrl, iconUrl)));
+            (identical(other.location, location) ||
+                const DeepCollectionEquality()
+                    .equals(other.location, location)) &&
+            (identical(other.comment, comment) ||
+                const DeepCollectionEquality()
+                    .equals(other.comment, comment)) &&
+            (identical(other.imageUrl, imageUrl) ||
+                const DeepCollectionEquality()
+                    .equals(other.imageUrl, imageUrl)));
   }
 
   @override
@@ -151,7 +202,9 @@ class _$_User implements _User {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(iconUrl);
+      const DeepCollectionEquality().hash(location) ^
+      const DeepCollectionEquality().hash(comment) ^
+      const DeepCollectionEquality().hash(imageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -159,15 +212,25 @@ class _$_User implements _User {
       __$UserCopyWithImpl<_User>(this, _$identity);
 }
 
-abstract class _User implements User {
-  factory _User({String? id, String? name, String? iconUrl}) = _$_User;
+abstract class _User extends User {
+  factory _User(
+      {String? id,
+      String? name,
+      String? location,
+      String? comment,
+      String? imageUrl}) = _$_User;
+  _User._() : super._();
 
   @override
   String? get id => throw _privateConstructorUsedError;
   @override
   String? get name => throw _privateConstructorUsedError;
   @override
-  String? get iconUrl => throw _privateConstructorUsedError;
+  String? get location => throw _privateConstructorUsedError;
+  @override
+  String? get comment => throw _privateConstructorUsedError;
+  @override
+  String? get imageUrl => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$UserCopyWith<_User> get copyWith => throw _privateConstructorUsedError;

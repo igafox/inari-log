@@ -55,7 +55,7 @@ class GlobalMenu extends HookWidget {
               return list;
             },
             icon: CircleImage(
-              image: NetworkImage(user.data?.value?.iconUrl ?? ""),
+              image: NetworkImage(user.data?.value?.imageUrl ?? ""),
               size: 42,
             ),
             iconSize: 42,

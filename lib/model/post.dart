@@ -9,7 +9,7 @@ abstract class Post implements _$Post {
   const Post._();
 
   const factory Post({
-    @Default("") String id,
+    @Default("")  id,
     @Default("") String name,
     @Default("") String prefecture,
     @Default("") String municipality,
