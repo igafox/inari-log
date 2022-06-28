@@ -49,7 +49,7 @@ class PostEditPage extends HookWidget {
       text: viewModel.houseNumber,
     );
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       switch (viewModel.currentDialogType) {
         case PostEditDialogType.PERMISSION_ERROR:
           await showAlertDialog(

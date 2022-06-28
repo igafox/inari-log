@@ -46,7 +46,7 @@ class PostCreatePage extends HookWidget {
       text: viewModel.houseNumber,
     );
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       switch (viewModel.currentDialogType) {
         case PostCreateDialogType.FILE_SIZE_OVER_ERROR:
           await showAlertDialog(
