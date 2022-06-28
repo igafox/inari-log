@@ -32,7 +32,7 @@ class MyApp extends HookWidget {
           fontFamily: FontFamily.NOTOSANS_REGULAR,
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: "user/edit",
+        initialRoute: "/",
         onGenerateRoute: AppRouter.router.generator);
   }
 }
